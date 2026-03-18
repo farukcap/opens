@@ -8,7 +8,7 @@ app = Flask(**name**)
 
 # ⚠️ Secret key - SABIT bir değer (Render.com veya başka yerlerde deploy edince session kaybolmasın)
 
-app.secret_key = ‘bizim-mekan-super-secret-key-2024’
+app.secret_key = "bizim-mekan-super-secret-key-2024"
 
 # ⚠️ Admin şifresini burada değiştir
 
