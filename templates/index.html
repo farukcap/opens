@@ -1,217 +1,845 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bizim Mekan - Samimi Sosyal Ağ">
     <title>✨ Bizim Mekan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #000000; color: #e7e9ea; margin: 0; padding: 0; }
-        .container { max-width: 600px; margin: 0 auto; border-left: 1px solid #2f3336; border-right: 1px solid #2f3336; min-height: 100vh; }
-        .header { padding: 15px; border-bottom: 1px solid #2f3336; font-size: 22px; font-weight: bold; position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10; display: flex; justify-content: space-between; align-items: center; }
-        .auth-box { padding: 20px; border-bottom: 1px solid #2f3336; }
-        .auth-form { display: flex; flex-direction: column; gap: 10px; background: #16181c; padding: 15px; border-radius: 15px; flex: 1; }
-        input, textarea { background-color: #202327; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 15px; outline: none; transition: 0.2s; }
-        input:focus, textarea:focus { border: 1px solid #1d9bf0; background-color: #000; }
-        button { background-color: #1d9bf0; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px; }
-        button:hover { background-color: #1a8cd8; }
-        button:disabled { background-color: #536471; cursor: not-allowed; }
-        .tweet-box { padding: 15px; border-bottom: 1px solid #2f3336; display: flex; flex-direction: column; gap: 10px; }
-        .tweet { padding: 15px; border-bottom: 1px solid #2f3336; transition: background 0.2s; display: flex; gap: 10px; align-items: flex-start; }
-        .tweet:hover { background-color: #080808; }
-        .user-avatar { width: 45px; height: 45px; border-radius: 50%; background-color: #202327; color: #71767b; font-size: 20px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .user-info { display: inline-flex; gap: 5px; align-items: center; }
-        .user { font-weight: bold; font-size: 16px; display: inline-block; text-decoration: none; color: #e7e9ea; }
-        .username { color: #71767b; font-size: 14px; }
-        .date { color: #71767b; font-size: 14px; float: right; }
-        .content { margin-top: 5px; font-size: 15px; line-height: 1.5; word-wrap: break-word; color: #e7e9ea; }
-        .flash { color: #f91880; padding: 10px; text-align: center; font-weight: bold; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; border-radius: 30px; z-index: 100; box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
-        .logout { background-color: transparent; border: 1px solid #536471; padding: 5px 15px; font-size: 14px; color: #e7e9ea; }
-        .logout:hover { border-color: #f91880; color: #f91880; background-color: rgba(249,24,128,0.05); }
-        /* Yönetici Silme Butonu */
-        .admin-sil { color: #f91880; background-color: rgba(249,24,128,0.05); border: 1px solid #f91880; padding: 3px 10px; border-radius: 15px; font-size: 12px; cursor: pointer; float: right; margin-left: 10px; text-decoration: none; font-weight: bold; }
-        .admin-sil:hover { background-color: rgba(249,24,128,0.1); }
-    </style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --primary-light: #818cf8;
+        --dark-bg: #0f172a;
+        --card-bg: #1e293b;
+        --border-color: #334155;
+        --text-primary: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --text-tertiary: #94a3b8;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --radius: 12px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f3a 100%);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        min-height: 100vh;
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Header */
+    .header {
+        position: sticky;
+        top: 0;
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 20px;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    /* Notifications */
+    .alert {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 16px 24px;
+        border-radius: var(--radius);
+        z-index: 1000;
+        max-width: 90%;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .alert.success {
+        border-left: 4px solid var(--success);
+    }
+
+    .alert.error {
+        border-left: 4px solid var(--danger);
+    }
+
+    .alert.warning {
+        border-left: 4px solid var(--warning);
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    /* Auth Section */
+    .auth-section {
+        padding: 40px 20px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(99, 102, 241, 0.02) 100%);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .auth-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .auth-subtitle {
+        color: var(--text-tertiary);
+        margin-bottom: 30px;
+        font-size: 14px;
+    }
+
+    .auth-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .auth-form {
+        background: var(--dark-bg);
+        padding: 20px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: var(--transition);
+    }
+
+    .auth-form:hover {
+        border-color: var(--primary);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+    }
+
+    .auth-form h3 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    textarea {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 12px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: rgba(99, 102, 241, 0.05);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+        max-height: 200px;
+    }
+
+    /* Buttons */
+    button {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .btn-secondary {
+        background: var(--card-bg);
+        color: var(--primary);
+        border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+        background: rgba(99, 102, 241, 0.1);
+    }
+
+    .btn-danger {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .btn-danger:hover {
+        background: rgba(239, 68, 68, 0.2);
+    }
+
+    .btn-small {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    /* Tweet/Post Section */
+    .post-section {
+        padding: 20px;
+        border-bottom: 1px solid var(--border-color);
+        background: rgba(99, 102, 241, 0.02);
+    }
+
+    .post-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .username-display {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .username-display strong {
+        font-size: 16px;
+        color: var(--text-primary);
+    }
+
+    .username-display .handle {
+        color: var(--text-tertiary);
+        font-size: 14px;
+    }
+
+    .post-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-left: 60px;
+    }
+
+    .textarea-wrapper {
+        position: relative;
+    }
+
+    #tweet-metni {
+        width: 100%;
+    }
+
+    .char-count {
+        position: absolute;
+        bottom: 8px;
+        right: 12px;
+        font-size: 12px;
+        color: var(--text-tertiary);
+    }
+
+    .char-count.warning {
+        color: var(--warning);
+    }
+
+    .char-count.danger {
+        color: var(--danger);
+    }
+
+    .post-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    /* Feed */
+    .feed {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .feed::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .feed::-webkit-scrollbar-track {
+        background: var(--dark-bg);
+    }
+
+    .feed::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+    }
+
+    .feed::-webkit-scrollbar-thumb:hover {
+        background: var(--text-tertiary);
+    }
+
+    .post {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .post:hover {
+        background: rgba(99, 102, 241, 0.03);
+    }
+
+    .post.new-post {
+        animation: newPost 0.5s ease-out;
+        border-left: 4px solid var(--primary);
+    }
+
+    @keyframes newPost {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .post-header-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .post-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 16px;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .post-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: 1;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .post-author {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .post-author strong {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .post-handle {
+        color: var(--text-tertiary);
+        font-size: 13px;
+    }
+
+    .post-time {
+        color: var(--text-tertiary);
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .post-content {
+        margin-left: 52px;
+        margin-bottom: 12px;
+        font-size: 15px;
+        line-height: 1.5;
+        color: var(--text-primary);
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    .post-actions {
+        margin-left: 52px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-start;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-tertiary);
+    }
+
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 20px;
+        margin-bottom: 8px;
+        color: var(--text-secondary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .auth-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header {
+            padding: 12px 16px;
+        }
+
+        .header-title {
+            font-size: 20px;
+        }
+
+        .post-section {
+            padding: 16px;
+        }
+
+        .post-form {
+            margin-left: 0;
+        }
+
+        .post-header {
+            margin-bottom: 12px;
+        }
+
+        .post-content,
+        .post-actions {
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        .auth-section {
+            padding: 20px;
+        }
+
+        .auth-title {
+            font-size: 24px;
+        }
+
+        #tweet-metni {
+            min-height: 80px;
+        }
+    }
+
+    /* Loading State */
+    .loading {
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        background: currentColor;
+        border-radius: 50%;
+        animation: pulse 1.4s infinite;
+    }
+
+    .loading:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .loading:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes pulse {
+        0%, 60%, 100% {
+            opacity: 0.3;
+        }
+        30% {
+            opacity: 1;
+        }
+    }
+</style>
+```
+
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            ✨ Akış
-            {% if 'kullanici' in session %}
-                <a href="/cikis"><button class="logout">Çıkış Yap</button></a>
-            {% endif %}
-        </div>
-        
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-              <div class="flash" id="flash-msg">{{ message }}</div>
-            {% endfor %}
-            <script>
-                // Hata mesajını 3 saniye sonra kapat
-                setTimeout(() => document.getElementById('flash-msg').style.display='none', 3000);
-            </script>
-          {% endif %}
-        {% endwith %}
-
-        {% if 'kullanici' in session %}
-        <div class="tweet-box">
-            <div style="display:flex; justify-content: space-between; align-items: center;">
-                <div style="display:flex; align-items: center; gap: 10px;">
-                    <div class="user-avatar">{{ session['kullanici'][0]|upper }}</div>
-                    <span style="font-weight: bold; font-size: 18px;">@{{ session['kullanici'] }}</span>
-                </div>
+            <div class="header-title">
+                ✨ Bizim Mekan
             </div>
-            <form id="gonder-formu" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; margin-left: 55px;">
-                <textarea name="mesaj" id="tweet-metni" placeholder="Neler oluyor?" required rows="3" maxlength="280"></textarea>
-                <div style="text-align: right;">
-                    <button type="submit" id="gonder-btn">Gönder</button>
+            <div class="header-actions">
+                {% if 'kullanici' in session %}
+                    <span style="font-size: 14px; color: var(--text-tertiary);">@{{ session['kullanici'] }}</span>
+                    <a href="/cikis"><button class="btn-secondary btn-small">Çıkış</button></a>
+                {% endif %}
+            </div>
+        </div>
+
+```
+    <!-- Alerts -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert success" id="alert-{{ loop.index }}">
+                    {{ message }}
                 </div>
+                <script>
+                    setTimeout(() => {
+                        const alert = document.getElementById('alert-{{ loop.index }}');
+                        if(alert) alert.style.display = 'none';
+                    }, 3000);
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Auth Section -->
+    {% if 'kullanici' not in session %}
+    <div class="auth-section">
+        <h2 class="auth-title">✨ Katıl Şimdi</h2>
+        <p class="auth-subtitle">Samimi bir topluluk oluşturalım. Mesajlaş, bağlan, eğlen!</p>
+        <div class="auth-grid">
+            <!-- Giriş Formu -->
+            <form action="/giris" method="POST" class="auth-form">
+                <h3>🔐 Giriş Yap</h3>
+                <input type="text" name="kullanici_adi" placeholder="Kullanıcı Adın" required>
+                <input type="password" name="sifre" placeholder="Şifren" required>
+                <button type="submit" class="btn-primary">Giriş Yap</button>
+            </form>
+
+            <!-- Kayıt Formu -->
+            <form action="/kayit" method="POST" class="auth-form">
+                <h3>✨ Yeni Hesap Oluş</h3>
+                <input type="text" name="kullanici_adi" placeholder="Yeni Kullanıcı Adı" required>
+                <input type="password" name="sifre" placeholder="Güçlü Şifre" required>
+                <button type="submit" class="btn-primary">Kayıt Ol</button>
             </form>
         </div>
-        
-        {% else %}
-        <div class="auth-box">
-            <h2 style="margin: 0 0 10px 0; font-size: 18px;">✨ Mekana katıl</h2>
-            <p style="color: #71767b; font-size: 14px; margin-bottom: 15px;">Akışı okumak için takıl. Yazmak için kendi lakabını al.</p>
-            <div style="display: flex; gap: 10px;">
-                <form action="/giris" method="POST" class="auth-form">
-                    <h3 style="margin: 0 0 10px 0; font-size: 16px;">Giriş Yap</h3>
-                    <input type="text" name="kullanici_adi" placeholder="Lakabın" required>
-                    <input type="password" name="sifre" placeholder="Şifre" required>
-                    <button type="submit">Giriş</button>
-                </form>
-                <form action="/kayit" method="POST" class="auth-form">
-                    <h3 style="margin: 0 0 10px 0; font-size: 16px;">Kayıt Ol</h3>
-                    <input type="text" name="kullanici_adi" placeholder="Yeni Lakap" required>
-                    <input type="password" name="sifre" placeholder="Şifre Belirle" required>
-                    <button type="submit" style="background-color: #eff3f4; color: #0f1419;">Kayıt Ol</button>
-                </form>
+    </div>
+    {% endif %}
+
+    <!-- Post Section (Giriş yapanlar için) -->
+    {% if 'kullanici' in session %}
+    <div class="post-section">
+        <div class="post-header">
+            <div class="avatar">{{ session['kullanici'][0]|upper }}</div>
+            <div class="username-display">
+                <strong>{{ session['kullanici'] }}</strong>
+                <span class="handle">@{{ session['kullanici']|lower }}</span>
             </div>
         </div>
-        {% endif %}
 
-        <div class="feed" id="feed-akis">
-            {% for gonderi in gonderiler %}
-            <div class="tweet" id="tweet-{{ gonderi[0] }}">
-                <div class="user-avatar">{{ gonderi[1][0]|upper }}</div>
-                <div style="flex: 1;">
-                    <div style="width: 100%;">
-                        <div class="user-info">
-                            <span class="user">{{ gonderi[1] }}</span>
-                            <span class="username">@{{ gonderi[1]|lower }}</span>
-                        </div>
-                        <span class="date">{{ gonderi[3] }}</span>
-                        
-                        {% if is_admin %}
-                            <a href="/sil/{{ gonderi[0] }}" onclick="return confirm('Bu gönderiyi silem mi moruk?')" class="admin-sil">SİL</a>
-                        {% endif %}
-                    </div>
-                    <div class="content">{{ gonderi[2] }}</div>
-                </div>
+        <form id="gonder-formu" class="post-form">
+            <div class="textarea-wrapper">
+                <textarea 
+                    name="mesaj" 
+                    id="tweet-metni" 
+                    placeholder="Neler oluyor? 💭" 
+                    required 
+                    maxlength="280"
+                    rows="3"></textarea>
+                <div class="char-count"><span id="char-count">0</span>/280</div>
             </div>
-            {% else %}
-            <div style="padding: 20px; text-align: center; color: #71767b;" id="bos-mesaj">
-                Buralar çok ıssız. İlk sesi sen ver!
+            <div class="post-actions">
+                <button type="submit" id="gonder-btn" class="btn-primary" disabled>
+                    Gönder 🚀
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Feed -->
+    <div class="feed" id="feed-akis">
+        {% if gonderiler %}
+            {% for gonderi in gonderiler %}
+            <div class="post" id="post-{{ gonderi[0] }}">
+                <div class="post-header-info">
+                    <div class="post-avatar">{{ gonderi[1][0]|upper }}</div>
+                    <div class="post-meta">
+                        <div class="post-author">
+                            <strong>{{ gonderi[1] }}</strong>
+                            <span class="post-handle">@{{ gonderi[1]|lower }}</span>
+                        </div>
+                        <span class="post-time">{{ gonderi[3] }}</span>
+                    </div>
+                    {% if is_admin %}
+                        <button class="btn-danger" onclick="silenPost({{ gonderi[0] }})">
+                            🗑️ Sil
+                        </button>
+                    {% endif %}
+                </div>
+                <div class="post-content">{{ gonderi[2] }}</div>
             </div>
             {% endfor %}
-        </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">🌟</div>
+                <h3>Henüz Hiç Post Yok</h3>
+                <p>İlk sesi sen ver! Mekanı yaşat.</p>
+            </div>
+        {% endif %}
     </div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('gonder-formu');
-            if(!form) return; // Giriş yapılmamışsa çalışmaz.
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('gonder-formu');
+        if (!form) return;
 
-            const textarea = document.getElementById('tweet-metni');
-            const button = document.getElementById('gonder-btn');
-            const feed = document.getElementById('feed-akis');
-            const emptyMsg = document.getElementById('bos-mesaj');
+        const textarea = document.getElementById('tweet-metni');
+        const button = document.getElementById('gonder-btn');
+        const charCount = document.getElementById('char-count');
+        const feed = document.getElementById('feed-akis');
 
-            // Gönder Butonu Kontrolü (Boşsa disabled)
-            textarea.addEventListener('input', () => {
-                button.disabled = textarea.value.trim().length === 0;
-            });
-            button.disabled = true; // İlk başta kapalı
-
-            // FORM GÖNDERME İŞLEMİ (AJAX)
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault(); // Sayfa yenilenmesini engelle
-                
-                if(button.disabled) return;
-                button.disabled = true;
-                button.textContent = "Gönderiliyor...";
-
-                const formData = new FormData(form);
-
-                try {
-                    const response = await fetch('/gonder_api', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if(response.ok) {
-                        const veri = await response.json();
-                        
-                        // Gönderiyi Akışa Ekle (Yenilemeden)
-                        const yeniTweet = createTweetHTML(veri);
-                        feed.insertAdjacentHTML('afterbegin', yeniTweet);
-                        
-                        // Boş mesajı kaldır
-                        if(emptyMsg) emptyMsg.style.display = 'none';
-                        
-                        // Formu temizle
-                        textarea.value = '';
-                        button.textContent = "Gönder";
-                        button.disabled = true;
-                        
-                    } else {
-                        const hata = await response.json();
-                        alert("Hata moruk: " + hata.hata);
-                        button.disabled = false;
-                        button.textContent = "Gönder";
-                    }
-                } catch (error) {
-                    console.error('Hata:', error);
-                    alert("Sistem patladı, Render uyuyor olabilir. Yeniden dene.");
-                    button.disabled = false;
-                    button.textContent = "Gönder";
-                }
-            });
-
-            // YENİ TWEET HTML'İ OLUŞTURMA
-            function createTweetHTML(data) {
-                const upperInitial = data.kullanici_adi[0].toUpperCase();
-                const lowerUsername = data.kullanici_adi.toLowerCase();
-                
-                // Admin silebilir mi butonu
-                let adminSilBtn = '';
-                if(data.is_admin) {
-                    adminSilBtn = `<a href="/sil/${data.id}" onclick="return confirm('Bu gönderiyi silem mi moruk?')" class="admin-sil">SİL</a>`;
-                }
-
-                return `
-                    <div class="tweet" id="tweet-${data.id}" style="border-bottom: 1px solid #1d9bf0; animation: fade-in 0.5s;">
-                        <div class="user-avatar">${upperInitial}</div>
-                        <div style="flex: 1;">
-                            <div style="width: 100%;">
-                                <div class="user-info">
-                                    <span class="user">${data.kullanici_adi}</span>
-                                    <span class="username">@${lowerUsername}</span>
-                                </div>
-                                <span class="date">${data.tarih}</span>
-                                ${adminSilBtn}
-                            </div>
-                            <div class="content">${data.mesaj}</div>
-                        </div>
-                    </div>
-                `;
-            }
+        // Karakter sayacı
+        textarea.addEventListener('input', () => {
+            const count = textarea.value.length;
+            charCount.textContent = count;
             
-            // CSS Animasyonu
-            const style = document.createElement('style');
-            style.innerHTML = '@keyframes fade-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }';
-            document.head.appendChild(style);
+            // Buton durumu
+            button.disabled = count === 0 || count > 280;
+
+            // Renklendir
+            const countEl = charCount.parentElement;
+            if (count > 250) {
+                countEl.classList.add('danger');
+                countEl.classList.remove('warning');
+            } else if (count > 200) {
+                countEl.classList.add('warning');
+                countEl.classList.remove('danger');
+            } else {
+                countEl.classList.remove('warning', 'danger');
+            }
         });
-    </script>
+
+        // Form Gönderme
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (button.disabled) return;
+            
+            button.disabled = true;
+            button.textContent = 'Gönderiliyor...';
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('/gonder_api', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const veri = await response.json();
+                    
+                    // Yeni post HTML'i
+                    const yeniPost = createPostHTML(veri);
+                    feed.insertAdjacentHTML('afterbegin', yeniPost);
+                    
+                    // Boş state'i kaldır
+                    const emptyState = feed.querySelector('.empty-state');
+                    if (emptyState) emptyState.remove();
+                    
+                    // Formu temizle
+                    textarea.value = '';
+                    charCount.textContent = '0';
+                    button.textContent = 'Gönder 🚀';
+                    button.disabled = true;
+                    
+                    showAlert('Gönderi başarıyla gönderildi! ✨', 'success');
+                } else {
+                    const error = await response.json();
+                    showAlert('Hata: ' + error.hata, 'error');
+                    button.textContent = 'Gönder 🚀';
+                    button.disabled = false;
+                }
+            } catch (error) {
+                console.error('Hata:', error);
+                showAlert('Bir hata oluştu. Lütfen tekrar dene.', 'error');
+                button.textContent = 'Gönder 🚀';
+                button.disabled = false;
+            }
+        });
+
+        // Post HTML'i oluştur
+        function createPostHTML(data) {
+            const adminBtn = data.is_admin 
+                ? `<button class="btn-danger" onclick="silenPost(${data.id})">🗑️ Sil</button>`
+                : '';
+
+            return `
+                <div class="post new-post" id="post-${data.id}">
+                    <div class="post-header-info">
+                        <div class="post-avatar">${data.kullanici_adi[0].toUpperCase()}</div>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <strong>${data.kullanici_adi}</strong>
+                                <span class="post-handle">@${data.kullanici_adi.toLowerCase()}</span>
+                            </div>
+                            <span class="post-time">${data.tarih}</span>
+                        </div>
+                        ${adminBtn}
+                    </div>
+                    <div class="post-content">${escapeHtml(data.mesaj)}</div>
+                </div>
+            `;
+        }
+
+        // Güvenlik: HTML karakterleri escape et
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Alert göster
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.textContent = message;
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                alert.style.transition = 'opacity 0.3s';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+    });
+
+    // Post silme (Admin)
+    async function silenPost(postId) {
+        if (!confirm('Bu gönderiyi silmek istediğine emin misin?')) return;
+
+        try {
+            const response = await fetch(`/sil/${postId}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                const post = document.getElementById(`post-${postId}`);
+                if (post) {
+                    post.style.animation = 'newPost 0.5s ease-out reverse';
+                    setTimeout(() => post.remove(), 500);
+                }
+                showAlert('Gönderi silindi!', 'success');
+            } else {
+                showAlert('Silme işlemi başarısız!', 'error');
+            }
+        } catch (error) {
+            console.error('Hata:', error);
+            showAlert('Bir hata oluştu!', 'error');
+        }
+    }
+
+    function showAlert(message, type = 'success') {
+        const alert = document.createElement('div');
+        alert.className = `alert ${type}`;
+        alert.textContent = message;
+        document.body.appendChild(alert);
+
+        setTimeout(() => {
+            alert.style.transition = 'opacity 0.3s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        }, 3000);
+    }
+</script>
+```
+
 </body>
 </html>
