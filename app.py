@@ -4,7 +4,7 @@ import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(**name**)
-app.secret_key = "bizim-mekan-super-secret-key-2024-faruk”
+app.secret_key = "bizim-mekan-super-secret-key-2024-faruk"
 
 ADMIN_USERNAME = "faruk"
 ADMIN_PASSWORD = "faruk4848"
