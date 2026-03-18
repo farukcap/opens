@@ -1,0 +1,55 @@
+# Veritabanı
+mekan.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Güvenlik
+.env
+.env.local
+secrets.txt
+
+# Log dosyaları
+*.log
+logs/
+
+# Node (eğer frontend build toolları kullanıyorsan)
+node_modules/
+npm-debug.log
