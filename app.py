@@ -12,9 +12,9 @@ app.secret_key = "bizim-mekan-super-secret-key-2024"
 
 # ⚠️ Admin şifresini burada değiştir
 
-ADMIN_SIFRESI = ‘faruk4848’
+ADMIN_SIFRESI = "faruk4848"
 
-DATABASE = ‘mekan.db’
+DATABASE = "mekan.db"
 
 def get_db_connection():
 “”“Veritabanı bağlantısı oluştur”””
