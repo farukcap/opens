@@ -5,40 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bizim Mekan</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f5f8fa; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; }
-        .header { text-align: center; color: #1da1f2; margin-bottom: 20px; }
-        .post-box { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 10px; border: 1px solid #e1e8ed; border-radius: 5px; font-size: 16px; }
-        button { background-color: #1da1f2; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; float: right; }
-        .feed { clear: both; margin-top: 30px; }
-        .tweet { background: white; padding: 15px; border-radius: 10px; border: 1px solid #e1e8ed; margin-bottom: 10px; }
-        .user { font-weight: bold; color: #14171a; }
-        .date { color: #657786; font-size: 12px; float: right; }
-        .content { margin-top: 10px; color: #14171a; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #000000; color: #e7e9ea; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; border-left: 1px solid #2f3336; border-right: 1px solid #2f3336; min-height: 100vh; }
+        .header { padding: 15px; border-bottom: 1px solid #2f3336; font-size: 20px; font-weight: bold; position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10; }
+        .auth-box { padding: 20px; border-bottom: 1px solid #2f3336; }
+        .auth-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: #16181c; padding: 15px; border-radius: 15px; }
+        input, textarea { background-color: #202327; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 15px; outline: none; }
+        input:focus, textarea:focus { border: 1px solid #1d9bf0; }
+        button { background-color: #1d9bf0; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background-color: #1a8cd8; }
+        .tweet-box { padding: 15px; border-bottom: 1px solid #2f3336; display: flex; flex-direction: column; gap: 10px; }
+        .tweet { padding: 15px; border-bottom: 1px solid #2f3336; transition: background 0.2s; }
+        .tweet:hover { background-color: #080808; }
+        .user { font-weight: bold; font-size: 16px; display: inline-block; }
+        .username { color: #71767b; font-size: 14px; margin-left: 5px; }
+        .date { color: #71767b; font-size: 14px; float: right; }
+        .content { margin-top: 5px; font-size: 15px; line-height: 1.5; word-wrap: break-word; }
+        .flash { color: #f91880; padding: 10px; text-align: center; font-weight: bold; }
+        .logout { background-color: transparent; border: 1px solid #536471; padding: 5px 15px; float: right; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 class="header">🚀 Bizim Mekan</h2>
+        <div class="header">✨ Akış</div>
         
-        <div class="post-box">
-            <form action="/gonder" method="POST">
-                <input type="text" name="kullanici" placeholder="Adın veya Lakabın" required maxlength="20">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="flash">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endendwith %}
+
+        {% if 'kullanici' in session %}
+        <div class="tweet-box">
+            <div>
+                <span style="font-weight: bold;">Hoş geldin, @{{ session['kullanici'] }}</span>
+                <a href="/cikis"><button class="logout">Çıkış Yap</button></a>
+            </div>
+            <form action="/gonder" method="POST" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
                 <textarea name="mesaj" placeholder="Neler oluyor?" required rows="3" maxlength="280"></textarea>
-                <button type="submit">Gönder</button>
+                <div style="text-align: right;">
+                    <button type="submit">Gönder</button>
+                </div>
             </form>
         </div>
+        
+        {% else %}
+        <div class="auth-box">
+            <p style="color: #71767b; font-size: 14px; margin-bottom: 15px;">Mekana katılmak için giriş yap veya kendi lakabını al.</p>
+            <div style="display: flex; gap: 10px;">
+                <form action="/giris" method="POST" class="auth-form" style="flex: 1;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px;">Giriş Yap</h3>
+                    <input type="text" name="kullanici_adi" placeholder="Lakabın" required>
+                    <input type="password" name="sifre" placeholder="Şifre" required>
+                    <button type="submit">Giriş</button>
+                </form>
+                <form action="/kayit" method="POST" class="auth-form" style="flex: 1;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px;">Kayıt Ol</h3>
+                    <input type="text" name="kullanici_adi" placeholder="Yeni Lakap" required>
+                    <input type="password" name="sifre" placeholder="Şifre Belirle" required>
+                    <button type="submit" style="background-color: #eff3f4; color: #0f1419;">Kayıt Ol</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
 
         <div class="feed">
             {% for gonderi in gonderiler %}
             <div class="tweet">
-                <span class="user">{{ gonderi[0] }}</span>
-                <span class="date">{{ gonderi[2] }}</span>
+                <div>
+                    <span class="user">{{ gonderi[0] }}</span>
+                    <span class="username">@{{ gonderi[0]|lower }}</span>
+                    <span class="date">{{ gonderi[2] }}</span>
+                </div>
                 <div class="content">{{ gonderi[1] }}</div>
             </div>
             {% else %}
-            <p style="text-align:center; color:#657786;">Henüz kimse bir şey yazmamış. İlk sesi sen ver!</p>
+            <div style="padding: 20px; text-align: center; color: #71767b;">
+                Buralar çok ıssız. İlk sesi sen ver!
+            </div>
             {% endfor %}
         </div>
     </div>
