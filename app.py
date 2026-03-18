@@ -98,29 +98,36 @@ init_db()
 @app.route(”/”)
 def home():
 try:
+# Giriş yapılmışsa, postları ve kullanıcıları göster
+if session.get(“username”):
 conn = get_db_connection()
 c = conn.cursor()
 
 ```
-    # Get all posts
-    c.execute("""SELECT p.id, p.author, p.content, p.created_at, 
-                 p.likes_count, p.retweets_count, u.bio
-                 FROM posts p
-                 JOIN users u ON p.author = u.username
-                 ORDER BY p.id DESC LIMIT 200""")
-    posts = c.fetchall()
-    
-    # Get users
-    c.execute("SELECT username, bio, followers_count FROM users ORDER BY followers_count DESC LIMIT 20")
-    users = c.fetchall()
-    
-    conn.close()
-    
-    current_user = session.get("username")
-    is_admin = current_user == ADMIN_USERNAME
-    
-    return render_template("index.html", posts=posts, users=users, 
-                         current_user=current_user, is_admin=is_admin)
+        # Get all posts
+        c.execute("""SELECT p.id, p.author, p.content, p.created_at, 
+                     p.likes_count, p.retweets_count, u.bio
+                     FROM posts p
+                     JOIN users u ON p.author = u.username
+                     ORDER BY p.id DESC LIMIT 200""")
+        posts = c.fetchall()
+        
+        # Get all users except current user
+        c.execute("SELECT username, bio, followers_count FROM users WHERE username != ? ORDER BY followers_count DESC", 
+                 (session["username"],))
+        all_users = c.fetchall()
+        
+        conn.close()
+        
+        current_user = session.get("username")
+        is_admin = current_user == ADMIN_USERNAME
+        
+        return render_template("index.html", posts=posts, all_users=all_users,
+                             current_user=current_user, is_admin=is_admin)
+    else:
+        # Giriş yapılmamışsa, sadece login/register sayfasını göster
+        return render_template("index.html")
+        
 except Exception as e:
     print(f"Error home: {e}")
     return redirect(url_for("home"))
@@ -447,10 +454,13 @@ except Exception as e:
 @app.route(”/profile/<username>”)
 def profile(username):
 try:
-conn = get_db_connection()
-c = conn.cursor()
+if “username” not in session:
+return redirect(url_for(“home”))
 
 ```
+    conn = get_db_connection()
+    c = conn.cursor()
+    
     # Get user info
     c.execute("SELECT username, bio, followers_count, following_count, created_at FROM users WHERE username = ?", (username,))
     user = c.fetchone()
