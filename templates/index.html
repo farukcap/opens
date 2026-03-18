@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bizim Mekan - Samimi Sosyal Ağ">
-    <title>✨ Bizim Mekan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Bizim Mekan - Samimi Sosyal Ağ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,20 +15,17 @@
 
 ```
     :root {
-        --primary: #6366f1;
-        --primary-dark: #4f46e5;
-        --primary-light: #818cf8;
-        --dark-bg: #0f172a;
-        --card-bg: #1e293b;
-        --border-color: #334155;
-        --text-primary: #f1f5f9;
-        --text-secondary: #cbd5e1;
-        --text-tertiary: #94a3b8;
-        --success: #10b981;
-        --danger: #ef4444;
-        --warning: #f59e0b;
-        --radius: 12px;
-        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --primary: #FF6B9D;
+        --secondary: #FFA07A;
+        --accent: #FFD700;
+        --light-bg: #FFF9F5;
+        --white: #FFFFFF;
+        --text-dark: #2D3436;
+        --text-light: #636E72;
+        --border-light: #F5E6D3;
+        --success: #6DD5ED;
+        --shadow: 0 10px 30px rgba(255, 107, 157, 0.15);
+        --shadow-hover: 0 15px 40px rgba(255, 107, 157, 0.25);
     }
 
     html {
@@ -37,351 +33,433 @@
     }
 
     body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f3a 100%);
-        color: var(--text-primary);
+        font-family: 'Quicksand', 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #FFF9F5 0%, #FFEFE7 50%, #FFF5F0 100%);
+        color: var(--text-dark);
         line-height: 1.6;
         min-height: 100vh;
     }
 
     .container {
-        max-width: 700px;
-        margin: 0 auto;
-        background: var(--card-bg);
-        min-height: 100vh;
-        border-left: 1px solid var(--border-color);
-        border-right: 1px solid var(--border-color);
-        display: flex;
-        flex-direction: column;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Header */
-    .header {
-        position: sticky;
-        top: 0;
-        background: rgba(30, 41, 59, 0.8);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid var(--border-color);
-        padding: 16px 20px;
-        z-index: 100;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .header-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 24px;
-        font-weight: 700;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .header-actions {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-    /* Notifications */
-    .alert {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        color: var(--text-primary);
-        padding: 16px 24px;
-        border-radius: var(--radius);
-        z-index: 1000;
-        max-width: 90%;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
-        animation: slideIn 0.3s ease-out;
-    }
-
-    .alert.success {
-        border-left: 4px solid var(--success);
-    }
-
-    .alert.error {
-        border-left: 4px solid var(--danger);
-    }
-
-    .alert.warning {
-        border-left: 4px solid var(--warning);
-    }
-
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-    }
-
-    /* Auth Section */
-    .auth-section {
-        padding: 40px 20px;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(99, 102, 241, 0.02) 100%);
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .auth-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    .auth-subtitle {
-        color: var(--text-tertiary);
-        margin-bottom: 30px;
-        font-size: 14px;
-    }
-
-    .auth-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 280px 1fr 320px;
         gap: 20px;
-    }
-
-    .auth-form {
-        background: var(--dark-bg);
         padding: 20px;
-        border-radius: var(--radius);
-        border: 1px solid var(--border-color);
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        transition: var(--transition);
+        max-width: 1400px;
+        margin: 0 auto;
+        min-height: 100vh;
     }
 
-    .auth-form:hover {
-        border-color: var(--primary);
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+        height: fit-content;
+        position: sticky;
+        top: 20px;
     }
 
-    .auth-form h3 {
-        font-family: 'Poppins', sans-serif;
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-
-    input[type="text"],
-    input[type="password"],
-    textarea {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        color: var(--text-primary);
-        padding: 12px 14px;
-        border-radius: 8px;
-        font-size: 14px;
-        transition: var(--transition);
-        font-family: 'Inter', sans-serif;
-    }
-
-    input[type="text"]:focus,
-    input[type="password"]:focus,
-    textarea:focus {
-        outline: none;
-        border-color: var(--primary);
-        background: rgba(99, 102, 241, 0.05);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-    }
-
-    textarea {
-        resize: vertical;
-        min-height: 100px;
-        max-height: 200px;
-    }
-
-    /* Buttons */
-    button {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: var(--transition);
-        font-size: 14px;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    .logo-section {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        padding: 30px 20px;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        margin-bottom: 25px;
         color: white;
     }
 
-    .btn-primary:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    .logo-text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 36px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        letter-spacing: -1px;
     }
 
-    .btn-primary:disabled {
+    .tagline {
+        font-size: 13px;
+        opacity: 0.9;
+        font-weight: 500;
+    }
+
+    .nav-menu {
+        list-style: none;
+        margin-bottom: 25px;
+    }
+
+    .nav-item {
+        margin-bottom: 12px;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        text-decoration: none;
+        color: var(--text-dark);
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        background: rgba(255, 107, 157, 0.05);
+    }
+
+    .nav-link:hover {
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 160, 122, 0.15) 100%);
+        transform: translateX(4px);
+        color: var(--primary);
+    }
+
+    .nav-link.active {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        box-shadow: var(--shadow);
+    }
+
+    .btn-compose {
+        width: 100%;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: 700;
+        font-family: 'Quicksand', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+    }
+
+    .btn-compose:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .btn-compose:active {
+        transform: translateY(-1px);
+    }
+
+    .user-card {
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(255, 107, 157, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .user-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-name {
+        font-weight: 700;
+        color: var(--text-dark);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-handle {
+        font-size: 12px;
+        color: var(--text-light);
+    }
+
+    .btn-logout {
+        width: 100%;
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        padding: 12px;
+        border-radius: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    .btn-logout:hover {
+        background: rgba(255, 107, 157, 0.1);
+        transform: translateY(-2px);
+    }
+
+    /* ===== MAIN FEED ===== */
+    .feed {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .feed-header {
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 160, 122, 0.1) 100%);
+        padding: 24px;
+        border-bottom: 2px solid var(--border-light);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .feed-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--primary);
+    }
+
+    /* ===== AUTH ONLY CONTENT ===== */
+    .auth-only {
+        display: none;
+    }
+
+    .auth-only.active {
+        display: block;
+    }
+
+    /* ===== LOGIN/REGISTER PAGE ===== */
+    .login-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .login-container {
+        background: white;
+        border-radius: 30px;
+        box-shadow: var(--shadow-hover);
+        overflow: hidden;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .login-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        padding: 40px 30px;
+        text-align: center;
+        color: white;
+    }
+
+    .login-logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 48px;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .login-tagline {
+        font-size: 16px;
+        opacity: 0.95;
+        font-weight: 500;
+    }
+
+    .login-body {
+        padding: 40px 30px;
+    }
+
+    .tab-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .tab-btn {
+        padding: 12px;
+        border: 2px solid var(--border-light);
+        background: white;
+        color: var(--text-dark);
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 14px;
+    }
+
+    .tab-btn.active {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .tab-btn:hover {
+        border-color: var(--primary);
+    }
+
+    .auth-form {
+        display: none;
+    }
+
+    .auth-form.active {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .auth-form input {
+        background: var(--light-bg);
+        border: 2px solid var(--border-light);
+        color: var(--text-dark);
+        padding: 14px 16px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-family: 'Quicksand', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .auth-form input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+    }
+
+    .auth-form input::placeholder {
+        color: var(--text-light);
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-family: 'Quicksand', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 15px;
+        margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+
+    /* ===== COMPOSE SECTION ===== */
+    .compose-section {
+        padding: 24px;
+        border-bottom: 2px solid var(--border-light);
+    }
+
+    .compose-inner {
+        display: flex;
+        gap: 16px;
+    }
+
+    .compose-textarea {
+        flex: 1;
+        background: var(--light-bg);
+        border: 2px solid var(--border-light);
+        color: var(--text-dark);
+        padding: 16px;
+        border-radius: 15px;
+        font-size: 16px;
+        font-family: 'Quicksand', sans-serif;
+        resize: none;
+        min-height: 120px;
+        transition: all 0.3s ease;
+    }
+
+    .compose-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+    }
+
+    .compose-textarea::placeholder {
+        color: var(--text-light);
+    }
+
+    .compose-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+    }
+
+    .char-counter {
+        color: var(--text-light);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .char-counter.warning {
+        color: var(--secondary);
+    }
+
+    .char-counter.danger {
+        color: #FF6B6B;
+    }
+
+    .btn-post {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 15px;
+        font-weight: 700;
+        font-family: 'Quicksand', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .btn-post:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+
+    .btn-post:disabled {
         opacity: 0.5;
         cursor: not-allowed;
     }
 
-    .btn-secondary {
-        background: var(--card-bg);
-        color: var(--primary);
-        border: 1px solid var(--primary);
-    }
-
-    .btn-secondary:hover:not(:disabled) {
-        background: rgba(99, 102, 241, 0.1);
-    }
-
-    .btn-danger {
-        background: rgba(239, 68, 68, 0.1);
-        color: var(--danger);
-        border: 1px solid var(--danger);
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-
-    .btn-danger:hover {
-        background: rgba(239, 68, 68, 0.2);
-    }
-
-    .btn-small {
-        padding: 8px 12px;
-        font-size: 12px;
-    }
-
-    /* Tweet/Post Section */
-    .post-section {
-        padding: 20px;
-        border-bottom: 1px solid var(--border-color);
-        background: rgba(99, 102, 241, 0.02);
-    }
-
-    .post-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 16px;
-    }
-
-    .avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 18px;
-        color: white;
-        flex-shrink: 0;
-    }
-
-    .username-display {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .username-display strong {
-        font-size: 16px;
-        color: var(--text-primary);
-    }
-
-    .username-display .handle {
-        color: var(--text-tertiary);
-        font-size: 14px;
-    }
-
-    .post-form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-left: 60px;
-    }
-
-    .textarea-wrapper {
-        position: relative;
-    }
-
-    #tweet-metni {
-        width: 100%;
-    }
-
-    .char-count {
-        position: absolute;
-        bottom: 8px;
-        right: 12px;
-        font-size: 12px;
-        color: var(--text-tertiary);
-    }
-
-    .char-count.warning {
-        color: var(--warning);
-    }
-
-    .char-count.danger {
-        color: var(--danger);
-    }
-
-    .post-actions {
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-    }
-
-    /* Feed */
-    .feed {
-        flex: 1;
-        overflow-y: auto;
-    }
-
-    .feed::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .feed::-webkit-scrollbar-track {
-        background: var(--dark-bg);
-    }
-
-    .feed::-webkit-scrollbar-thumb {
-        background: var(--border-color);
-        border-radius: 4px;
-    }
-
-    .feed::-webkit-scrollbar-thumb:hover {
-        background: var(--text-tertiary);
+    /* ===== POSTS ===== */
+    .posts-container {
+        padding: 0;
     }
 
     .post {
-        padding: 16px 20px;
-        border-bottom: 1px solid var(--border-color);
-        transition: var(--transition);
+        padding: 20px 24px;
+        border-bottom: 2px solid var(--border-light);
+        display: flex;
+        gap: 16px;
+        transition: all 0.3s ease;
         position: relative;
     }
 
     .post:hover {
-        background: rgba(99, 102, 241, 0.03);
+        background: rgba(255, 107, 157, 0.02);
     }
 
     .post.new-post {
-        animation: newPost 0.5s ease-out;
-        border-left: 4px solid var(--primary);
+        animation: slideDown 0.4s ease-out;
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.05) 0%, rgba(255, 160, 122, 0.05) 100%);
     }
 
-    @keyframes newPost {
+    @keyframes slideDown {
         from {
             opacity: 0;
             transform: translateY(-20px);
@@ -392,448 +470,780 @@
         }
     }
 
-    .post-header-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 12px;
-    }
-
     .post-avatar {
-        width: 40px;
-        height: 40px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 600;
-        font-size: 16px;
         color: white;
+        font-weight: 700;
+        font-size: 20px;
         flex-shrink: 0;
+        box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+        cursor: pointer;
+        text-decoration: none;
     }
 
-    .post-meta {
+    .post-avatar:hover {
+        transform: scale(1.05);
+    }
+
+    .post-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .post-header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        flex: 1;
-        gap: 12px;
+        gap: 8px;
+        margin-bottom: 10px;
         flex-wrap: wrap;
     }
 
     .post-author {
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        font-weight: 700;
+        color: var(--text-dark);
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.2s;
     }
 
-    .post-author strong {
-        color: var(--text-primary);
-        font-weight: 600;
+    .post-author:hover {
+        color: var(--primary);
     }
 
     .post-handle {
-        color: var(--text-tertiary);
-        font-size: 13px;
+        color: var(--text-light);
+        font-size: 14px;
     }
 
     .post-time {
-        color: var(--text-tertiary);
+        color: var(--text-light);
         font-size: 13px;
-        white-space: nowrap;
+        margin-left: auto;
     }
 
     .post-content {
-        margin-left: 52px;
-        margin-bottom: 12px;
         font-size: 15px;
-        line-height: 1.5;
-        color: var(--text-primary);
+        line-height: 1.6;
+        color: var(--text-dark);
+        margin-bottom: 14px;
         word-break: break-word;
         white-space: pre-wrap;
     }
 
     .post-actions {
-        margin-left: 52px;
         display: flex;
-        gap: 10px;
         justify-content: flex-start;
+        gap: 24px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-light);
     }
 
+    .post-action {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        color: var(--text-light);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .post-action:hover {
+        background: rgba(255, 107, 157, 0.1);
+        color: var(--primary);
+    }
+
+    .post-action.liked {
+        color: #FF6B6B;
+    }
+
+    .post-action.retweeted {
+        color: var(--success);
+    }
+
+    .post-action-delete {
+        margin-left: auto;
+        background: rgba(255, 107, 157, 0.1);
+        color: #FF6B6B;
+        padding: 6px 12px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    .post-action-delete:hover {
+        background: #FF6B6B;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .btn-message {
+        background: linear-gradient(135deg, var(--success) 0%, #5BC0DE 100%);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-message:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(107, 213, 237, 0.3);
+    }
+
+    /* ===== EMPTY STATE ===== */
     .empty-state {
         text-align: center;
-        padding: 60px 20px;
-        color: var(--text-tertiary);
+        padding: 80px 20px;
+        color: var(--text-light);
     }
 
-    .empty-state-icon {
-        font-size: 48px;
-        margin-bottom: 16px;
+    .empty-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        animation: float 3s ease-in-out infinite;
     }
 
-    .empty-state h3 {
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .empty-title {
         font-family: 'Poppins', sans-serif;
-        font-size: 20px;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-dark);
         margin-bottom: 8px;
-        color: var(--text-secondary);
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-        .auth-grid {
+    .empty-text {
+        font-size: 15px;
+        color: var(--text-light);
+    }
+
+    /* ===== RIGHT SIDEBAR ===== */
+    .right-sidebar {
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: white;
+        padding: 14px 16px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        border: 2px solid var(--border-light);
+        transition: all 0.3s ease;
+    }
+
+    .search-box:focus-within {
+        border-color: var(--primary);
+        box-shadow: var(--shadow);
+    }
+
+    .search-box input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: var(--text-dark);
+        outline: none;
+        font-size: 14px;
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    .search-box input::placeholder {
+        color: var(--text-light);
+    }
+
+    .users-section {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .users-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+        font-weight: 800;
+        padding: 20px;
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 160, 122, 0.1) 100%);
+        border-bottom: 2px solid var(--border-light);
+        color: var(--primary);
+    }
+
+    .user-item {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-light);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+    }
+
+    .user-item:hover {
+        background: rgba(255, 107, 157, 0.05);
+        padding-left: 24px;
+    }
+
+    .user-item-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .user-item-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-item-name {
+        font-weight: 700;
+        color: var(--text-dark);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 14px;
+    }
+
+    .user-item-handle {
+        font-size: 12px;
+        color: var(--text-light);
+    }
+
+    /* ===== ALERTS ===== */
+    .alert {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        color: var(--text-dark);
+        padding: 16px 24px;
+        border-radius: 15px;
+        border-left: 5px solid var(--primary);
+        z-index: 1000;
+        animation: slideDown 0.4s ease-out;
+        box-shadow: var(--shadow);
+        max-width: 90%;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
+        .container {
             grid-template-columns: 1fr;
         }
 
-        .header {
-            padding: 12px 16px;
+        .sidebar, .right-sidebar {
+            display: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .login-page {
+            min-height: 100vh;
         }
 
-        .header-title {
+        .login-container {
+            max-width: 100%;
+        }
+
+        .login-header {
+            padding: 30px 20px;
+        }
+
+        .login-logo {
+            font-size: 36px;
+        }
+
+        .login-body {
+            padding: 30px 20px;
+        }
+
+        .container {
+            padding: 12px;
+            gap: 12px;
+        }
+
+        .compose-inner {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .post {
+            padding: 16px;
+            gap: 12px;
+        }
+
+        .post-avatar {
+            width: 44px;
+            height: 44px;
+            font-size: 16px;
+        }
+
+        .feed-title {
             font-size: 20px;
         }
 
-        .post-section {
-            padding: 16px;
+        .compose-textarea {
+            min-height: 100px;
+            font-size: 14px;
         }
 
-        .post-form {
-            margin-left: 0;
-        }
-
-        .post-header {
-            margin-bottom: 12px;
-        }
-
-        .post-content,
         .post-actions {
-            margin-left: 0;
-            padding-left: 0;
+            gap: 16px;
         }
 
-        .auth-section {
-            padding: 20px;
+        .logo-text {
+            font-size: 28px;
         }
 
-        .auth-title {
-            font-size: 24px;
+        .post-action {
+            font-size: 12px;
         }
 
-        #tweet-metni {
-            min-height: 80px;
+        .post-action-delete {
+            padding: 6px 10px;
         }
     }
 
-    /* Loading State */
-    .loading {
-        display: inline-block;
-        width: 4px;
-        height: 4px;
-        background: currentColor;
-        border-radius: 50%;
-        animation: pulse 1.4s infinite;
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
     }
 
-    .loading:nth-child(2) {
-        animation-delay: 0.2s;
+    ::-webkit-scrollbar-track {
+        background: var(--light-bg);
     }
 
-    .loading:nth-child(3) {
-        animation-delay: 0.4s;
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255, 107, 157, 0.3);
+        border-radius: 4px;
     }
 
-    @keyframes pulse {
-        0%, 60%, 100% {
-            opacity: 0.3;
-        }
-        30% {
-            opacity: 1;
-        }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 107, 157, 0.5);
     }
 </style>
 ```
 
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-title">
-                ✨ Bizim Mekan
+    {% if not session.get('username') %}
+    <!-- LOGIN/REGISTER PAGE -->
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-logo">✨ Mekan</div>
+                <div class="login-tagline">Samimi Bir Sosyal Ağ</div>
             </div>
-            <div class="header-actions">
-                {% if 'kullanici' in session %}
-                    <span style="font-size: 14px; color: var(--text-tertiary);">@{{ session['kullanici'] }}</span>
-                    <a href="/cikis"><button class="btn-secondary btn-small">Çıkış</button></a>
-                {% endif %}
-            </div>
-        </div>
 
 ```
-    <!-- Alerts -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert success" id="alert-{{ loop.index }}">
-                    {{ message }}
-                </div>
-                <script>
-                    setTimeout(() => {
-                        const alert = document.getElementById('alert-{{ loop.index }}');
-                        if(alert) alert.style.display = 'none';
-                    }, 3000);
-                </script>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+        <div class="login-body">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('login')">🔐 Giriş Yap</button>
+                <button class="tab-btn" onclick="switchTab('register')">📝 Kayıt Ol</button>
+            </div>
 
-    <!-- Auth Section -->
-    {% if 'kullanici' not in session %}
-    <div class="auth-section">
-        <h2 class="auth-title">✨ Katıl Şimdi</h2>
-        <p class="auth-subtitle">Samimi bir topluluk oluşturalım. Mesajlaş, bağlan, eğlen!</p>
-        <div class="auth-grid">
-            <!-- Giriş Formu -->
-            <form action="/giris" method="POST" class="auth-form">
-                <h3>🔐 Giriş Yap</h3>
-                <input type="text" name="kullanici_adi" placeholder="Kullanıcı Adın" required>
-                <input type="password" name="sifre" placeholder="Şifren" required>
-                <button type="submit" class="btn-primary">Giriş Yap</button>
+            <!-- LOGIN FORM -->
+            <form action="/login" method="POST" class="auth-form active" id="loginForm">
+                <input type="text" name="username" placeholder="Kullanıcı Adı" required autofocus>
+                <input type="password" name="password" placeholder="Şifre" required>
+                <button type="submit" class="btn-submit">Giriş Yap 🚀</button>
             </form>
 
-            <!-- Kayıt Formu -->
-            <form action="/kayit" method="POST" class="auth-form">
-                <h3>✨ Yeni Hesap Oluş</h3>
-                <input type="text" name="kullanici_adi" placeholder="Yeni Kullanıcı Adı" required>
-                <input type="password" name="sifre" placeholder="Güçlü Şifre" required>
-                <button type="submit" class="btn-primary">Kayıt Ol</button>
+            <!-- REGISTER FORM -->
+            <form action="/register" method="POST" class="auth-form" id="registerForm">
+                <input type="text" name="username" placeholder="Kullanıcı Adı" required minlength="2">
+                <input type="password" name="password" placeholder="Şifre (min 4 karakter)" required minlength="4">
+                <button type="submit" class="btn-submit">Kayıt Ol ✨</button>
             </form>
         </div>
-    </div>
-    {% endif %}
-
-    <!-- Post Section (Giriş yapanlar için) -->
-    {% if 'kullanici' in session %}
-    <div class="post-section">
-        <div class="post-header">
-            <div class="avatar">{{ session['kullanici'][0]|upper }}</div>
-            <div class="username-display">
-                <strong>{{ session['kullanici'] }}</strong>
-                <span class="handle">@{{ session['kullanici']|lower }}</span>
-            </div>
-        </div>
-
-        <form id="gonder-formu" class="post-form">
-            <div class="textarea-wrapper">
-                <textarea 
-                    name="mesaj" 
-                    id="tweet-metni" 
-                    placeholder="Neler oluyor? 💭" 
-                    required 
-                    maxlength="280"
-                    rows="3"></textarea>
-                <div class="char-count"><span id="char-count">0</span>/280</div>
-            </div>
-            <div class="post-actions">
-                <button type="submit" id="gonder-btn" class="btn-primary" disabled>
-                    Gönder 🚀
-                </button>
-            </div>
-        </form>
-    </div>
-    {% endif %}
-
-    <!-- Feed -->
-    <div class="feed" id="feed-akis">
-        {% if gonderiler %}
-            {% for gonderi in gonderiler %}
-            <div class="post" id="post-{{ gonderi[0] }}">
-                <div class="post-header-info">
-                    <div class="post-avatar">{{ gonderi[1][0]|upper }}</div>
-                    <div class="post-meta">
-                        <div class="post-author">
-                            <strong>{{ gonderi[1] }}</strong>
-                            <span class="post-handle">@{{ gonderi[1]|lower }}</span>
-                        </div>
-                        <span class="post-time">{{ gonderi[3] }}</span>
-                    </div>
-                    {% if is_admin %}
-                        <button class="btn-danger" onclick="silenPost({{ gonderi[0] }})">
-                            🗑️ Sil
-                        </button>
-                    {% endif %}
-                </div>
-                <div class="post-content">{{ gonderi[2] }}</div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">🌟</div>
-                <h3>Henüz Hiç Post Yok</h3>
-                <p>İlk sesi sen ver! Mekanı yaşat.</p>
-            </div>
-        {% endif %}
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('gonder-formu');
-        if (!form) return;
+{% else %}
+<!-- LOGGED IN - MAIN APP -->
+<div class="container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo-section">
+            <div class="logo-text">✨ Mekan</div>
+            <div class="tagline">Samimi Bir Yer</div>
+        </div>
 
-        const textarea = document.getElementById('tweet-metni');
-        const button = document.getElementById('gonder-btn');
-        const charCount = document.getElementById('char-count');
-        const feed = document.getElementById('feed-akis');
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="/" class="nav-link active">🏠 Anasayfa</a>
+            </li>
+            <li class="nav-item">
+                <a href="/messages" class="nav-link">💬 Mesajlar</a>
+            </li>
+            <li class="nav-item">
+                <a href="/profile/{{ session.get('username') }}" class="nav-link">👤 Profil</a>
+            </li>
+        </ul>
 
-        // Karakter sayacı
-        textarea.addEventListener('input', () => {
-            const count = textarea.value.length;
-            charCount.textContent = count;
-            
-            // Buton durumu
-            button.disabled = count === 0 || count > 280;
+        <button class="btn-compose" onclick="document.getElementById('composeArea').scrollIntoView({behavior: 'smooth'})">✍️ Yazı Yaz</button>
 
-            // Renklendir
-            const countEl = charCount.parentElement;
-            if (count > 250) {
-                countEl.classList.add('danger');
-                countEl.classList.remove('warning');
-            } else if (count > 200) {
-                countEl.classList.add('warning');
-                countEl.classList.remove('danger');
-            } else {
-                countEl.classList.remove('warning', 'danger');
-            }
-        });
+        <div class="user-card">
+            <div class="user-avatar">{{ session.get('username')[0].upper() }}</div>
+            <div class="user-info">
+                <div class="user-name">{{ session.get('username') }}</div>
+                <div class="user-handle">@{{ session.get('username') }}</div>
+            </div>
+        </div>
 
-        // Form Gönderme
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (button.disabled) return;
-            
-            button.disabled = true;
-            button.textContent = 'Gönderiliyor...';
+        <form action="/logout" method="GET">
+            <button type="submit" class="btn-logout">Çıkış Yap 👋</button>
+        </form>
+    </aside>
 
-            try {
-                const formData = new FormData(form);
-                const response = await fetch('/gonder_api', {
-                    method: 'POST',
-                    body: formData
-                });
+    <!-- MAIN FEED -->
+    <main class="feed">
+        <div class="feed-header">
+            <div class="feed-title">✨ Akış</div>
+        </div>
 
-                if (response.ok) {
-                    const veri = await response.json();
-                    
-                    // Yeni post HTML'i
-                    const yeniPost = createPostHTML(veri);
-                    feed.insertAdjacentHTML('afterbegin', yeniPost);
-                    
-                    // Boş state'i kaldır
-                    const emptyState = feed.querySelector('.empty-state');
-                    if (emptyState) emptyState.remove();
-                    
-                    // Formu temizle
-                    textarea.value = '';
-                    charCount.textContent = '0';
-                    button.textContent = 'Gönder 🚀';
-                    button.disabled = true;
-                    
-                    showAlert('Gönderi başarıyla gönderildi! ✨', 'success');
-                } else {
-                    const error = await response.json();
-                    showAlert('Hata: ' + error.hata, 'error');
-                    button.textContent = 'Gönder 🚀';
-                    button.disabled = false;
-                }
-            } catch (error) {
-                console.error('Hata:', error);
-                showAlert('Bir hata oluştu. Lütfen tekrar dene.', 'error');
-                button.textContent = 'Gönder 🚀';
-                button.disabled = false;
-            }
-        });
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert" id="alert-{{ loop.index }}">{{ message }}</div>
+                    <script>
+                        setTimeout(() => {
+                            const alert = document.getElementById('alert-{{ loop.index }}');
+                            if(alert) alert.style.opacity = '0';
+                        }, 3000);
+                    </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-        // Post HTML'i oluştur
-        function createPostHTML(data) {
-            const adminBtn = data.is_admin 
-                ? `<button class="btn-danger" onclick="silenPost(${data.id})">🗑️ Sil</button>`
-                : '';
-
-            return `
-                <div class="post new-post" id="post-${data.id}">
-                    <div class="post-header-info">
-                        <div class="post-avatar">${data.kullanici_adi[0].toUpperCase()}</div>
-                        <div class="post-meta">
-                            <div class="post-author">
-                                <strong>${data.kullanici_adi}</strong>
-                                <span class="post-handle">@${data.kullanici_adi.toLowerCase()}</span>
-                            </div>
-                            <span class="post-time">${data.tarih}</span>
-                        </div>
-                        ${adminBtn}
-                    </div>
-                    <div class="post-content">${escapeHtml(data.mesaj)}</div>
+        <!-- COMPOSE SECTION -->
+        <div class="compose-section" id="composeArea">
+            <div class="compose-inner">
+                <div class="user-avatar" style="width: 48px; height: 48px; font-size: 16px;">
+                    {{ session.get('username')[0].upper() }}
                 </div>
-            `;
-        }
+                <div style="flex: 1;">
+                    <textarea 
+                        class="compose-textarea" 
+                        id="tweetInput" 
+                        placeholder="Neler düşünüyorsun? 💭" 
+                        maxlength="500"></textarea>
+                    <div class="compose-actions">
+                        <div class="char-counter" id="charCounter">0/500</div>
+                        <button class="btn-post" id="postBtn" disabled onclick="postTweet()">Gönder 🚀</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        // Güvenlik: HTML karakterleri escape et
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        <!-- POSTS FEED -->
+        <div class="posts-container" id="postsFeed">
+            {% if posts %}
+                {% for post in posts %}
+                <div class="post" id="post-{{ post[0] }}">
+                    <a href="/profile/{{ post[1] }}" style="text-decoration: none;">
+                        <div class="post-avatar">{{ post[1][0].upper() }}</div>
+                    </a>
+                    <div class="post-body">
+                        <div class="post-header">
+                            <a href="/profile/{{ post[1] }}" class="post-author">{{ post[1] }}</a>
+                            <span class="post-handle">@{{ post[1] }}</span>
+                            <span class="post-time">{{ post[3] }}</span>
+                        </div>
+                        <div class="post-content">{{ post[2] }}</div>
+                        <div class="post-actions">
+                            <div class="post-action" onclick="likePost({{ post[0] }})">
+                                ❤️ <span class="like-count">{{ post[4] }}</span>
+                            </div>
+                            <div class="post-action" onclick="retweetPost({{ post[0] }})">
+                                🔄 <span class="retweet-count">{{ post[5] }}</span>
+                            </div>
+                            {% if session.get('username') == post[1] or session.get('username') == 'faruk' %}
+                            <button class="post-action-delete" onclick="deletePost({{ post[0] }})">
+                                🗑️ Sil
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">🌸</div>
+                <div class="empty-title">Henüz Yazı Yok</div>
+                <div class="empty-text">İlk yazıyı sen yaz ve mekanı yaşat!</div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
 
-        // Alert göster
-        function showAlert(message, type = 'success') {
-            const alert = document.createElement('div');
-            alert.className = `alert ${type}`;
-            alert.textContent = message;
-            document.body.appendChild(alert);
+    <!-- RIGHT SIDEBAR - USERS LIST -->
+    <aside class="right-sidebar">
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="Ara..." id="searchInput">
+        </div>
 
-            setTimeout(() => {
-                alert.style.transition = 'opacity 0.3s';
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 300);
-            }, 3000);
+        <div class="users-section">
+            <div class="users-title">👥 Kişiler</div>
+            
+            <div id="usersList">
+                {% if current_user %}
+                    {% for user in all_users %}
+                        {% if user[0] != session.get('username') %}
+                        <div class="user-item">
+                            <div class="user-item-avatar">{{ user[0][0].upper() }}</div>
+                            <div class="user-item-info" onclick="goToProfile('{{ user[0] }}')">
+                                <div class="user-item-name">{{ user[0] }}</div>
+                                <div class="user-item-handle">@{{ user[0] }}</div>
+                            </div>
+                            <a href="/message/{{ user[0] }}" class="btn-message">Mesaj</a>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </aside>
+</div>
+{% endif %}
+
+<script>
+    function switchTab(tab) {
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const buttons = document.querySelectorAll('.tab-btn');
+
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        if (tab === 'login') {
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+            buttons[0].classList.add('active');
+            loginForm.querySelector('input').focus();
+        } else {
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+            buttons[1].classList.add('active');
+            registerForm.querySelector('input').focus();
         }
+    }
+
+    function goToProfile(username) {
+        window.location.href = `/profile/${username}`;
+    }
+
+    // Character counter
+    document.getElementById('tweetInput')?.addEventListener('input', function() {
+        const counter = document.getElementById('charCounter');
+        const btn = document.getElementById('postBtn');
+        const length = this.value.length;
+        
+        counter.textContent = `${length}/500`;
+        
+        if (length > 400) {
+            counter.classList.add('danger');
+            counter.classList.remove('warning');
+        } else if (length > 300) {
+            counter.classList.add('warning');
+            counter.classList.remove('danger');
+        } else {
+            counter.classList.remove('warning', 'danger');
+        }
+        
+        btn.disabled = length === 0;
     });
 
-    // Post silme (Admin)
-    async function silenPost(postId) {
-        if (!confirm('Bu gönderiyi silmek istediğine emin misin?')) return;
+    // Post Tweet
+    async function postTweet() {
+        const content = document.getElementById('tweetInput').value.trim();
+        
+        if (!content) {
+            alert('Yazı boş olamaz!');
+            return;
+        }
 
         try {
-            const response = await fetch(`/sil/${postId}`, {
+            const formData = new FormData();
+            formData.append('content', content);
+            
+            const response = await fetch('/post', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const post = await response.json();
+                
+                const newPost = `
+                    <div class="post new-post" id="post-${post.id}">
+                        <a href="/profile/{{ session.get('username') }}" style="text-decoration: none;">
+                            <div class="post-avatar">{{ session.get('username')[0].upper() }}</div>
+                        </a>
+                        <div class="post-body">
+                            <div class="post-header">
+                                <a href="/profile/{{ session.get('username') }}" class="post-author">{{ session.get('username') }}</a>
+                                <span class="post-handle">@{{ session.get('username') }}</span>
+                                <span class="post-time">${post.created_at}</span>
+                            </div>
+                            <div class="post-content">${escapeHtml(post.content)}</div>
+                            <div class="post-actions">
+                                <div class="post-action" onclick="likePost(${post.id})">
+                                    ❤️ <span class="like-count">${post.likes_count}</span>
+                                </div>
+                                <div class="post-action" onclick="retweetPost(${post.id})">
+                                    🔄 <span class="retweet-count">${post.retweets_count}</span>
+                                </div>
+                                <button class="post-action-delete" onclick="deletePost(${post.id})">
+                                    🗑️ Sil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                const feed = document.getElementById('postsFeed');
+                feed.innerHTML = newPost + feed.innerHTML;
+                
+                document.getElementById('tweetInput').value = '';
+                document.getElementById('charCounter').textContent = '0/500';
+                document.getElementById('postBtn').disabled = true;
+                
+                showAlert('Yazı başarıyla gönderildi! ✨');
+            } else {
+                const error = await response.json();
+                alert('Hata: ' + error.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Gönderme hatası');
+        }
+    }
+
+    // Like Post
+    async function likePost(postId) {
+        try {
+            const response = await fetch(`/like/${postId}`, {
                 method: 'POST'
             });
 
             if (response.ok) {
-                const post = document.getElementById(`post-${postId}`);
-                if (post) {
-                    post.style.animation = 'newPost 0.5s ease-out reverse';
-                    setTimeout(() => post.remove(), 500);
+                const data = await response.json();
+                const postEl = document.getElementById(`post-${postId}`);
+                const likeBtn = postEl.querySelector('.post-action:nth-child(1)');
+                const likeCount = likeBtn.querySelector('.like-count');
+                
+                likeCount.textContent = data.likes_count;
+                
+                if (data.action === 'liked') {
+                    likeBtn.classList.add('liked');
+                } else {
+                    likeBtn.classList.remove('liked');
                 }
-                showAlert('Gönderi silindi!', 'success');
-            } else {
-                showAlert('Silme işlemi başarısız!', 'error');
             }
         } catch (error) {
-            console.error('Hata:', error);
-            showAlert('Bir hata oluştu!', 'error');
+            console.error('Error:', error);
         }
     }
 
-    function showAlert(message, type = 'success') {
+    // Retweet Post
+    async function retweetPost(postId) {
+        try {
+            const response = await fetch(`/retweet/${postId}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const postEl = document.getElementById(`post-${postId}`);
+                const retweetBtn = postEl.querySelector('.post-action:nth-child(2)');
+                const retweetCount = retweetBtn.querySelector('.retweet-count');
+                
+                retweetCount.textContent = data.retweets_count;
+                
+                if (data.action === 'retweeted') {
+                    retweetBtn.classList.add('retweeted');
+                } else {
+                    retweetBtn.classList.remove('retweeted');
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    // Delete Post
+    async function deletePost(postId) {
+        if (!confirm('Bu yazıyı silmek istediğine emin misin?')) return;
+
+        try {
+            const response = await fetch(`/delete_post/${postId}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                const postEl = document.getElementById(`post-${postId}`);
+                postEl.style.animation = 'slideDown 0.4s ease-out reverse';
+                setTimeout(() => postEl.remove(), 400);
+                showAlert('Yazı silindi!');
+            } else {
+                alert('Silme hatası!');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Silme hatası');
+        }
+    }
+
+    // Utilities
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showAlert(message) {
         const alert = document.createElement('div');
-        alert.className = `alert ${type}`;
+        alert.className = 'alert';
         alert.textContent = message;
         document.body.appendChild(alert);
 
         setTimeout(() => {
-            alert.style.transition = 'opacity 0.3s';
             alert.style.opacity = '0';
             setTimeout(() => alert.remove(), 300);
         }, 3000);
