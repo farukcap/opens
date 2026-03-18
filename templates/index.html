@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizim Mekan</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f5f8fa; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { text-align: center; color: #1da1f2; margin-bottom: 20px; }
+        .post-box { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 10px; border: 1px solid #e1e8ed; border-radius: 5px; font-size: 16px; }
+        button { background-color: #1da1f2; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; float: right; }
+        .feed { clear: both; margin-top: 30px; }
+        .tweet { background: white; padding: 15px; border-radius: 10px; border: 1px solid #e1e8ed; margin-bottom: 10px; }
+        .user { font-weight: bold; color: #14171a; }
+        .date { color: #657786; font-size: 12px; float: right; }
+        .content { margin-top: 10px; color: #14171a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="header">🚀 Bizim Mekan</h2>
+        
+        <div class="post-box">
+            <form action="/gonder" method="POST">
+                <input type="text" name="kullanici" placeholder="Adın veya Lakabın" required maxlength="20">
+                <textarea name="mesaj" placeholder="Neler oluyor?" required rows="3" maxlength="280"></textarea>
+                <button type="submit">Gönder</button>
+            </form>
+        </div>
+
+        <div class="feed">
+            {% for gonderi in gonderiler %}
+            <div class="tweet">
+                <span class="user">{{ gonderi[0] }}</span>
+                <span class="date">{{ gonderi[2] }}</span>
+                <div class="content">{{ gonderi[1] }}</div>
+            </div>
+            {% else %}
+            <p style="text-align:center; color:#657786;">Henüz kimse bir şey yazmamış. İlk sesi sen ver!</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
