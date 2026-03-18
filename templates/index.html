@@ -3,65 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bizim Mekan</title>
+    <title>✨ Bizim Mekan</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #000000; color: #e7e9ea; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 0 auto; border-left: 1px solid #2f3336; border-right: 1px solid #2f3336; min-height: 100vh; }
-        .header { padding: 15px; border-bottom: 1px solid #2f3336; font-size: 20px; font-weight: bold; position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10; }
+        .header { padding: 15px; border-bottom: 1px solid #2f3336; font-size: 22px; font-weight: bold; position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10; display: flex; justify-content: space-between; align-items: center; }
         .auth-box { padding: 20px; border-bottom: 1px solid #2f3336; }
-        .auth-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: #16181c; padding: 15px; border-radius: 15px; }
-        input, textarea { background-color: #202327; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 15px; outline: none; }
-        input:focus, textarea:focus { border: 1px solid #1d9bf0; }
-        button { background-color: #1d9bf0; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .auth-form { display: flex; flex-direction: column; gap: 10px; background: #16181c; padding: 15px; border-radius: 15px; flex: 1; }
+        input, textarea { background-color: #202327; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 15px; outline: none; transition: 0.2s; }
+        input:focus, textarea:focus { border: 1px solid #1d9bf0; background-color: #000; }
+        button { background-color: #1d9bf0; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px; }
         button:hover { background-color: #1a8cd8; }
+        button:disabled { background-color: #536471; cursor: not-allowed; }
         .tweet-box { padding: 15px; border-bottom: 1px solid #2f3336; display: flex; flex-direction: column; gap: 10px; }
-        .tweet { padding: 15px; border-bottom: 1px solid #2f3336; transition: background 0.2s; }
+        .tweet { padding: 15px; border-bottom: 1px solid #2f3336; transition: background 0.2s; display: flex; gap: 10px; align-items: flex-start; }
         .tweet:hover { background-color: #080808; }
-        .user { font-weight: bold; font-size: 16px; display: inline-block; }
-        .username { color: #71767b; font-size: 14px; margin-left: 5px; }
+        .user-avatar { width: 45px; height: 45px; border-radius: 50%; background-color: #202327; color: #71767b; font-size: 20px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .user-info { display: inline-flex; gap: 5px; align-items: center; }
+        .user { font-weight: bold; font-size: 16px; display: inline-block; text-decoration: none; color: #e7e9ea; }
+        .username { color: #71767b; font-size: 14px; }
         .date { color: #71767b; font-size: 14px; float: right; }
-        .content { margin-top: 5px; font-size: 15px; line-height: 1.5; word-wrap: break-word; }
-        .flash { color: #f91880; padding: 10px; text-align: center; font-weight: bold; }
-        .logout { background-color: transparent; border: 1px solid #536471; padding: 5px 15px; float: right; }
+        .content { margin-top: 5px; font-size: 15px; line-height: 1.5; word-wrap: break-word; color: #e7e9ea; }
+        .flash { color: #f91880; padding: 10px; text-align: center; font-weight: bold; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; border-radius: 30px; z-index: 100; box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
+        .logout { background-color: transparent; border: 1px solid #536471; padding: 5px 15px; font-size: 14px; color: #e7e9ea; }
+        .logout:hover { border-color: #f91880; color: #f91880; background-color: rgba(249,24,128,0.05); }
+        /* Yönetici Silme Butonu */
+        .admin-sil { color: #f91880; background-color: rgba(249,24,128,0.05); border: 1px solid #f91880; padding: 3px 10px; border-radius: 15px; font-size: 12px; cursor: pointer; float: right; margin-left: 10px; text-decoration: none; font-weight: bold; }
+        .admin-sil:hover { background-color: rgba(249,24,128,0.1); }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">✨ Akış</div>
+        <div class="header">
+            ✨ Akış
+            {% if 'kullanici' in session %}
+                <a href="/cikis"><button class="logout">Çıkış Yap</button></a>
+            {% endif %}
+        </div>
         
         {% with messages = get_flashed_messages() %}
           {% if messages %}
             {% for message in messages %}
-              <div class="flash">{{ message }}</div>
+              <div class="flash" id="flash-msg">{{ message }}</div>
             {% endfor %}
+            <script>
+                // Hata mesajını 3 saniye sonra kapat
+                setTimeout(() => document.getElementById('flash-msg').style.display='none', 3000);
+            </script>
           {% endif %}
         {% endendwith %}
 
         {% if 'kullanici' in session %}
         <div class="tweet-box">
-            <div>
-                <span style="font-weight: bold;">Hoş geldin, @{{ session['kullanici'] }}</span>
-                <a href="/cikis"><button class="logout">Çıkış Yap</button></a>
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+                <div style="display:flex; align-items: center; gap: 10px;">
+                    <div class="user-avatar">{{ session['kullanici'][0]|upper }}</div>
+                    <span style="font-weight: bold; font-size: 18px;">@{{ session['kullanici'] }}</span>
+                </div>
             </div>
-            <form action="/gonder" method="POST" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
-                <textarea name="mesaj" placeholder="Neler oluyor?" required rows="3" maxlength="280"></textarea>
+            <form id="gonder-formu" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; margin-left: 55px;">
+                <textarea name="mesaj" id="tweet-metni" placeholder="Neler oluyor?" required rows="3" maxlength="280"></textarea>
                 <div style="text-align: right;">
-                    <button type="submit">Gönder</button>
+                    <button type="submit" id="gonder-btn">Gönder</button>
                 </div>
             </form>
         </div>
         
         {% else %}
         <div class="auth-box">
-            <p style="color: #71767b; font-size: 14px; margin-bottom: 15px;">Mekana katılmak için giriş yap veya kendi lakabını al.</p>
+            <h2 style="margin: 0 0 10px 0; font-size: 18px;">✨ Mekana katıl</h2>
+            <p style="color: #71767b; font-size: 14px; margin-bottom: 15px;">Akışı okumak için takıl. Yazmak için kendi lakabını al.</p>
             <div style="display: flex; gap: 10px;">
-                <form action="/giris" method="POST" class="auth-form" style="flex: 1;">
+                <form action="/giris" method="POST" class="auth-form">
                     <h3 style="margin: 0 0 10px 0; font-size: 16px;">Giriş Yap</h3>
                     <input type="text" name="kullanici_adi" placeholder="Lakabın" required>
                     <input type="password" name="sifre" placeholder="Şifre" required>
                     <button type="submit">Giriş</button>
                 </form>
-                <form action="/kayit" method="POST" class="auth-form" style="flex: 1;">
+                <form action="/kayit" method="POST" class="auth-form">
                     <h3 style="margin: 0 0 10px 0; font-size: 16px;">Kayıt Ol</h3>
                     <input type="text" name="kullanici_adi" placeholder="Yeni Lakap" required>
                     <input type="password" name="sifre" placeholder="Şifre Belirle" required>
@@ -71,22 +90,128 @@
         </div>
         {% endif %}
 
-        <div class="feed">
+        <div class="feed" id="feed-akis">
             {% for gonderi in gonderiler %}
-            <div class="tweet">
-                <div>
-                    <span class="user">{{ gonderi[0] }}</span>
-                    <span class="username">@{{ gonderi[0]|lower }}</span>
-                    <span class="date">{{ gonderi[2] }}</span>
+            <div class="tweet" id="tweet-{{ gonderi[0] }}">
+                <div class="user-avatar">{{ gonderi[1][0]|upper }}</div>
+                <div style="flex: 1;">
+                    <div style="width: 100%;">
+                        <div class="user-info">
+                            <span class="user">{{ gonderi[1] }}</span>
+                            <span class="username">@{{ gonderi[1]|lower }}</span>
+                        </div>
+                        <span class="date">{{ gonderi[3] }}</span>
+                        
+                        {% if is_admin %}
+                            <a href="/sil/{{ gonderi[0] }}" onclick="return confirm('Bu gönderiyi silem mi moruk?')" class="admin-sil">SİL</a>
+                        {% endif %}
+                    </div>
+                    <div class="content">{{ gonderi[2] }}</div>
                 </div>
-                <div class="content">{{ gonderi[1] }}</div>
             </div>
             {% else %}
-            <div style="padding: 20px; text-align: center; color: #71767b;">
+            <div style="padding: 20px; text-align: center; color: #71767b;" id="bos-mesaj">
                 Buralar çok ıssız. İlk sesi sen ver!
             </div>
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('gonder-formu');
+            if(!form) return; // Giriş yapılmamışsa çalışmaz.
+
+            const textarea = document.getElementById('tweet-metni');
+            const button = document.getElementById('gonder-btn');
+            const feed = document.getElementById('feed-akis');
+            const emptyMsg = document.getElementById('bos-mesaj');
+
+            // Gönder Butonu Kontrolü (Boşsa disabled)
+            textarea.addEventListener('input', () => {
+                button.disabled = textarea.value.trim().length === 0;
+            });
+            button.disabled = true; // İlk başta kapalı
+
+            // FORM GÖNDERME İŞLEMİ (AJAX)
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); // Sayfa yenilenmesini engelle
+                
+                if(button.disabled) return;
+                button.disabled = true;
+                button.textContent = "Gönderiliyor...";
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch('/gonder_api', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if(response.ok) {
+                        const veri = await response.json();
+                        
+                        // Gönderiyi Akışa Ekle (Yenilemeden)
+                        const yeniTweet = createTweetHTML(veri);
+                        feed.insertAdjacentHTML('afterbegin', yeniTweet);
+                        
+                        // Boş mesajı kaldır
+                        if(emptyMsg) emptyMsg.style.display = 'none';
+                        
+                        // Formu temizle
+                        textarea.value = '';
+                        button.textContent = "Gönder";
+                        button.disabled = true;
+                        
+                    } else {
+                        const hata = await response.json();
+                        alert("Hata moruk: " + hata.hata);
+                        button.disabled = false;
+                        button.textContent = "Gönder";
+                    }
+                } catch (error) {
+                    console.error('Hata:', error);
+                    alert("Sistem patladı, Render uyuyor olabilir. Yeniden dene.");
+                    button.disabled = false;
+                    button.textContent = "Gönder";
+                }
+            });
+
+            // YENİ TWEET HTML'İ OLUŞTURMA
+            function createTweetHTML(data) {
+                const upperInitial = data.kullanici_adi[0].toUpperCase();
+                const lowerUsername = data.kullanici_adi.toLowerCase();
+                
+                // Admin silebilir mi butonu
+                let adminSilBtn = '';
+                if(data.is_admin) {
+                    adminSilBtn = `<a href="/sil/${data.id}" onclick="return confirm('Bu gönderiyi silem mi moruk?')" class="admin-sil">SİL</a>`;
+                }
+
+                return `
+                    <div class="tweet" id="tweet-${data.id}" style="border-bottom: 1px solid #1d9bf0; animation: fade-in 0.5s;">
+                        <div class="user-avatar">${upperInitial}</div>
+                        <div style="flex: 1;">
+                            <div style="width: 100%;">
+                                <div class="user-info">
+                                    <span class="user">${data.kullanici_adi}</span>
+                                    <span class="username">@${lowerUsername}</span>
+                                </div>
+                                <span class="date">${data.tarih}</span>
+                                ${adminSilBtn}
+                            </div>
+                            <div class="content">${data.mesaj}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // CSS Animasyonu
+            const style = document.createElement('style');
+            style.innerHTML = '@keyframes fade-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }';
+            document.head.appendChild(style);
+        });
+    </script>
 </body>
 </html>
