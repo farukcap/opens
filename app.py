@@ -21,7 +21,6 @@ conn = get_db_connection()
 c = conn.cursor()
 
 ```
-# Users table
 c.execute("""CREATE TABLE IF NOT EXISTS users
              (id INTEGER PRIMARY KEY AUTOINCREMENT, 
               username TEXT UNIQUE NOT NULL, 
@@ -31,7 +30,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS users
               following_count INTEGER DEFAULT 0,
               created_at TEXT DEFAULT CURRENT_TIMESTAMP)""")
 
-# Posts table
 c.execute("""CREATE TABLE IF NOT EXISTS posts
              (id INTEGER PRIMARY KEY AUTOINCREMENT, 
               author TEXT NOT NULL, 
@@ -41,7 +39,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS posts
               retweets_count INTEGER DEFAULT 0,
               FOREIGN KEY(author) REFERENCES users(username) ON DELETE CASCADE)""")
 
-# Direct messages table
 c.execute("""CREATE TABLE IF NOT EXISTS messages
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
               sender TEXT NOT NULL,
@@ -52,7 +49,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS messages
               FOREIGN KEY(sender) REFERENCES users(username) ON DELETE CASCADE,
               FOREIGN KEY(recipient) REFERENCES users(username) ON DELETE CASCADE)""")
 
-# Likes table
 c.execute("""CREATE TABLE IF NOT EXISTS likes
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
               user TEXT NOT NULL,
@@ -62,7 +58,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS likes
               FOREIGN KEY(user) REFERENCES users(username) ON DELETE CASCADE,
               FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE)""")
 
-# Retweets table
 c.execute("""CREATE TABLE IF NOT EXISTS retweets
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
               user TEXT NOT NULL,
@@ -72,7 +67,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS retweets
               FOREIGN KEY(user) REFERENCES users(username) ON DELETE CASCADE,
               FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE)""")
 
-# Blocks table
 c.execute("""CREATE TABLE IF NOT EXISTS blocks
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
               blocker TEXT NOT NULL,
@@ -82,7 +76,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS blocks
               FOREIGN KEY(blocker) REFERENCES users(username) ON DELETE CASCADE,
               FOREIGN KEY(blocked) REFERENCES users(username) ON DELETE CASCADE)""")
 
-# Create admin user if not exists
 c.execute("SELECT * FROM users WHERE username = ?", (ADMIN_USERNAME,))
 if not c.fetchone():
     hashli_sifre = generate_password_hash(ADMIN_PASSWORD)
@@ -98,13 +91,11 @@ init_db()
 @app.route(”/”)
 def home():
 try:
-# Giriş yapılmışsa, postları ve kullanıcıları göster
 if session.get(“username”):
 conn = get_db_connection()
 c = conn.cursor()
 
 ```
-        # Get all posts
         c.execute("""SELECT p.id, p.author, p.content, p.created_at, 
                      p.likes_count, p.retweets_count, u.bio
                      FROM posts p
@@ -112,7 +103,6 @@ c = conn.cursor()
                      ORDER BY p.id DESC LIMIT 200""")
         posts = c.fetchall()
         
-        # Get all users except current user
         c.execute("SELECT username, bio, followers_count FROM users WHERE username != ? ORDER BY followers_count DESC", 
                  (session["username"],))
         all_users = c.fetchall()
@@ -125,7 +115,6 @@ c = conn.cursor()
         return render_template("index.html", posts=posts, all_users=all_users,
                              current_user=current_user, is_admin=is_admin)
     else:
-        # Giriş yapılmamışsa, sadece login/register sayfasını göster
         return render_template("index.html")
         
 except Exception as e:
@@ -267,7 +256,6 @@ return jsonify({“error”: “Lutfen giris yap”}), 401
     if not post:
         return jsonify({"error": "Gonderi bulunamadi"}), 404
     
-    # Only admin or post owner can delete
     if not is_admin and post["author"] != current_user:
         return jsonify({"error": "Yetkiniz yok"}), 403
     
@@ -294,15 +282,12 @@ return jsonify({“error”: “Lutfen giris yap”}), 401
     conn = get_db_connection()
     c = conn.cursor()
     
-    # Check if already liked
     c.execute("SELECT id FROM likes WHERE user = ? AND post_id = ?", (username, post_id))
     if c.fetchone():
-        # Unlike
         c.execute("DELETE FROM likes WHERE user = ? AND post_id = ?", (username, post_id))
         c.execute("UPDATE posts SET likes_count = likes_count - 1 WHERE id = ?", (post_id,))
         action = "unliked"
     else:
-        # Like
         c.execute("INSERT INTO likes (user, post_id, created_at) VALUES (?, ?, ?)", 
                  (username, post_id, created_at))
         c.execute("UPDATE posts SET likes_count = likes_count + 1 WHERE id = ?", (post_id,))
@@ -333,15 +318,12 @@ return jsonify({“error”: “Lutfen giris yap”}), 401
     conn = get_db_connection()
     c = conn.cursor()
     
-    # Check if already retweeted
     c.execute("SELECT id FROM retweets WHERE user = ? AND post_id = ?", (username, post_id))
     if c.fetchone():
-        # Un-retweet
         c.execute("DELETE FROM retweets WHERE user = ? AND post_id = ?", (username, post_id))
         c.execute("UPDATE posts SET retweets_count = retweets_count - 1 WHERE id = ?", (post_id,))
         action = "unretweeted"
     else:
-        # Retweet
         c.execute("INSERT INTO retweets (user, post_id, created_at) VALUES (?, ?, ?)", 
                  (username, post_id, created_at))
         c.execute("UPDATE posts SET retweets_count = retweets_count + 1 WHERE id = ?", (post_id,))
@@ -370,7 +352,6 @@ return redirect(url_for(“home”))
     conn = get_db_connection()
     c = conn.cursor()
     
-    # Get conversation list
     c.execute("""SELECT DISTINCT 
                  CASE WHEN sender = ? THEN recipient ELSE sender END as other_user
                  FROM messages
@@ -397,7 +378,6 @@ return redirect(url_for(“home”))
     conn = get_db_connection()
     c = conn.cursor()
     
-    # Get messages between two users
     c.execute("""SELECT sender, recipient, content, created_at 
                  FROM messages
                  WHERE (sender = ? AND recipient = ?) OR (sender = ? AND recipient = ?)
@@ -405,7 +385,6 @@ return redirect(url_for(“home”))
              (current_user, username, username, current_user))
     messages_list = c.fetchall()
     
-    # Mark as read
     c.execute("UPDATE messages SET is_read = 1 WHERE recipient = ? AND sender = ?", 
              (current_user, username))
     conn.commit()
@@ -432,7 +411,6 @@ return jsonify({“error”: “Lutfen giris yap”}), 401
     if not recipient or not content:
         return jsonify({"error": "Alici ve mesaj bos olamaz"}), 400
     
-    # Check if recipient exists
     conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT id FROM users WHERE username = ?", (recipient,))
@@ -461,14 +439,12 @@ return redirect(url_for(“home”))
     conn = get_db_connection()
     c = conn.cursor()
     
-    # Get user info
     c.execute("SELECT username, bio, followers_count, following_count, created_at FROM users WHERE username = ?", (username,))
     user = c.fetchone()
     
     if not user:
         return redirect(url_for("home"))
     
-    # Get user posts
     c.execute("SELECT id, author, content, created_at, likes_count, retweets_count FROM posts WHERE author = ? ORDER BY id DESC", (username,))
     posts = c.fetchall()
     
