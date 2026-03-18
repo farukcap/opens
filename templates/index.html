@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -13,856 +12,831 @@
             box-sizing: border-box;
         }
 
-```
-    :root {
-        --primary: #FF6B9D;
-        --secondary: #FFA07A;
-        --accent: #FFD700;
-        --light-bg: #FFF9F5;
-        --white: #FFFFFF;
-        --text-dark: #2D3436;
-        --text-light: #636E72;
-        --border-light: #F5E6D3;
-        --success: #6DD5ED;
-        --shadow: 0 10px 30px rgba(255, 107, 157, 0.15);
-        --shadow-hover: 0 15px 40px rgba(255, 107, 157, 0.25);
-    }
-
-    html {
-        scroll-behavior: smooth;
-    }
-
-    body {
-        font-family: 'Quicksand', 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #FFF9F5 0%, #FFEFE7 50%, #FFF5F0 100%);
-        color: var(--text-dark);
-        line-height: 1.6;
-        min-height: 100vh;
-    }
-
-    .container {
-        display: grid;
-        grid-template-columns: 280px 1fr 320px;
-        gap: 20px;
-        padding: 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-        min-height: 100vh;
-    }
-
-    /* ===== SIDEBAR ===== */
-    .sidebar {
-        height: fit-content;
-        position: sticky;
-        top: 20px;
-    }
-
-    .logo-section {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        padding: 30px 20px;
-        border-radius: 25px;
-        text-align: center;
-        box-shadow: var(--shadow);
-        margin-bottom: 25px;
-        color: white;
-    }
-
-    .logo-text {
-        font-family: 'Poppins', sans-serif;
-        font-size: 36px;
-        font-weight: 800;
-        margin-bottom: 8px;
-        letter-spacing: -1px;
-    }
-
-    .tagline {
-        font-size: 13px;
-        opacity: 0.9;
-        font-weight: 500;
-    }
-
-    .nav-menu {
-        list-style: none;
-        margin-bottom: 25px;
-    }
-
-    .nav-item {
-        margin-bottom: 12px;
-    }
-
-    .nav-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 14px 16px;
-        text-decoration: none;
-        color: var(--text-dark);
-        font-size: 15px;
-        font-weight: 600;
-        border-radius: 15px;
-        transition: all 0.3s ease;
-        background: rgba(255, 107, 157, 0.05);
-    }
-
-    .nav-link:hover {
-        background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 160, 122, 0.15) 100%);
-        transform: translateX(4px);
-        color: var(--primary);
-    }
-
-    .nav-link.active {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        color: white;
-        box-shadow: var(--shadow);
-    }
-
-    .btn-compose {
-        width: 100%;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        color: white;
-        border: none;
-        padding: 16px;
-        border-radius: 20px;
-        font-size: 16px;
-        font-weight: 700;
-        font-family: 'Quicksand', sans-serif;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: var(--shadow);
-        margin-bottom: 20px;
-    }
-
-    .btn-compose:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-hover);
-    }
-
-    .btn-compose:active {
-        transform: translateY(-1px);
-    }
-
-    .user-card {
-        background: white;
-        padding: 20px;
-        border-radius: 20px;
-        box-shadow: 0 5px 15px rgba(255, 107, 157, 0.1);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 15px;
-    }
-
-    .user-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 18px;
-        flex-shrink: 0;
-    }
-
-    .user-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .user-name {
-        font-weight: 700;
-        color: var(--text-dark);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .user-handle {
-        font-size: 12px;
-        color: var(--text-light);
-    }
-
-    .btn-logout {
-        width: 100%;
-        background: white;
-        color: var(--primary);
-        border: 2px solid var(--primary);
-        padding: 12px;
-        border-radius: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: 'Quicksand', sans-serif;
-    }
-
-    .btn-logout:hover {
-        background: rgba(255, 107, 157, 0.1);
-        transform: translateY(-2px);
-    }
-
-    /* ===== MAIN FEED ===== */
-    .feed {
-        background: white;
-        border-radius: 25px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
-    }
-
-    .feed-header {
-        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 160, 122, 0.1) 100%);
-        padding: 24px;
-        border-bottom: 2px solid var(--border-light);
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    .feed-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 24px;
-        font-weight: 800;
-        color: var(--primary);
-    }
-
-    /* ===== AUTH ONLY CONTENT ===== */
-    .auth-only {
-        display: none;
-    }
-
-    .auth-only.active {
-        display: block;
-    }
-
-    /* ===== LOGIN/REGISTER PAGE ===== */
-    .login-page {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        padding: 20px;
-    }
-
-    .login-container {
-        background: white;
-        border-radius: 30px;
-        box-shadow: var(--shadow-hover);
-        overflow: hidden;
-        max-width: 500px;
-        width: 100%;
-    }
-
-    .login-header {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        padding: 40px 30px;
-        text-align: center;
-        color: white;
-    }
-
-    .login-logo {
-        font-family: 'Poppins', sans-serif;
-        font-size: 48px;
-        font-weight: 800;
-        margin-bottom: 12px;
-    }
-
-    .login-tagline {
-        font-size: 16px;
-        opacity: 0.95;
-        font-weight: 500;
-    }
-
-    .login-body {
-        padding: 40px 30px;
-    }
-
-    .tab-buttons {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-bottom: 30px;
-    }
-
-    .tab-btn {
-        padding: 12px;
-        border: 2px solid var(--border-light);
-        background: white;
-        color: var(--text-dark);
-        border-radius: 12px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: 'Quicksand', sans-serif;
-        font-size: 14px;
-    }
-
-    .tab-btn.active {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        color: white;
-        border-color: var(--primary);
-    }
-
-    .tab-btn:hover {
-        border-color: var(--primary);
-    }
-
-    .auth-form {
-        display: none;
-    }
-
-    .auth-form.active {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .auth-form input {
-        background: var(--light-bg);
-        border: 2px solid var(--border-light);
-        color: var(--text-dark);
-        padding: 14px 16px;
-        border-radius: 12px;
-        font-size: 15px;
-        font-family: 'Quicksand', sans-serif;
-        transition: all 0.3s ease;
-    }
-
-    .auth-form input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
-    }
-
-    .auth-form input::placeholder {
-        color: var(--text-light);
-    }
-
-    .btn-submit {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        color: white;
-        border: none;
-        padding: 14px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-family: 'Quicksand', sans-serif;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 15px;
-        margin-top: 10px;
-    }
-
-    .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow);
-    }
-
-    /* ===== COMPOSE SECTION ===== */
-    .compose-section {
-        padding: 24px;
-        border-bottom: 2px solid var(--border-light);
-    }
-
-    .compose-inner {
-        display: flex;
-        gap: 16px;
-    }
-
-    .compose-textarea {
-        flex: 1;
-        background: var(--light-bg);
-        border: 2px solid var(--border-light);
-        color: var(--text-dark);
-        padding: 16px;
-        border-radius: 15px;
-        font-size: 16px;
-        font-family: 'Quicksand', sans-serif;
-        resize: none;
-        min-height: 120px;
-        transition: all 0.3s ease;
-    }
-
-    .compose-textarea:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
-    }
-
-    .compose-textarea::placeholder {
-        color: var(--text-light);
-    }
-
-    .compose-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 12px;
-    }
-
-    .char-counter {
-        color: var(--text-light);
-        font-size: 13px;
-        font-weight: 600;
-    }
-
-    .char-counter.warning {
-        color: var(--secondary);
-    }
-
-    .char-counter.danger {
-        color: #FF6B6B;
-    }
-
-    .btn-post {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        color: white;
-        border: none;
-        padding: 12px 28px;
-        border-radius: 15px;
-        font-weight: 700;
-        font-family: 'Quicksand', sans-serif;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 14px;
-    }
-
-    .btn-post:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow);
-    }
-
-    .btn-post:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
-    /* ===== POSTS ===== */
-    .posts-container {
-        padding: 0;
-    }
-
-    .post {
-        padding: 20px 24px;
-        border-bottom: 2px solid var(--border-light);
-        display: flex;
-        gap: 16px;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .post:hover {
-        background: rgba(255, 107, 157, 0.02);
-    }
-
-    .post.new-post {
-        animation: slideDown 0.4s ease-out;
-        background: linear-gradient(135deg, rgba(255, 107, 157, 0.05) 0%, rgba(255, 160, 122, 0.05) 100%);
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .post-avatar {
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 20px;
-        flex-shrink: 0;
-        box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .post-avatar:hover {
-        transform: scale(1.05);
-    }
-
-    .post-body {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .post-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
-    }
-
-    .post-author {
-        font-weight: 700;
-        color: var(--text-dark);
-        text-decoration: none;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-
-    .post-author:hover {
-        color: var(--primary);
-    }
-
-    .post-handle {
-        color: var(--text-light);
-        font-size: 14px;
-    }
-
-    .post-time {
-        color: var(--text-light);
-        font-size: 13px;
-        margin-left: auto;
-    }
-
-    .post-content {
-        font-size: 15px;
-        line-height: 1.6;
-        color: var(--text-dark);
-        margin-bottom: 14px;
-        word-break: break-word;
-        white-space: pre-wrap;
-    }
-
-    .post-actions {
-        display: flex;
-        justify-content: flex-start;
-        gap: 24px;
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px solid var(--border-light);
-    }
-
-    .post-action {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-        padding: 6px 10px;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        color: var(--text-light);
-        font-size: 13px;
-        font-weight: 600;
-    }
-
-    .post-action:hover {
-        background: rgba(255, 107, 157, 0.1);
-        color: var(--primary);
-    }
-
-    .post-action.liked {
-        color: #FF6B6B;
-    }
-
-    .post-action.retweeted {
-        color: var(--success);
-    }
-
-    .post-action-delete {
-        margin-left: auto;
-        background: rgba(255, 107, 157, 0.1);
-        color: #FF6B6B;
-        padding: 6px 12px;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: 700;
-        transition: all 0.3s ease;
-        font-family: 'Quicksand', sans-serif;
-    }
-
-    .post-action-delete:hover {
-        background: #FF6B6B;
-        color: white;
-        transform: scale(1.05);
-    }
-
-    .btn-message {
-        background: linear-gradient(135deg, var(--success) 0%, #5BC0DE 100%);
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: 700;
-        font-size: 12px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-message:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(107, 213, 237, 0.3);
-    }
-
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
-        text-align: center;
-        padding: 80px 20px;
-        color: var(--text-light);
-    }
-
-    .empty-icon {
-        font-size: 80px;
-        margin-bottom: 20px;
-        animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-    }
-
-    .empty-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--text-dark);
-        margin-bottom: 8px;
-    }
-
-    .empty-text {
-        font-size: 15px;
-        color: var(--text-light);
-    }
-
-    /* ===== RIGHT SIDEBAR ===== */
-    .right-sidebar {
-        height: fit-content;
-        position: sticky;
-        top: 20px;
-    }
-
-    .search-box {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: white;
-        padding: 14px 16px;
-        border-radius: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        border: 2px solid var(--border-light);
-        transition: all 0.3s ease;
-    }
-
-    .search-box:focus-within {
-        border-color: var(--primary);
-        box-shadow: var(--shadow);
-    }
-
-    .search-box input {
-        flex: 1;
-        background: transparent;
-        border: none;
-        color: var(--text-dark);
-        outline: none;
-        font-size: 14px;
-        font-family: 'Quicksand', sans-serif;
-    }
-
-    .search-box input::placeholder {
-        color: var(--text-light);
-    }
-
-    .users-section {
-        background: white;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    }
-
-    .users-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 18px;
-        font-weight: 800;
-        padding: 20px;
-        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 160, 122, 0.1) 100%);
-        border-bottom: 2px solid var(--border-light);
-        color: var(--primary);
-    }
-
-    .user-item {
-        padding: 16px 20px;
-        border-bottom: 1px solid var(--border-light);
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        cursor: pointer;
-    }
-
-    .user-item:hover {
-        background: rgba(255, 107, 157, 0.05);
-        padding-left: 24px;
-    }
-
-    .user-item-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        flex-shrink: 0;
-    }
-
-    .user-item-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .user-item-name {
-        font-weight: 700;
-        color: var(--text-dark);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 14px;
-    }
-
-    .user-item-handle {
-        font-size: 12px;
-        color: var(--text-light);
-    }
-
-    /* ===== ALERTS ===== */
-    .alert {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: white;
-        color: var(--text-dark);
-        padding: 16px 24px;
-        border-radius: 15px;
-        border-left: 5px solid var(--primary);
-        z-index: 1000;
-        animation: slideDown 0.4s ease-out;
-        box-shadow: var(--shadow);
-        max-width: 90%;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1200px) {
-        .container {
-            grid-template-columns: 1fr;
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #FFA07A;
+            --accent: #FFD700;
+            --light-bg: #FFF9F5;
+            --white: #FFFFFF;
+            --text-dark: #2D3436;
+            --text-light: #636E72;
+            --border-light: #F5E6D3;
+            --success: #6DD5ED;
+            --shadow: 0 10px 30px rgba(255, 107, 157, 0.15);
+            --shadow-hover: 0 15px 40px rgba(255, 107, 157, 0.25);
         }
 
-        .sidebar, .right-sidebar {
-            display: none;
+        html {
+            scroll-behavior: smooth;
         }
-    }
 
-    @media (max-width: 768px) {
-        .login-page {
+        body {
+            font-family: 'Quicksand', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #FFF9F5 0%, #FFEFE7 50%, #FFF5F0 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
             min-height: 100vh;
         }
 
-        .login-container {
-            max-width: 100%;
-        }
-
-        .login-header {
-            padding: 30px 20px;
-        }
-
-        .login-logo {
-            font-size: 36px;
-        }
-
-        .login-body {
-            padding: 30px 20px;
-        }
-
         .container {
-            padding: 12px;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
         }
 
-        .compose-inner {
-            flex-direction: column;
-            gap: 12px;
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            height: fit-content;
+            position: sticky;
+            top: 20px;
         }
 
-        .post {
-            padding: 16px;
-            gap: 12px;
-        }
-
-        .post-avatar {
-            width: 44px;
-            height: 44px;
-            font-size: 16px;
-        }
-
-        .feed-title {
-            font-size: 20px;
-        }
-
-        .compose-textarea {
-            min-height: 100px;
-            font-size: 14px;
-        }
-
-        .post-actions {
-            gap: 16px;
+        .logo-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 30px 20px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            color: white;
         }
 
         .logo-text {
-            font-size: 28px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .nav-item {
+            margin-bottom: 12px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            background: rgba(255, 107, 157, 0.05);
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 160, 122, 0.15) 100%);
+            transform: translateX(4px);
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-compose {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .btn-compose:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-compose:active {
+            transform: translateY(-1px);
+        }
+
+        .user-card {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-handle {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .btn-logout {
+            width: 100%;
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 107, 157, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ===== MAIN FEED ===== */
+        .feed {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .feed-header {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 160, 122, 0.1) 100%);
+            padding: 24px;
+            border-bottom: 2px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .feed-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* ===== LOGIN/REGISTER PAGE ===== */
+        .login-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: var(--shadow-hover);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .login-logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .login-tagline {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .login-body {
+            padding: 40px 30px;
+        }
+
+        .tab-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 12px;
+            border: 2px solid var(--border-light);
+            background: white;
+            color: var(--text-dark);
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 14px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .auth-form input {
+            background: var(--light-bg);
+            border: 2px solid var(--border-light);
+            color: var(--text-dark);
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* ===== COMPOSE SECTION ===== */
+        .compose-section {
+            padding: 24px;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .compose-inner {
+            display: flex;
+            gap: 16px;
+        }
+
+        .compose-textarea {
+            flex: 1;
+            background: var(--light-bg);
+            border: 2px solid var(--border-light);
+            color: var(--text-dark);
+            padding: 16px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Quicksand', sans-serif;
+            resize: none;
+            min-height: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .compose-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+        }
+
+        .compose-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .char-counter {
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .char-counter.warning {
+            color: var(--secondary);
+        }
+
+        .char-counter.danger {
+            color: #FF6B6B;
+        }
+
+        .btn-post {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-post:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-post:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===== POSTS ===== */
+        .posts-container {
+            padding: 0;
+        }
+
+        .post {
+            padding: 20px 24px;
+            border-bottom: 2px solid var(--border-light);
+            display: flex;
+            gap: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .post:hover {
+            background: rgba(255, 107, 157, 0.02);
+        }
+
+        .post.new-post {
+            animation: slideDown 0.4s ease-out;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.05) 0%, rgba(255, 160, 122, 0.05) 100%);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .post-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .post-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .post-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .post-author {
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .post-author:hover {
+            color: var(--primary);
+        }
+
+        .post-handle {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .post-time {
+            color: var(--text-light);
+            font-size: 13px;
+            margin-left: auto;
+        }
+
+        .post-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: flex-start;
+            gap: 24px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-light);
         }
 
         .post-action {
-            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .post-action:hover {
+            background: rgba(255, 107, 157, 0.1);
+            color: var(--primary);
+        }
+
+        .post-action.liked {
+            color: #FF6B6B;
+        }
+
+        .post-action.retweeted {
+            color: var(--success);
         }
 
         .post-action-delete {
-            padding: 6px 10px;
+            margin-left: auto;
+            background: rgba(255, 107, 157, 0.1);
+            color: #FF6B6B;
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
         }
-    }
 
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
+        .post-action-delete:hover {
+            background: #FF6B6B;
+            color: white;
+            transform: scale(1.05);
+        }
 
-    ::-webkit-scrollbar-track {
-        background: var(--light-bg);
-    }
+        .btn-message {
+            background: linear-gradient(135deg, var(--success) 0%, #5BC0DE 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
 
-    ::-webkit-scrollbar-thumb {
-        background: rgba(255, 107, 157, 0.3);
-        border-radius: 4px;
-    }
+        .btn-message:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 213, 237, 0.3);
+        }
 
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 107, 157, 0.5);
-    }
-</style>
-```
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-light);
+        }
 
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .empty-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        /* ===== RIGHT SIDEBAR ===== */
+        .right-sidebar {
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 14px 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-dark);
+            outline: none;
+            font-size: 14px;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .users-section {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .users-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 160, 122, 0.1) 100%);
+            border-bottom: 2px solid var(--border-light);
+            color: var(--primary);
+        }
+
+        .user-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .user-item:hover {
+            background: rgba(255, 107, 157, 0.05);
+            padding-left: 24px;
+        }
+
+        .user-item-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-item-name {
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+        }
+
+        .user-item-handle {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: var(--text-dark);
+            padding: 16px 24px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+            z-index: 1000;
+            animation: slideDown 0.4s ease-out;
+            box-shadow: var(--shadow);
+            max-width: 90%;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar, .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-page {
+                min-height: 100vh;
+            }
+
+            .login-container {
+                max-width: 100%;
+            }
+
+            .login-header {
+                padding: 30px 20px;
+            }
+
+            .login-logo {
+                font-size: 36px;
+            }
+
+            .login-body {
+                padding: 30px 20px;
+            }
+
+            .container {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .compose-inner {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .post {
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .post-avatar {
+                width: 44px;
+                height: 44px;
+                font-size: 16px;
+            }
+
+            .feed-title {
+                font-size: 20px;
+            }
+
+            .compose-textarea {
+                min-height: 100px;
+                font-size: 14px;
+            }
+
+            .post-actions {
+                gap: 16px;
+            }
+
+            .logo-text {
+                font-size: 28px;
+            }
+
+            .post-action {
+                font-size: 12px;
+            }
+
+            .post-action-delete {
+                padding: 6px 10px;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 157, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 107, 157, 0.5);
+        }
+    </style>
 </head>
 <body>
     {% if not session.get('username') %}
-    <!-- LOGIN/REGISTER PAGE -->
     <div class="login-page">
         <div class="login-container">
             <div class="login-header">
@@ -870,386 +844,375 @@
                 <div class="login-tagline">Samimi Bir Sosyal Ağ</div>
             </div>
 
-```
-        <div class="login-body">
-            <div class="tab-buttons">
-                <button class="tab-btn active" onclick="switchTab('login')">🔐 Giriş Yap</button>
-                <button class="tab-btn" onclick="switchTab('register')">📝 Kayıt Ol</button>
+            <div class="login-body">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab('login')">🔐 Giriş Yap</button>
+                    <button class="tab-btn" onclick="switchTab('register')">📝 Kayıt Ol</button>
+                </div>
+
+                <form action="/login" method="POST" class="auth-form active" id="loginForm">
+                    <input type="text" name="username" placeholder="Kullanıcı Adı" required autofocus>
+                    <input type="password" name="password" placeholder="Şifre" required>
+                    <button type="submit" class="btn-submit">Giriş Yap 🚀</button>
+                </form>
+
+                <form action="/register" method="POST" class="auth-form" id="registerForm">
+                    <input type="text" name="username" placeholder="Kullanıcı Adı" required minlength="2">
+                    <input type="password" name="password" placeholder="Şifre (min 4 karakter)" required minlength="4">
+                    <button type="submit" class="btn-submit">Kayıt Ol ✨</button>
+                </form>
             </div>
-
-            <!-- LOGIN FORM -->
-            <form action="/login" method="POST" class="auth-form active" id="loginForm">
-                <input type="text" name="username" placeholder="Kullanıcı Adı" required autofocus>
-                <input type="password" name="password" placeholder="Şifre" required>
-                <button type="submit" class="btn-submit">Giriş Yap 🚀</button>
-            </form>
-
-            <!-- REGISTER FORM -->
-            <form action="/register" method="POST" class="auth-form" id="registerForm">
-                <input type="text" name="username" placeholder="Kullanıcı Adı" required minlength="2">
-                <input type="password" name="password" placeholder="Şifre (min 4 karakter)" required minlength="4">
-                <button type="submit" class="btn-submit">Kayıt Ol ✨</button>
-            </form>
         </div>
     </div>
-</div>
 
-{% else %}
-<!-- LOGGED IN - MAIN APP -->
-<div class="container">
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar">
-        <div class="logo-section">
-            <div class="logo-text">✨ Mekan</div>
-            <div class="tagline">Samimi Bir Yer</div>
-        </div>
-
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="/" class="nav-link active">🏠 Anasayfa</a>
-            </li>
-            <li class="nav-item">
-                <a href="/messages" class="nav-link">💬 Mesajlar</a>
-            </li>
-            <li class="nav-item">
-                <a href="/profile/{{ session.get('username') }}" class="nav-link">👤 Profil</a>
-            </li>
-        </ul>
-
-        <button class="btn-compose" onclick="document.getElementById('composeArea').scrollIntoView({behavior: 'smooth'})">✍️ Yazı Yaz</button>
-
-        <div class="user-card">
-            <div class="user-avatar">{{ session.get('username')[0].upper() }}</div>
-            <div class="user-info">
-                <div class="user-name">{{ session.get('username') }}</div>
-                <div class="user-handle">@{{ session.get('username') }}</div>
+    {% else %}
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-text">✨ Mekan</div>
+                <div class="tagline">Samimi Bir Yer</div>
             </div>
-        </div>
 
-        <form action="/logout" method="GET">
-            <button type="submit" class="btn-logout">Çıkış Yap 👋</button>
-        </form>
-    </aside>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link active">🏠 Anasayfa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/messages" class="nav-link">💬 Mesajlar</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/profile/{{ session.get('username') }}" class="nav-link">👤 Profil</a>
+                </li>
+            </ul>
 
-    <!-- MAIN FEED -->
-    <main class="feed">
-        <div class="feed-header">
-            <div class="feed-title">✨ Akış</div>
-        </div>
+            <button class="btn-compose" onclick="document.getElementById('composeArea').scrollIntoView({behavior: 'smooth'})">✍️ Yazı Yaz</button>
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert" id="alert-{{ loop.index }}">{{ message }}</div>
-                    <script>
-                        setTimeout(() => {
-                            const alert = document.getElementById('alert-{{ loop.index }}');
-                            if(alert) alert.style.opacity = '0';
-                        }, 3000);
-                    </script>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <!-- COMPOSE SECTION -->
-        <div class="compose-section" id="composeArea">
-            <div class="compose-inner">
-                <div class="user-avatar" style="width: 48px; height: 48px; font-size: 16px;">
-                    {{ session.get('username')[0].upper() }}
-                </div>
-                <div style="flex: 1;">
-                    <textarea 
-                        class="compose-textarea" 
-                        id="tweetInput" 
-                        placeholder="Neler düşünüyorsun? 💭" 
-                        maxlength="500"></textarea>
-                    <div class="compose-actions">
-                        <div class="char-counter" id="charCounter">0/500</div>
-                        <button class="btn-post" id="postBtn" disabled onclick="postTweet()">Gönder 🚀</button>
-                    </div>
+            <div class="user-card">
+                <div class="user-avatar">{{ session.get('username')[0].upper() }}</div>
+                <div class="user-info">
+                    <div class="user-name">{{ session.get('username') }}</div>
+                    <div class="user-handle">@{{ session.get('username') }}</div>
                 </div>
             </div>
-        </div>
 
-        <!-- POSTS FEED -->
-        <div class="posts-container" id="postsFeed">
-            {% if posts %}
-                {% for post in posts %}
-                <div class="post" id="post-{{ post[0] }}">
-                    <a href="/profile/{{ post[1] }}" style="text-decoration: none;">
-                        <div class="post-avatar">{{ post[1][0].upper() }}</div>
-                    </a>
-                    <div class="post-body">
-                        <div class="post-header">
-                            <a href="/profile/{{ post[1] }}" class="post-author">{{ post[1] }}</a>
-                            <span class="post-handle">@{{ post[1] }}</span>
-                            <span class="post-time">{{ post[3] }}</span>
-                        </div>
-                        <div class="post-content">{{ post[2] }}</div>
-                        <div class="post-actions">
-                            <div class="post-action" onclick="likePost({{ post[0] }})">
-                                ❤️ <span class="like-count">{{ post[4] }}</span>
-                            </div>
-                            <div class="post-action" onclick="retweetPost({{ post[0] }})">
-                                🔄 <span class="retweet-count">{{ post[5] }}</span>
-                            </div>
-                            {% if session.get('username') == post[1] or session.get('username') == 'faruk' %}
-                            <button class="post-action-delete" onclick="deletePost({{ post[0] }})">
-                                🗑️ Sil
-                            </button>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-            <div class="empty-state">
-                <div class="empty-icon">🌸</div>
-                <div class="empty-title">Henüz Yazı Yok</div>
-                <div class="empty-text">İlk yazıyı sen yaz ve mekanı yaşat!</div>
+            <form action="/logout" method="GET">
+                <button type="submit" class="btn-logout">Çıkış Yap 👋</button>
+            </form>
+        </aside>
+
+        <main class="feed">
+            <div class="feed-header">
+                <div class="feed-title">✨ Akış</div>
             </div>
-            {% endif %}
-        </div>
-    </main>
 
-    <!-- RIGHT SIDEBAR - USERS LIST -->
-    <aside class="right-sidebar">
-        <div class="search-box">
-            <span>🔍</span>
-            <input type="text" placeholder="Ara..." id="searchInput">
-        </div>
-
-        <div class="users-section">
-            <div class="users-title">👥 Kişiler</div>
-            
-            <div id="usersList">
-                {% if current_user %}
-                    {% for user in all_users %}
-                        {% if user[0] != session.get('username') %}
-                        <div class="user-item">
-                            <div class="user-item-avatar">{{ user[0][0].upper() }}</div>
-                            <div class="user-item-info" onclick="goToProfile('{{ user[0] }}')">
-                                <div class="user-item-name">{{ user[0] }}</div>
-                                <div class="user-item-handle">@{{ user[0] }}</div>
-                            </div>
-                            <a href="/message/{{ user[0] }}" class="btn-message">Mesaj</a>
-                        </div>
-                        {% endif %}
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert" id="alert-{{ loop.index }}">{{ message }}</div>
+                        <script>
+                            setTimeout(() => {
+                                const alert = document.getElementById('alert-{{ loop.index }}');
+                                if(alert) alert.style.opacity = '0';
+                            }, 3000);
+                        </script>
                     {% endfor %}
                 {% endif %}
+            {% endwith %}
+
+            <div class="compose-section" id="composeArea">
+                <div class="compose-inner">
+                    <div class="user-avatar" style="width: 48px; height: 48px; font-size: 16px;">
+                        {{ session.get('username')[0].upper() }}
+                    </div>
+                    <div style="flex: 1;">
+                        <textarea 
+                            class="compose-textarea" 
+                            id="tweetInput" 
+                            placeholder="Neler düşünüyorsun? 💭" 
+                            maxlength="500"></textarea>
+                        <div class="compose-actions">
+                            <div class="char-counter" id="charCounter">0/500</div>
+                            <button class="btn-post" id="postBtn" disabled onclick="postTweet()">Gönder 🚀</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </aside>
-</div>
-{% endif %}
 
-<script>
-    function switchTab(tab) {
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const buttons = document.querySelectorAll('.tab-btn');
-
-        buttons.forEach(btn => btn.classList.remove('active'));
-        
-        if (tab === 'login') {
-            loginForm.classList.add('active');
-            registerForm.classList.remove('active');
-            buttons[0].classList.add('active');
-            loginForm.querySelector('input').focus();
-        } else {
-            registerForm.classList.add('active');
-            loginForm.classList.remove('active');
-            buttons[1].classList.add('active');
-            registerForm.querySelector('input').focus();
-        }
-    }
-
-    function goToProfile(username) {
-        window.location.href = `/profile/${username}`;
-    }
-
-    // Character counter
-    document.getElementById('tweetInput')?.addEventListener('input', function() {
-        const counter = document.getElementById('charCounter');
-        const btn = document.getElementById('postBtn');
-        const length = this.value.length;
-        
-        counter.textContent = `${length}/500`;
-        
-        if (length > 400) {
-            counter.classList.add('danger');
-            counter.classList.remove('warning');
-        } else if (length > 300) {
-            counter.classList.add('warning');
-            counter.classList.remove('danger');
-        } else {
-            counter.classList.remove('warning', 'danger');
-        }
-        
-        btn.disabled = length === 0;
-    });
-
-    // Post Tweet
-    async function postTweet() {
-        const content = document.getElementById('tweetInput').value.trim();
-        
-        if (!content) {
-            alert('Yazı boş olamaz!');
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append('content', content);
-            
-            const response = await fetch('/post', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                const post = await response.json();
-                
-                const newPost = `
-                    <div class="post new-post" id="post-${post.id}">
-                        <a href="/profile/{{ session.get('username') }}" style="text-decoration: none;">
-                            <div class="post-avatar">{{ session.get('username')[0].upper() }}</div>
+            <div class="posts-container" id="postsFeed">
+                {% if posts %}
+                    {% for post in posts %}
+                    <div class="post" id="post-{{ post[0] }}">
+                        <a href="/profile/{{ post[1] }}" style="text-decoration: none;">
+                            <div class="post-avatar">{{ post[1][0].upper() }}</div>
                         </a>
                         <div class="post-body">
                             <div class="post-header">
-                                <a href="/profile/{{ session.get('username') }}" class="post-author">{{ session.get('username') }}</a>
-                                <span class="post-handle">@{{ session.get('username') }}</span>
-                                <span class="post-time">${post.created_at}</span>
+                                <a href="/profile/{{ post[1] }}" class="post-author">{{ post[1] }}</a>
+                                <span class="post-handle">@{{ post[1] }}</span>
+                                <span class="post-time">{{ post[3] }}</span>
                             </div>
-                            <div class="post-content">${escapeHtml(post.content)}</div>
+                            <div class="post-content">{{ post[2] }}</div>
                             <div class="post-actions">
-                                <div class="post-action" onclick="likePost(${post.id})">
-                                    ❤️ <span class="like-count">${post.likes_count}</span>
+                                <div class="post-action" onclick="likePost({{ post[0] }})">
+                                    ❤️ <span class="like-count">{{ post[4] }}</span>
                                 </div>
-                                <div class="post-action" onclick="retweetPost(${post.id})">
-                                    🔄 <span class="retweet-count">${post.retweets_count}</span>
+                                <div class="post-action" onclick="retweetPost({{ post[0] }})">
+                                    🔄 <span class="retweet-count">{{ post[5] }}</span>
                                 </div>
-                                <button class="post-action-delete" onclick="deletePost(${post.id})">
+                                {% if session.get('username') == post[1] or session.get('username') == 'faruk' %}
+                                <button class="post-action-delete" onclick="deletePost({{ post[0] }})">
                                     🗑️ Sil
                                 </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                `;
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">🌸</div>
+                    <div class="empty-title">Henüz Yazı Yok</div>
+                    <div class="empty-text">İlk yazıyı sen yaz ve mekanı yaşat!</div>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Ara..." id="searchInput">
+            </div>
+
+            <div class="users-section">
+                <div class="users-title">👥 Kişiler</div>
                 
-                const feed = document.getElementById('postsFeed');
-                feed.innerHTML = newPost + feed.innerHTML;
-                
-                document.getElementById('tweetInput').value = '';
-                document.getElementById('charCounter').textContent = '0/500';
-                document.getElementById('postBtn').disabled = true;
-                
-                showAlert('Yazı başarıyla gönderildi! ✨');
+                <div id="usersList">
+                    {% if current_user %}
+                        {% for user in all_users %}
+                            {% if user[0] != session.get('username') %}
+                            <div class="user-item">
+                                <div class="user-item-avatar">{{ user[0][0].upper() }}</div>
+                                <div class="user-item-info" onclick="goToProfile('{{ user[0] }}')">
+                                    <div class="user-item-name">{{ user[0] }}</div>
+                                    <div class="user-item-handle">@{{ user[0] }}</div>
+                                </div>
+                                <a href="/message/{{ user[0] }}" class="btn-message">Mesaj</a>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </aside>
+    </div>
+    {% endif %}
+
+    <script>
+        function switchTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const buttons = document.querySelectorAll('.tab-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (tab === 'login') {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                buttons[0].classList.add('active');
+                loginForm.querySelector('input').focus();
             } else {
-                const error = await response.json();
-                alert('Hata: ' + error.error);
+                registerForm.classList.add('active');
+                loginForm.classList.remove('active');
+                buttons[1].classList.add('active');
+                registerForm.querySelector('input').focus();
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Gönderme hatası');
         }
-    }
 
-    // Like Post
-    async function likePost(postId) {
-        try {
-            const response = await fetch(`/like/${postId}`, {
-                method: 'POST'
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const postEl = document.getElementById(`post-${postId}`);
-                const likeBtn = postEl.querySelector('.post-action:nth-child(1)');
-                const likeCount = likeBtn.querySelector('.like-count');
-                
-                likeCount.textContent = data.likes_count;
-                
-                if (data.action === 'liked') {
-                    likeBtn.classList.add('liked');
-                } else {
-                    likeBtn.classList.remove('liked');
-                }
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        function goToProfile(username) {
+            window.location.href = `/profile/${username}`;
         }
-    }
 
-    // Retweet Post
-    async function retweetPost(postId) {
-        try {
-            const response = await fetch(`/retweet/${postId}`, {
-                method: 'POST'
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const postEl = document.getElementById(`post-${postId}`);
-                const retweetBtn = postEl.querySelector('.post-action:nth-child(2)');
-                const retweetCount = retweetBtn.querySelector('.retweet-count');
-                
-                retweetCount.textContent = data.retweets_count;
-                
-                if (data.action === 'retweeted') {
-                    retweetBtn.classList.add('retweeted');
-                } else {
-                    retweetBtn.classList.remove('retweeted');
-                }
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    // Delete Post
-    async function deletePost(postId) {
-        if (!confirm('Bu yazıyı silmek istediğine emin misin?')) return;
-
-        try {
-            const response = await fetch(`/delete_post/${postId}`, {
-                method: 'POST'
-            });
-
-            if (response.ok) {
-                const postEl = document.getElementById(`post-${postId}`);
-                postEl.style.animation = 'slideDown 0.4s ease-out reverse';
-                setTimeout(() => postEl.remove(), 400);
-                showAlert('Yazı silindi!');
+        // Character counter
+        document.getElementById('tweetInput')?.addEventListener('input', function() {
+            const counter = document.getElementById('charCounter');
+            const btn = document.getElementById('postBtn');
+            const length = this.value.length;
+            
+            counter.textContent = `${length}/500`;
+            
+            if (length > 400) {
+                counter.classList.add('danger');
+                counter.classList.remove('warning');
+            } else if (length > 300) {
+                counter.classList.add('warning');
+                counter.classList.remove('danger');
             } else {
-                alert('Silme hatası!');
+                counter.classList.remove('warning', 'danger');
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Silme hatası');
+            
+            btn.disabled = length === 0;
+        });
+
+        // Post Tweet
+        async function postTweet() {
+            const content = document.getElementById('tweetInput').value.trim();
+            
+            if (!content) {
+                alert('Yazı boş olamaz!');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('content', content);
+                
+                const response = await fetch('/post', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const post = await response.json();
+                    
+                    const newPost = `
+                        <div class="post new-post" id="post-${post.id}">
+                            <a href="/profile/{{ session.get('username') }}" style="text-decoration: none;">
+                                <div class="post-avatar">{{ session.get('username')[0].upper() }}</div>
+                            </a>
+                            <div class="post-body">
+                                <div class="post-header">
+                                    <a href="/profile/{{ session.get('username') }}" class="post-author">{{ session.get('username') }}</a>
+                                    <span class="post-handle">@{{ session.get('username') }}</span>
+                                    <span class="post-time">${post.created_at}</span>
+                                </div>
+                                <div class="post-content">${escapeHtml(post.content)}</div>
+                                <div class="post-actions">
+                                    <div class="post-action" onclick="likePost(${post.id})">
+                                        ❤️ <span class="like-count">${post.likes_count}</span>
+                                    </div>
+                                    <div class="post-action" onclick="retweetPost(${post.id})">
+                                        🔄 <span class="retweet-count">${post.retweets_count}</span>
+                                    </div>
+                                    <button class="post-action-delete" onclick="deletePost(${post.id})">
+                                        🗑️ Sil
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const feed = document.getElementById('postsFeed');
+                    feed.innerHTML = newPost + feed.innerHTML;
+                    
+                    document.getElementById('tweetInput').value = '';
+                    document.getElementById('charCounter').textContent = '0/500';
+                    document.getElementById('postBtn').disabled = true;
+                    
+                    showAlert('Yazı başarıyla gönderildi! ✨');
+                } else {
+                    const error = await response.json();
+                    alert('Hata: ' + error.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Gönderme hatası');
+            }
         }
-    }
 
-    // Utilities
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+        // Like Post
+        async function likePost(postId) {
+            try {
+                const response = await fetch(`/like/${postId}`, {
+                    method: 'POST'
+                });
 
-    function showAlert(message) {
-        const alert = document.createElement('div');
-        alert.className = 'alert';
-        alert.textContent = message;
-        document.body.appendChild(alert);
+                if (response.ok) {
+                    const data = await response.json();
+                    const postEl = document.getElementById(`post-${postId}`);
+                    const likeBtn = postEl.querySelector('.post-action:nth-child(1)');
+                    const likeCount = likeBtn.querySelector('.like-count');
+                    
+                    likeCount.textContent = data.likes_count;
+                    
+                    if (data.action === 'liked') {
+                        likeBtn.classList.add('liked');
+                    } else {
+                        likeBtn.classList.remove('liked');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
 
-        setTimeout(() => {
-            alert.style.opacity = '0';
-            setTimeout(() => alert.remove(), 300);
-        }, 3000);
-    }
-</script>
-```
+        // Retweet Post
+        async function retweetPost(postId) {
+            try {
+                const response = await fetch(`/retweet/${postId}`, {
+                    method: 'POST'
+                });
 
+                if (response.ok) {
+                    const data = await response.json();
+                    const postEl = document.getElementById(`post-${postId}`);
+                    const retweetBtn = postEl.querySelector('.post-action:nth-child(2)');
+                    const retweetCount = retweetBtn.querySelector('.retweet-count');
+                    
+                    retweetCount.textContent = data.retweets_count;
+                    
+                    if (data.action === 'retweeted') {
+                        retweetBtn.classList.add('retweeted');
+                    } else {
+                        retweetBtn.classList.remove('retweeted');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Delete Post
+        async function deletePost(postId) {
+            if (!confirm('Bu yazıyı silmek istediğine emin misin?')) return;
+
+            try {
+                const response = await fetch(`/delete_post/${postId}`, {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    const postEl = document.getElementById(`post-${postId}`);
+                    postEl.style.animation = 'slideDown 0.4s ease-out reverse';
+                    setTimeout(() => postEl.remove(), 400);
+                    showAlert('Yazı silindi!');
+                } else {
+                    alert('Silme hatası!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Silme hatası');
+            }
+        }
+
+        // Utilities
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showAlert(message) {
+            const alert = document.createElement('div');
+            alert.className = 'alert';
+            alert.textContent = message;
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
