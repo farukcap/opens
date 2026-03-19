@@ -3,7 +3,7 @@ import sqlite3, datetime, re
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = "mekan-premium-v7"
+app.secret_key = "mekan-premium-v8-self-healing"
 
 ADMIN_USERNAME = "faruk"
 ADMIN_PASSWORD = "faruk4848"
@@ -17,13 +17,23 @@ def get_db():
 def init_db():
     conn = get_db()
     c = conn.cursor()
+    # Temel Tablolar
     c.execute("""CREATE TABLE IF NOT EXISTS users (
         username TEXT PRIMARY KEY, password TEXT, bio TEXT DEFAULT 'Mekan''da yeni!', 
-        last_seen TEXT, is_verified INTEGER DEFAULT 0, streak INTEGER DEFAULT 0, 
-        last_login_date TEXT, profile_views INTEGER DEFAULT 0, mood TEXT DEFAULT '✨ Yeni',
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP)""")
+        last_seen TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP)""")
     
-    # Anonim (is_anonymous) tamamen kaldırıldı. Profesyonel yapı.
+    # Self-Healing (Kendi Kendini Onarma): Eski DB varsa çökmeyi engeller, eksik sütunları ekler
+    try: c.execute("ALTER TABLE users ADD COLUMN is_verified INTEGER DEFAULT 0")
+    except: pass
+    try: c.execute("ALTER TABLE users ADD COLUMN streak INTEGER DEFAULT 0")
+    except: pass
+    try: c.execute("ALTER TABLE users ADD COLUMN last_login_date TEXT")
+    except: pass
+    try: c.execute("ALTER TABLE users ADD COLUMN profile_views INTEGER DEFAULT 0")
+    except: pass
+    try: c.execute("ALTER TABLE users ADD COLUMN mood TEXT DEFAULT '✨ Yeni'")
+    except: pass
+
     c.execute("""CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY AUTOINCREMENT, author TEXT, content TEXT, 
         created_at TEXT, likes_count INTEGER DEFAULT 0, retweets_count INTEGER DEFAULT 0, 
@@ -49,47 +59,50 @@ init_db()
 @app.context_processor
 def inject_global_data():
     if "username" in session:
-        conn = get_db()
-        user = session["username"]
-        now = datetime.datetime.now()
-        date_str = now.strftime("%Y-%m-%d")
-        time_str = now.strftime("%Y-%m-%d %H:%M:%S")
-        
-        user_data = conn.execute("SELECT last_login_date, streak, is_verified, mood FROM users WHERE username = ?", (user,)).fetchone()
-        if user_data:
-            last_date = user_data['last_login_date']
-            streak = user_data['streak']
-            if last_date != date_str:
-                if last_date == (now - datetime.timedelta(days=1)).strftime("%Y-%m-%d"): streak += 1
-                elif last_date is not None: streak = 1 
-                else: streak = 1
-                conn.execute("UPDATE users SET streak = ?, last_login_date = ? WHERE username = ?", (streak, date_str, user))
-        
-        conn.execute("UPDATE users SET last_seen = ? WHERE username = ?", (time_str, user))
-        
-        # SİLİNEN ÖZELLİK GERİ GELDİ: Yeni Katılanlar
-        new_users = conn.execute("SELECT username, is_verified FROM users WHERE username != ? ORDER BY created_at DESC LIMIT 5", (user,)).fetchall()
-        
-        # Liderlik Tablosu
-        top_users = conn.execute("""
-            SELECT u.username, u.is_verified, u.mood, (SELECT COUNT(*) FROM follows WHERE followed = u.username) as followers 
-            FROM users u WHERE u.username != ? ORDER BY followers DESC LIMIT 5
-        """, (user,)).fetchall()
-        
-        trends = conn.execute("SELECT tag, count FROM hashtags ORDER BY count DESC LIMIT 5").fetchall()
-        
-        conn.commit(); conn.close()
-        
-        return dict(
-            current_user=user, 
-            current_user_verified=user_data['is_verified'] if user_data else 0,
-            current_user_mood=user_data['mood'] if user_data else '',
-            current_user_streak=streak if user_data else 0,
-            new_users=new_users,
-            top_users=top_users, 
-            trends=trends, 
-            is_admin=(user==ADMIN_USERNAME)
-        )
+        try:
+            conn = get_db()
+            user = session["username"]
+            now = datetime.datetime.now()
+            date_str = now.strftime("%Y-%m-%d")
+            time_str = now.strftime("%Y-%m-%d %H:%M:%S")
+            
+            user_data = conn.execute("SELECT last_login_date, streak, is_verified, mood, created_at FROM users WHERE username = ?", (user,)).fetchone()
+            streak = 0
+            if user_data:
+                last_date = user_data['last_login_date']
+                streak = user_data['streak'] if user_data['streak'] else 0
+                if last_date != date_str:
+                    if last_date == (now - datetime.timedelta(days=1)).strftime("%Y-%m-%d"): streak += 1
+                    elif last_date is not None: streak = 1 
+                    else: streak = 1
+                    conn.execute("UPDATE users SET streak = ?, last_login_date = ? WHERE username = ?", (streak, date_str, user))
+            
+            conn.execute("UPDATE users SET last_seen = ? WHERE username = ?", (time_str, user))
+            new_users = conn.execute("SELECT username, is_verified FROM users WHERE username != ? ORDER BY created_at DESC LIMIT 6", (user,)).fetchall()
+            top_users = conn.execute("SELECT u.username, u.is_verified, u.mood, (SELECT COUNT(*) FROM follows WHERE followed = u.username) as followers FROM users u WHERE u.username != ? ORDER BY followers DESC LIMIT 5", (user,)).fetchall()
+            trends = conn.execute("SELECT tag, count FROM hashtags ORDER BY count DESC LIMIT 5").fetchall()
+            
+            unread_notifs = conn.execute("SELECT COUNT(*) as c FROM notifications WHERE recipient = ? AND is_read = 0", (user,)).fetchone()['c']
+            conn.commit(); conn.close()
+            
+            # Üyelik yılı rozeti için (Erken erişim)
+            is_early = True if user_data and "2024" in str(user_data['created_at']) else False
+
+            return dict(
+                current_user=user, 
+                current_user_verified=user_data['is_verified'] if user_data else 0,
+                current_user_mood=user_data['mood'] if user_data else '',
+                current_user_streak=streak,
+                is_early_adopter=is_early,
+                new_users=new_users,
+                top_users=top_users, 
+                trends=trends, 
+                unread_notifs=unread_notifs,
+                is_admin=(user==ADMIN_USERNAME)
+            )
+        except Exception as e:
+            print("Global veri hatası (Çökme engellendi):", e)
+            return dict(current_user=session["username"], unread_notifs=0)
     return dict(current_user=None)
 
 def notify(recipient, sender, n_type, post_id=0):
@@ -105,8 +118,10 @@ def home():
     if not session.get("username"): return render_template("index.html")
     conn = get_db()
     posts = conn.execute("SELECT p.*, u.is_verified, u.mood FROM posts p JOIN users u ON p.author = u.username ORDER BY p.id DESC LIMIT 50").fetchall()
+    # Aktif kullanıcıları çek (Story alanı için)
+    active_users = conn.execute("SELECT username FROM users WHERE username != ? ORDER BY last_seen DESC LIMIT 8", (session["username"],)).fetchall()
     conn.close()
-    return render_template("index.html", page="home", posts=posts)
+    return render_template("index.html", page="home", posts=posts, active_users=active_users)
 
 @app.route("/profile/<username>")
 def profile(username):
@@ -170,7 +185,7 @@ def register():
     username = request.form.get("username", "").strip().lower()
     password = request.form.get("password", "").strip()
     if len(username) < 3 or not username.isalnum():
-        flash("Sadece harf ve rakam (Min 3 karakter)"); return redirect(url_for("home"))
+        flash("Kullanıcı adı sadece harf ve rakamlardan oluşmalı (Min 3)"); return redirect(url_for("home"))
     conn = get_db()
     try:
         conn.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, generate_password_hash(password)))
@@ -181,13 +196,17 @@ def register():
 
 @app.route("/login", methods=["POST"])
 def login():
-    username = request.form.get("username", "").strip().lower()
-    password = request.form.get("password", "").strip()
-    conn = get_db()
-    user = conn.execute("SELECT password FROM users WHERE username = ?", (username,)).fetchone()
-    conn.close()
-    if user and check_password_hash(user["password"], password): session["username"] = username
-    else: flash("Hatalı giriş!")
+    try:
+        username = request.form.get("username", "").strip().lower()
+        password = request.form.get("password", "").strip()
+        conn = get_db()
+        user = conn.execute("SELECT password FROM users WHERE username = ?", (username,)).fetchone()
+        conn.close()
+        if user and check_password_hash(user["password"], password): session["username"] = username
+        else: flash("Hatalı giriş!")
+    except Exception as e:
+        print("Login Hatası:", e)
+        flash("Giriş yapılırken beklenmedik bir hata oluştu.")
     return redirect(url_for("home"))
 
 @app.route("/logout")
