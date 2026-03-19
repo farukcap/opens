@@ -4,7 +4,7 @@ import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = "bizim-mekan-super-secret-key-2024-faruk"
+app.secret_key = "bizim-mekan-kusursuz-2024"
 
 ADMIN_USERNAME = "faruk"
 ADMIN_PASSWORD = "faruk4848"
@@ -19,121 +19,149 @@ def init_db():
     conn = get_db_connection()
     c = conn.cursor()
 
-    c.execute("""CREATE TABLE IF NOT EXISTS users
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    # Kullanıcılar
+    c.execute("""CREATE TABLE IF NOT EXISTS users (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT, 
                   username TEXT UNIQUE NOT NULL, 
                   password TEXT NOT NULL,
-                  bio TEXT DEFAULT '',
+                  bio TEXT DEFAULT 'Mekan''a yeni katıldı!',
                   created_at TEXT DEFAULT CURRENT_TIMESTAMP)""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS posts
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    # Gönderiler (Görüntülenme eklendi)
+    c.execute("""CREATE TABLE IF NOT EXISTS posts (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT, 
                   author TEXT NOT NULL, 
                   content TEXT NOT NULL, 
                   created_at TEXT NOT NULL,
                   likes_count INTEGER DEFAULT 0,
                   retweets_count INTEGER DEFAULT 0,
-                  FOREIGN KEY(author) REFERENCES users(username) ON DELETE CASCADE)""")
+                  views_count INTEGER DEFAULT 0)""")
 
-    # YENİ: Yanıtlar (Yorumlar) Tablosu
-    c.execute("""CREATE TABLE IF NOT EXISTS replies
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    # Yanıtlar
+    c.execute("""CREATE TABLE IF NOT EXISTS replies (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                   post_id INTEGER NOT NULL,
                   author TEXT NOT NULL,
                   content TEXT NOT NULL,
-                  created_at TEXT NOT NULL,
-                  FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE,
-                  FOREIGN KEY(author) REFERENCES users(username) ON DELETE CASCADE)""")
+                  created_at TEXT NOT NULL)""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS messages
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    # Mesajlar (Görüldü eklendi)
+    c.execute("""CREATE TABLE IF NOT EXISTS messages (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                   sender TEXT NOT NULL,
                   recipient TEXT NOT NULL,
                   content TEXT NOT NULL,
-                  created_at TEXT NOT NULL,
-                  is_read INTEGER DEFAULT 0)""")
+                  is_read INTEGER DEFAULT 0,
+                  created_at TEXT NOT NULL)""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS likes
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  user TEXT NOT NULL,
-                  post_id INTEGER NOT NULL,
-                  created_at TEXT NOT NULL,
-                  UNIQUE(user, post_id))""")
+    # Takip Sistemi
+    c.execute("""CREATE TABLE IF NOT EXISTS follows (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  follower TEXT NOT NULL,
+                  followed TEXT NOT NULL,
+                  UNIQUE(follower, followed))""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS retweets
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  user TEXT NOT NULL,
-                  post_id INTEGER NOT NULL,
-                  created_at TEXT NOT NULL,
-                  UNIQUE(user, post_id))""")
+    # Beğeniler ve Retweetler
+    c.execute("CREATE TABLE IF NOT EXISTS likes (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, post_id INTEGER, UNIQUE(user, post_id))")
+    c.execute("CREATE TABLE IF NOT EXISTS retweets (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, post_id INTEGER, UNIQUE(user, post_id))")
+    c.execute("CREATE TABLE IF NOT EXISTS post_views (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, post_id INTEGER, UNIQUE(user, post_id))")
 
-    c.execute("SELECT * FROM users WHERE username = ?", (ADMIN_USERNAME,))
-    if not c.fetchone():
-        hashed = generate_password_hash(ADMIN_PASSWORD)
+    # Admin Kontrolü
+    if not c.execute("SELECT * FROM users WHERE username = ?", (ADMIN_USERNAME,)).fetchone():
         c.execute("INSERT INTO users (username, password, bio) VALUES (?, ?, ?)", 
-                 (ADMIN_USERNAME, hashed, "Kurucu / Admin"))
+                 (ADMIN_USERNAME, generate_password_hash(ADMIN_PASSWORD), "Mekan Kurucusu 👑"))
 
     conn.commit()
     conn.close()
 
 init_db()
 
+# --- YARDIMCI FONKSİYONLAR ---
+def get_user_stats(username):
+    conn = get_db_connection()
+    followers = conn.execute("SELECT COUNT(*) as c FROM follows WHERE followed = ?", (username,)).fetchone()['c']
+    following = conn.execute("SELECT COUNT(*) as c FROM follows WHERE follower = ?", (username,)).fetchone()['c']
+    conn.close()
+    return followers, following
+
+# --- SAYFALAR ---
 @app.route("/")
 def home():
-    if session.get("username"):
-        conn = get_db_connection()
-        c = conn.cursor()
-        
-        c.execute("""SELECT p.id, p.author, p.content, p.created_at, 
-                     p.likes_count, p.retweets_count, u.bio
-                     FROM posts p JOIN users u ON p.author = u.username
-                     ORDER BY p.id DESC LIMIT 100""")
-        posts = c.fetchall()
-        
-        c.execute("SELECT username, bio FROM users WHERE username != ? ORDER BY id DESC", (session["username"],))
-        all_users = c.fetchall()
-        
-        # YENİ: Yeni katılanları ayır (Son 5 kişi)
-        c.execute("SELECT username FROM users WHERE username != ? ORDER BY id DESC LIMIT 5", (session["username"],))
-        new_users = c.fetchall()
-        
-        conn.close()
-        return render_template("index.html", posts=posts, all_users=all_users, new_users=new_users, 
-                             current_user=session.get("username"), is_admin=(session.get("username") == ADMIN_USERNAME))
-    return render_template("index.html")
+    if not session.get("username"): return render_template("index.html")
+    
+    conn = get_db_connection()
+    posts = conn.execute("SELECT * FROM posts ORDER BY id DESC LIMIT 50").fetchall()
+    users = conn.execute("SELECT username FROM users WHERE username != ? ORDER BY id DESC LIMIT 10", (session["username"],)).fetchall()
+    conn.close()
+    
+    return render_template("index.html", page="home", posts=posts, users=users, current_user=session["username"], is_admin=(session["username"]==ADMIN_USERNAME))
 
+@app.route("/profile/<username>")
+def profile(username):
+    if not session.get("username"): return redirect(url_for("home"))
+    
+    conn = get_db_connection()
+    user = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+    if not user: return redirect(url_for("home"))
+    
+    posts = conn.execute("SELECT * FROM posts WHERE author = ? ORDER BY id DESC", (username,)).fetchall()
+    is_following = conn.execute("SELECT 1 FROM follows WHERE follower = ? AND followed = ?", (session["username"], username)).fetchone() is not None
+    conn.close()
+    
+    followers, following = get_user_stats(username)
+    
+    return render_template("index.html", page="profile", profile_user=user, posts=posts, 
+                           followers=followers, following=following, is_following=is_following,
+                           current_user=session["username"], is_admin=(session["username"]==ADMIN_USERNAME))
+
+@app.route("/messages")
+def messages():
+    if not session.get("username"): return redirect(url_for("home"))
+    
+    conn = get_db_connection()
+    # Konuşulan kişileri getir
+    chats = conn.execute("""
+        SELECT DISTINCT CASE WHEN sender = ? THEN recipient ELSE sender END as partner 
+        FROM messages WHERE sender = ? OR recipient = ?
+    """, (session["username"], session["username"], session["username"])).fetchall()
+    conn.close()
+    
+    return render_template("index.html", page="messages", chats=chats, current_user=session["username"])
+
+@app.route("/messages/<username>")
+def chat_room(username):
+    if not session.get("username"): return redirect(url_for("home"))
+    return render_template("index.html", page="chat", chat_partner=username, current_user=session["username"])
+
+# --- API (ETKİLEŞİMLER) ---
 @app.route("/register", methods=["POST"])
 def register():
-    username = request.form.get("username", "").strip()
+    username = request.form.get("username", "").strip().lower()
     password = request.form.get("password", "").strip()
-    if len(username) < 2 or len(password) < 4:
-        flash("Kullanıcı adı en az 2, şifre en az 4 karakter olmalı!")
+    if len(username) < 3:
+        flash("Kullanıcı adı en az 3 karakter olmalı!")
         return redirect(url_for("home"))
     
     conn = get_db_connection()
-    c = conn.cursor()
     try:
-        c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, generate_password_hash(password)))
+        conn.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, generate_password_hash(password)))
         conn.commit()
         session["username"] = username
-    except sqlite3.IntegrityError:
-        flash("Bu kullanıcı adı alınmış!")
+    except:
+        flash("Bu isim alınmış!")
     finally:
         conn.close()
     return redirect(url_for("home"))
 
 @app.route("/login", methods=["POST"])
 def login():
-    username = request.form.get("username", "").strip()
+    username = request.form.get("username", "").strip().lower()
     password = request.form.get("password", "").strip()
     conn = get_db_connection()
     user = conn.execute("SELECT password FROM users WHERE username = ?", (username,)).fetchone()
     conn.close()
-    
-    if user and check_password_hash(user["password"], password):
-        session["username"] = username
-    else:
-        flash("Hatalı giriş!")
+    if user and check_password_hash(user["password"], password): session["username"] = username
+    else: flash("Şifre veya kullanıcı adı hatalı!")
     return redirect(url_for("home"))
 
 @app.route("/logout")
@@ -141,121 +169,114 @@ def logout():
     session.pop("username", None)
     return redirect(url_for("home"))
 
-@app.route("/post", methods=["POST"])
+@app.route("/api/post", methods=["POST"])
 def create_post():
     if "username" not in session: return jsonify({"error": "Giriş yapın"}), 401
     content = request.form.get("content", "").strip()
-    if not content: return jsonify({"error": "Boş mesaj"}), 400
+    if not content: return jsonify({"error": "Boş olamaz"})
     
-    created_at = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+    time_str = datetime.datetime.now().strftime("%d %b %H:%M")
     conn = get_db_connection()
-    c = conn.cursor()
-    c.execute("INSERT INTO posts (author, content, created_at) VALUES (?, ?, ?)", (session["username"], content, created_at))
-    post_id = c.lastrowid
-    conn.commit()
-    conn.close()
-    
-    return jsonify({"success": True, "id": post_id, "author": session["username"], "content": content, "created_at": created_at, "likes_count": 0, "retweets_count": 0})
-
-@app.route("/delete_post/<int:post_id>", methods=["POST"])
-def delete_post(post_id):
-    if "username" not in session: return jsonify({"error": "Giriş yapın"}), 401
-    conn = get_db_connection()
-    post = conn.execute("SELECT author FROM posts WHERE id = ?", (post_id,)).fetchone()
-    if not post: return jsonify({"error": "Bulunamadı"}), 404
-    
-    if session["username"] != ADMIN_USERNAME and post["author"] != session["username"]:
-        return jsonify({"error": "Yetkisiz"}), 403
-        
-    conn.execute("DELETE FROM posts WHERE id = ?", (post_id,))
+    conn.execute("INSERT INTO posts (author, content, created_at) VALUES (?, ?, ?)", (session["username"], content, time_str))
     conn.commit()
     conn.close()
     return jsonify({"success": True})
 
-# --- YENİ: YANIT SİSTEMİ (REPLIES) ---
-@app.route("/reply/<int:post_id>", methods=["POST"])
-def add_reply(post_id):
-    if "username" not in session: return jsonify({"error": "Giriş yapın"}), 401
-    content = request.form.get("content", "").strip()
-    if not content: return jsonify({"error": "Boş yorum"}), 400
-    
-    created_at = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+@app.route("/api/follow/<username>", methods=["POST"])
+def follow_user(username):
+    if "username" not in session: return jsonify({"error": "Giriş yapın"})
+    me = session["username"]
     conn = get_db_connection()
-    c = conn.cursor()
-    c.execute("INSERT INTO replies (post_id, author, content, created_at) VALUES (?, ?, ?, ?)", 
-             (post_id, session["username"], content, created_at))
+    exists = conn.execute("SELECT 1 FROM follows WHERE follower = ? AND followed = ?", (me, username)).fetchone()
+    if exists:
+        conn.execute("DELETE FROM follows WHERE follower = ? AND followed = ?", (me, username))
+        action = "unfollowed"
+    else:
+        conn.execute("INSERT INTO follows (follower, followed) VALUES (?, ?)", (me, username))
+        action = "followed"
     conn.commit()
     conn.close()
-    return jsonify({"success": True, "author": session["username"], "content": content, "created_at": created_at})
+    return jsonify({"success": True, "action": action})
 
-@app.route("/api/replies/<int:post_id>")
-def get_replies(post_id):
+@app.route("/api/search")
+def search():
+    q = request.args.get("q", "").strip()
+    if not q: return jsonify([])
     conn = get_db_connection()
-    replies = conn.execute("SELECT author, content, created_at FROM replies WHERE post_id = ? ORDER BY id ASC", (post_id,)).fetchall()
+    users = conn.execute("SELECT username FROM users WHERE username LIKE ? LIMIT 5", (f"%{q}%",)).fetchall()
     conn.close()
-    return jsonify([dict(r) for r in replies])
+    return jsonify([u["username"] for u in users])
 
-# --- YENİ: DM / MESAJLAŞMA SİSTEMİ (MODAL İÇİN) ---
-@app.route("/api/messages/<username>")
-def fetch_messages(username):
-    if "username" not in session: return jsonify([])
-    current = session["username"]
+@app.route("/api/view/<int:post_id>", methods=["POST"])
+def view_post(post_id):
+    if "username" not in session: return jsonify({"success": False})
     conn = get_db_connection()
-    msgs = conn.execute("""SELECT sender, content, created_at FROM messages 
-                           WHERE (sender = ? AND recipient = ?) OR (sender = ? AND recipient = ?) 
-                           ORDER BY id ASC""", (current, username, username, current)).fetchall()
+    exists = conn.execute("SELECT 1 FROM post_views WHERE user = ? AND post_id = ?", (session["username"], post_id)).fetchone()
+    if not exists:
+        conn.execute("INSERT INTO post_views (user, post_id) VALUES (?, ?)", (session["username"], post_id))
+        conn.execute("UPDATE posts SET views_count = views_count + 1 WHERE id = ?", (post_id,))
+        conn.commit()
     conn.close()
+    return jsonify({"success": True})
+
+@app.route("/api/action/<action_type>/<int:post_id>", methods=["POST"])
+def post_action(action_type, post_id):
+    if "username" not in session: return jsonify({"error": "Giriş yapın"})
+    table = "likes" if action_type == "like" else "retweets"
+    col = "likes_count" if action_type == "like" else "retweets_count"
+    
+    conn = get_db_connection()
+    exists = conn.execute(f"SELECT 1 FROM {table} WHERE user = ? AND post_id = ?", (session["username"], post_id)).fetchone()
+    if exists:
+        conn.execute(f"DELETE FROM {table} WHERE user = ? AND post_id = ?", (session["username"], post_id))
+        conn.execute(f"UPDATE posts SET {col} = {col} - 1 WHERE id = ?", (post_id,))
+    else:
+        conn.execute(f"INSERT INTO {table} (user, post_id) VALUES (?, ?)", (session["username"], post_id))
+        conn.execute(f"UPDATE posts SET {col} = {col} + 1 WHERE id = ?", (post_id,))
+    
+    count = conn.execute(f"SELECT {col} FROM posts WHERE id = ?", (post_id,)).fetchone()[0]
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True, "count": count})
+
+@app.route("/api/delete/<int:post_id>", methods=["POST"])
+def delete_post(post_id):
+    if "username" not in session: return jsonify({"error": "Giriş yapın"})
+    conn = get_db_connection()
+    post = conn.execute("SELECT author FROM posts WHERE id = ?", (post_id,)).fetchone()
+    if session["username"] == ADMIN_USERNAME or post["author"] == session["username"]:
+        conn.execute("DELETE FROM posts WHERE id = ?", (post_id,))
+        conn.commit()
+    conn.close()
+    return jsonify({"success": True})
+
+# --- ANINDA MESAJLAŞMA SİSTEMİ ---
+@app.route("/api/chat/<partner>", methods=["GET", "POST"])
+def chat_api(partner):
+    if "username" not in session: return jsonify({"error": "Giriş yapın"})
+    me = session["username"]
+    conn = get_db_connection()
+    
+    if request.method == "POST":
+        content = request.form.get("content", "").strip()
+        time_str = datetime.datetime.now().strftime("%H:%M")
+        if content:
+            conn.execute("INSERT INTO messages (sender, recipient, content, created_at) VALUES (?, ?, ?, ?)", (me, partner, content, time_str))
+            conn.commit()
+            return jsonify({"success": True})
+            
+    # GET: Mesajları getir ve okunmayanları 'Görüldü' yap
+    conn.execute("UPDATE messages SET is_read = 1 WHERE sender = ? AND recipient = ?", (partner, me))
+    conn.commit()
+    
+    msgs = conn.execute("""
+        SELECT sender, content, created_at, is_read FROM messages 
+        WHERE (sender = ? AND recipient = ?) OR (sender = ? AND recipient = ?) 
+        ORDER BY id ASC
+    """, (me, partner, partner, me)).fetchall()
+    conn.close()
+    
     return jsonify([dict(m) for m in msgs])
-
-@app.route("/api/send_message", methods=["POST"])
-def api_send_msg():
-    if "username" not in session: return jsonify({"error": "Giriş yapın"}), 401
-    recipient = request.form.get("recipient")
-    content = request.form.get("content", "").strip()
-    if not content: return jsonify({"error": "Boş mesaj"})
-    
-    created_at = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
-    conn = get_db_connection()
-    conn.execute("INSERT INTO messages (sender, recipient, content, created_at) VALUES (?, ?, ?, ?)", 
-                 (session["username"], recipient, content, created_at))
-    conn.commit()
-    conn.close()
-    return jsonify({"success": True, "sender": session["username"], "content": content, "created_at": created_at})
-
-# Eylemler (Like/Retweet)
-@app.route("/like/<int:post_id>", methods=["POST"])
-def like_post(post_id):
-    if "username" not in session: return jsonify({"error": "Giriş yapın"}), 401
-    conn = get_db_connection(); c = conn.cursor()
-    existing = c.execute("SELECT id FROM likes WHERE user = ? AND post_id = ?", (session["username"], post_id)).fetchone()
-    if existing:
-        c.execute("DELETE FROM likes WHERE user = ? AND post_id = ?", (session["username"], post_id))
-        c.execute("UPDATE posts SET likes_count = likes_count - 1 WHERE id = ?", (post_id,))
-        action = "unliked"
-    else:
-        c.execute("INSERT INTO likes (user, post_id, created_at) VALUES (?, ?, ?)", (session["username"], post_id, datetime.datetime.now().strftime("%d.%m.%Y %H:%M")))
-        c.execute("UPDATE posts SET likes_count = likes_count + 1 WHERE id = ?", (post_id,))
-        action = "liked"
-    likes = c.execute("SELECT likes_count FROM posts WHERE id = ?", (post_id,)).fetchone()["likes_count"]
-    conn.commit(); conn.close()
-    return jsonify({"success": True, "action": action, "likes_count": likes})
-
-@app.route("/retweet/<int:post_id>", methods=["POST"])
-def retweet_post(post_id):
-    if "username" not in session: return jsonify({"error": "Giriş yapın"}), 401
-    conn = get_db_connection(); c = conn.cursor()
-    existing = c.execute("SELECT id FROM retweets WHERE user = ? AND post_id = ?", (session["username"], post_id)).fetchone()
-    if existing:
-        c.execute("DELETE FROM retweets WHERE user = ? AND post_id = ?", (session["username"], post_id))
-        c.execute("UPDATE posts SET retweets_count = retweets_count - 1 WHERE id = ?", (post_id,))
-        action = "unretweeted"
-    else:
-        c.execute("INSERT INTO retweets (user, post_id, created_at) VALUES (?, ?, ?)", (session["username"], post_id, datetime.datetime.now().strftime("%d.%m.%Y %H:%M")))
-        c.execute("UPDATE posts SET retweets_count = retweets_count + 1 WHERE id = ?", (post_id,))
-        action = "retweeted"
-    retweets = c.execute("SELECT retweets_count FROM posts WHERE id = ?", (post_id,)).fetchone()["retweets_count"]
-    conn.commit(); conn.close()
-    return jsonify({"success": True, "action": action, "retweets_count": retweets})
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
