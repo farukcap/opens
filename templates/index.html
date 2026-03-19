@@ -1077,13 +1077,13 @@
                     
                     const newPost = `
                         <div class="post new-post" id="post-${post.id}">
-                            <a href="/profile/{{ session.get('username') }}" style="text-decoration: none;">
-                                <div class="post-avatar">{{ session.get('username')[0].upper() }}</div>
+                            <a href="/profile/${post.author}" style="text-decoration: none;">
+                                <div class="post-avatar">${post.author[0].toUpperCase()}</div>
                             </a>
                             <div class="post-body">
                                 <div class="post-header">
-                                    <a href="/profile/{{ session.get('username') }}" class="post-author">{{ session.get('username') }}</a>
-                                    <span class="post-handle">@{{ session.get('username') }}</span>
+                                    <a href="/profile/${post.author}" class="post-author">${post.author}</a>
+                                    <span class="post-handle">@${post.author}</span>
                                     <span class="post-time">${post.created_at}</span>
                                 </div>
                                 <div class="post-content">${escapeHtml(post.content)}</div>
