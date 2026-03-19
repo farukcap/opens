@@ -1,254 +1,1864 @@
 <!DOCTYPE html>
+
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mekan v40</title>
+    <title>Mekan - Sosyal Medya</title>
     <style>
-        :root { --bg: #ffffff; --surface: #ffffff; --text: #0f1419; --border: #eff3f4; --blue: #1d9bf0; --gray: #536471; }
-        [data-theme="dark"] { --bg: #000000; --surface: #000000; --text: #e7e9ea; --border: #2f3336; --gray: #71767b; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
-        button { cursor: pointer; transition: 0.2s; border: none; background: none; color: inherit; }
-        
-        /* HEADER */
-        .top-nav { position: fixed; top: 0; width: 100%; height: 55px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 15px; z-index: 1000; justify-content: space-between; }
-        [data-theme="dark"] .top-nav { background: rgba(0,0,0,0.85); }
-        
-        /* LAYOUT */
-        .main-container { max-width: 600px; margin: 55px auto 60px auto; min-height: 100vh; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
-        
-        /* STORIES */
-        .stories { display: flex; gap: 15px; padding: 15px; overflow-x: auto; border-bottom: 1px solid var(--border); }
-        .story { width: 65px; flex-shrink: 0; text-align: center; font-size: 11px; }
-        .story-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--blue); padding: 2px; background: var(--bg); margin-bottom: 5px; display:flex; align-items:center; justify-content:center; font-weight:bold; }
-        
-        /* POSTS */
-        .post { padding: 15px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; background: #ccc; flex-shrink: 0; display:flex; align-items:center; justify-content:center; font-weight:bold; }
-        .verified { width: 18px; color: var(--blue); margin-left: 3px; }
-        .post-content { flex: 1; }
-        .post-meta { font-size: 15px; margin-bottom: 5px; }
-        .post-text { font-size: 16px; line-height: 1.4; margin-bottom: 10px; }
-        .post-actions { display: flex; justify-content: space-between; max-width: 350px; color: var(--gray); font-size: 14px; }
-        
-        /* BOTTOM NAV */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 55px; background: var(--bg); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-icon { font-size: 24px; position: relative; }
-        .badge { position: absolute; top: -5px; right: -8px; background: #f4212e; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; }
+        :root {
+            --primary: #1d9bf0;
+            --primary-dark: #1a8cd8;
+            --success: #17bf63;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --bg: #ffffff;
+            --surface: #f7f9fa;
+            --surface-2: #eff3f4;
+            --text: #0f1419;
+            --text-secondary: #536471;
+            --border: #eff3f4;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+        }
 
-        /* PANELS (DM & NEW USERS) */
-        .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 600px; height: 100vh; background: var(--bg); z-index: 2000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
-        .side-panel.active { right: 0; }
-        .panel-header { padding: 15px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 20px; font-weight: bold; }
-        .chat-msgs { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #f0f2f5; }
-        [data-theme="dark"] .chat-msgs { background: #15181c; }
-        .bubble { max-width: 75%; padding: 10px 15px; border-radius: 18px; font-size: 15px; }
-        .bubble.me { align-self: flex-end; background: var(--blue); color: white; border-bottom-right-radius: 2px; }
-        .bubble.them { align-self: flex-start; background: var(--border); border-bottom-left-radius: 2px; }
-        .chat-input-area { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
-        .chat-input { flex: 1; background: var(--border); padding: 12px; border-radius: 25px; font-size: 15px; }
-
-        /* MODALS */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; }
-        .modal-content { background: var(--bg); padding: 20px; border-radius: 20px; width: 90%; max-width: 500px; }
+```
+    [data-theme="dark"] {
+        --bg: #000000;
+        --surface: #16181c;
+        --surface-2: #2f3336;
+        --text: #e7e9ea;
+        --text-secondary: #71767b;
+        --border: #2f3336;
+        --shadow: 0 1px 3px rgba(0,0,0,0.5);
+        --shadow-lg: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    html, body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        overflow-x: hidden;
+    }
+    
+    button, input, textarea, select {
+        font-family: inherit;
+        color: inherit;
+    }
+    
+    input::placeholder, textarea::placeholder {
+        color: var(--text-secondary);
+    }
+    
+    /* ============ AUTH ============ */
+    .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    }
+    
+    .auth-container {
+        background: var(--bg);
+        padding: 40px 30px;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .auth-container h1 {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 30px;
+        text-align: center;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .input-field {
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 16px;
+        background: var(--surface);
+        transition: all 0.2s;
+    }
+    
+    .input-field:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--bg);
+        box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.1);
+    }
+    
+    .btn-primary {
+        padding: 12px 20px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: var(--shadow);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+    
+    .btn-secondary {
+        padding: 12px 20px;
+        background: transparent;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(29, 155, 240, 0.1);
+    }
+    
+    .auth-divider {
+        text-align: center;
+        color: var(--text-secondary);
+        margin: 20px 0;
+        position: relative;
+    }
+    
+    .auth-divider::before, .auth-divider::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 45%;
+        height: 1px;
+        background: var(--border);
+    }
+    
+    .auth-divider::before {
+        left: 0;
+    }
+    
+    .auth-divider::after {
+        right: 0;
+    }
+    
+    .toggle-auth {
+        text-align: center;
+        color: var(--text-secondary);
+        margin-top: 20px;
+    }
+    
+    .toggle-auth a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    /* ============ MAIN LAYOUT ============ */
+    .app-wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+    
+    .sidebar-wrapper {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 280px;
+        height: 100vh;
+        background: var(--bg);
+        border-right: 1px solid var(--border);
+        padding: 20px;
+        overflow-y: auto;
+        z-index: 100;
+    }
+    
+    @media (max-width: 1024px) {
+        .sidebar-wrapper {
+            width: 60px;
+            padding: 10px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .sidebar-wrapper {
+            width: 100%;
+            height: 60px;
+            border-bottom: 1px solid var(--border);
+            border-right: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+        }
+    }
+    
+    .logo {
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 30px;
+        text-decoration: none;
+        color: var(--primary);
+    }
+    
+    @media (max-width: 1024px) {
+        .logo {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .logo {
+            margin-bottom: 0;
+            margin-right: auto;
+        }
+    }
+    
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    @media (max-width: 768px) {
+        .nav-menu {
+            flex-direction: row;
+            gap: 0;
+        }
+    }
+    
+    .nav-item {
+        padding: 12px 16px;
+        border-radius: 25px;
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 500;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.2s;
+        cursor: pointer;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .nav-item:hover {
+        background: var(--surface);
+    }
+    
+    .nav-item.active {
+        color: var(--primary);
+        font-weight: 700;
+    }
+    
+    .nav-icon {
+        font-size: 20px;
+        width: 24px;
+        text-align: center;
+    }
+    
+    @media (max-width: 1024px) {
+        .nav-item {
+            padding: 8px;
+            font-size: 0;
+            gap: 0;
+        }
         
-        .raw-img { max-width: 100%; border-radius: 12px; margin-top: 8px; border: 1px solid var(--border); }
-        .verified-svg { width: 1.2em; height: 1.2em; vertical-align: text-bottom; fill: var(--blue); }
-    </style>
+        .nav-item.active .nav-icon {
+            color: var(--primary);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .nav-item {
+            padding: 10px 15px;
+            font-size: 0;
+            border-radius: 8px;
+        }
+    }
+    
+    .compose-btn {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .compose-btn:hover {
+        background: var(--primary-dark);
+    }
+    
+    /* ============ MAIN CONTENT ============ */
+    .main-content {
+        flex: 1;
+        margin-left: 280px;
+        margin-bottom: 0;
+        max-width: 600px;
+    }
+    
+    @media (max-width: 1024px) {
+        .main-content {
+            margin-left: 60px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .main-content {
+            margin-left: 0;
+            margin-bottom: 60px;
+            max-width: 100%;
+        }
+    }
+    
+    .header {
+        position: sticky;
+        top: 0;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 16px;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    [data-theme="dark"] .header {
+        background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .header-title {
+        font-size: 20px;
+        font-weight: 700;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    
+    .icon-btn {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.2s;
+        color: var(--text-secondary);
+    }
+    
+    .icon-btn:hover {
+        background: var(--surface);
+        color: var(--primary);
+    }
+    
+    /* ============ FEED & POSTS ============ */
+    .feed {
+        border-right: 1px solid var(--border);
+    }
+    
+    .post {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        transition: background 0.2s;
+        cursor: pointer;
+    }
+    
+    .post:hover {
+        background: var(--surface);
+    }
+    
+    .post-header {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .post-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        flex-shrink: 0;
+    }
+    
+    .post-info {
+        flex: 1;
+    }
+    
+    .post-author {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 4px;
+    }
+    
+    .post-name {
+        font-weight: 700;
+        color: var(--text);
+    }
+    
+    .post-handle {
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+    
+    .post-time {
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+    
+    .post-content {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+        word-break: break-word;
+    }
+    
+    .post-actions {
+        display: flex;
+        justify-content: space-around;
+        max-width: 350px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+    
+    .action-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+    
+    .action-btn:hover {
+        background: rgba(29, 155, 240, 0.1);
+        color: var(--primary);
+    }
+    
+    .action-btn.liked {
+        color: #e74c3c;
+    }
+    
+    .hashtag {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .hashtag:hover {
+        text-decoration: underline;
+    }
+    
+    /* ============ STORIES ============ */
+    .stories {
+        display: flex;
+        gap: 8px;
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        overflow-x: auto;
+        background: var(--surface);
+    }
+    
+    .story-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--text);
+        min-width: 70px;
+    }
+    
+    .story-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+        font-size: 20px;
+    }
+    
+    .story-avatar.add {
+        border-style: dashed;
+        background: var(--surface-2);
+        color: var(--primary);
+    }
+    
+    .story-name {
+        font-size: 12px;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
+    
+    /* ============ COMPOSE ============ */
+    .compose-area {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+    }
+    
+    .compose-form {
+        display: flex;
+        gap: 12px;
+    }
+    
+    .compose-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        flex-shrink: 0;
+    }
+    
+    .compose-body {
+        flex: 1;
+    }
+    
+    .compose-textarea {
+        width: 100%;
+        background: transparent;
+        border: none;
+        font-size: 20px;
+        resize: none;
+        min-height: 60px;
+        padding: 0;
+        margin-bottom: 12px;
+    }
+    
+    .compose-textarea:focus {
+        outline: none;
+    }
+    
+    .compose-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .char-count {
+        font-size: 14px;
+        color: var(--text-secondary);
+    }
+    
+    .char-count.warning {
+        color: var(--warning);
+    }
+    
+    .char-count.danger {
+        color: var(--danger);
+    }
+    
+    /* ============ MODALS & PANELS ============ */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: flex-end;
+        z-index: 1000;
+        animation: slideUp 0.3s ease-out;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .modal-content {
+        background: var(--bg);
+        border-radius: 16px 16px 0 0;
+        padding: 20px;
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    @media (min-width: 768px) {
+        .modal {
+            align-items: center;
+        }
+        
+        .modal-content {
+            border-radius: 16px;
+            max-width: 500px;
+        }
+    }
+    
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .modal-title {
+        font-size: 20px;
+        font-weight: 700;
+    }
+    
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--text-secondary);
+    }
+    
+    .side-panel {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        max-width: 600px;
+        height: 100vh;
+        background: var(--bg);
+        z-index: 999;
+        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        border-left: 1px solid var(--border);
+    }
+    
+    .side-panel.active {
+        right: 0;
+    }
+    
+    .panel-header {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 700;
+        font-size: 18px;
+    }
+    
+    .panel-content {
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .chat-messages {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .message {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    
+    .message.sent {
+        justify-content: flex-end;
+    }
+    
+    .bubble {
+        max-width: 75%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 15px;
+        line-height: 1.4;
+    }
+    
+    .bubble.sent {
+        background: var(--primary);
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+    
+    .bubble.received {
+        background: var(--surface-2);
+        color: var(--text);
+        border-bottom-left-radius: 4px;
+    }
+    
+    .message-time {
+        font-size: 12px;
+        opacity: 0.7;
+        margin-top: 4px;
+        text-align: center;
+    }
+    
+    .chat-input-area {
+        padding: 12px 16px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .chat-input {
+        flex: 1;
+        padding: 12px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 25px;
+        font-size: 15px;
+        transition: all 0.2s;
+    }
+    
+    .chat-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--bg);
+    }
+    
+    /* ============ PROFILE ============ */
+    .profile-header {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .profile-cover {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        border-radius: 12px;
+        margin-bottom: 16px;
+    }
+    
+    .profile-info {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 4px solid var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 32px;
+        color: white;
+        flex-shrink: 0;
+        margin-top: -50px;
+    }
+    
+    .profile-details {
+        flex: 1;
+    }
+    
+    .profile-name {
+        font-size: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .profile-handle {
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+    
+    .profile-bio {
+        margin: 12px 0;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    
+    .profile-stats {
+        display: flex;
+        gap: 20px;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+    
+    .stat {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .stat-value {
+        font-weight: 700;
+        font-size: 16px;
+    }
+    
+    .stat-label {
+        color: var(--text-secondary);
+    }
+    
+    /* ============ MENU ============ */
+    .menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--bg);
+        z-index: 998;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        border-right: 1px solid var(--border);
+        padding: 20px 0;
+    }
+    
+    .menu.active {
+        left: 0;
+    }
+    
+    .menu-item {
+        padding: 12px 20px;
+        text-decoration: none;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: background 0.2s;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    
+    .menu-item:hover {
+        background: var(--surface);
+    }
+    
+    .menu-item.danger {
+        color: var(--danger);
+    }
+    
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 997;
+        display: none;
+    }
+    
+    .menu-overlay.active {
+        display: block;
+    }
+    
+    /* ============ NOTIFICATIONS ============ */
+    .notification-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 12px;
+        transition: background 0.2s;
+    }
+    
+    .notification-item:hover {
+        background: var(--surface);
+    }
+    
+    .notification-item.unread {
+        background: var(--surface);
+    }
+    
+    .notification-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+    
+    .notification-content {
+        flex: 1;
+    }
+    
+    .notification-text {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    
+    .notification-time {
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+    
+    /* ============ SEARCH ============ */
+    .search-container {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 12px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 25px;
+        font-size: 15px;
+        transition: all 0.2s;
+    }
+    
+    .search-input:focus {
+        outline: none;
+        background: var(--bg);
+        border-color: var(--primary);
+    }
+    
+    .search-results {
+        padding: 0;
+    }
+    
+    .result-section {
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .result-title {
+        padding: 12px 16px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+    
+    /* ============ UTILITY ============ */
+    .verified {
+        width: 18px;
+        height: 18px;
+        fill: var(--primary);
+    }
+    
+    .hidden {
+        display: none !important;
+    }
+    
+    .loading {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--primary);
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    
+    .badge-notification {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: var(--danger);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    
+    .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+        color: var(--text-secondary);
+    }
+    
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+    
+    .verified-svg {
+        width: 18px;
+        height: 18px;
+        fill: var(--primary);
+        vertical-align: middle;
+    }
+    
+    @media (max-width: 768px) {
+        .sidebar-wrapper {
+            width: 100%;
+        }
+        
+        .main-content {
+            margin-left: 0;
+            margin-bottom: 60px;
+        }
+    }
+</style>
+```
+
 </head>
 <body>
 
 {% if not current_user %}
-    <div class="auth-container">
-        <div class="auth-box">
-            <h1 style="margin-bottom: 20px;">Mekan</h1>
-            <form action="/login" method="POST"><input type="text" name="username" class="input-box" placeholder="Kullanıcı Adı" required><input type="password" name="password" class="input-box" placeholder="Şifre" required><button class="btn-black">Giriş Yap</button></form>
-            <div style="margin:15px">veya</div>
-            <form action="/register" method="POST"><input type="text" name="username" class="input-box" placeholder="Yeni Kullanıcı Adı" required><input type="password" name="password" class="input-box" placeholder="Yeni Şifre" required><button class="btn-black" style="background:none; color:var(--text); border:1px solid var(--border)">Kayıt Ol</button></form>
+<!-- ============ AUTH PAGE ============ -->
+<div class="auth-wrapper">
+<div class="auth-container">
+<h1>Mekan</h1>
+
+```
+        <div id="loginForm">
+            <form action="/login" method="POST" class="auth-form">
+                <input type="text" name="username" class="input-field" placeholder="Kullanıcı Adı" required>
+                <input type="password" name="password" class="input-field" placeholder="Şifre" required>
+                <button type="submit" class="btn-primary">Giriş Yap</button>
+            </form>
+            
+            <div class="auth-divider">veya</div>
+            
+            <button class="btn-secondary" onclick="toggleAuthForm()" style="width: 100%;">Yeni Hesap Oluştur</button>
+            
+            <div class="toggle-auth">
+                Henüz hesabınız yok? <a href="#" onclick="toggleAuthForm(); return false;">Kayıt olun</a>
+            </div>
+        </div>
+        
+        <div id="registerForm" class="hidden">
+            <form action="/register" method="POST" class="auth-form">
+                <input type="text" name="username" class="input-field" placeholder="Yeni Kullanıcı Adı (3+ karakter)" minlength="3" required>
+                <input type="password" name="password" class="input-field" placeholder="Şifre (4+ karakter)" minlength="4" required>
+                <button type="submit" class="btn-primary">Kayıt Ol</button>
+            </form>
+            
+            <div class="auth-divider">veya</div>
+            
+            <button class="btn-secondary" onclick="toggleAuthForm()" style="width: 100%;">Var Olan Hesap</button>
+            
+            <div class="toggle-auth">
+                Zaten hesabınız var mı? <a href="#" onclick="toggleAuthForm(); return false;">Giriş yapın</a>
+            </div>
         </div>
     </div>
-{% else %}
-    <div class="top-nav">
-        <button onclick="togglePanel('newUsersPanel')">🌟 Yeni</button>
-        <b style="font-size: 20px;">Mekan</b>
-        <button onclick="toggleTheme()">🌙</button>
-    </div>
+</div>
+```
 
-    <div class="main-container">
-        {% if page == "home" %}
+{% else %}
+<!-- ============ MAIN APP ============ -->
+<div class="app-wrapper">
+<!-- Sidebar -->
+<div class="sidebar-wrapper" id="sidebar">
+<a href="/" class="logo">Mekan</a>
+
+```
+        <nav class="nav-menu">
+            <a href="/" class="nav-item {% if page == 'home' %}active{% endif %}">
+                <span class="nav-icon">🏠</span>
+                <span>Ana Sayfa</span>
+            </a>
+            <a href="/explore" class="nav-item {% if page == 'explore' %}active{% endif %}">
+                <span class="nav-icon">🔍</span>
+                <span>Keşfet</span>
+            </a>
+            <a href="/bookmarks" class="nav-item {% if page == 'bookmarks' %}active{% endif %}">
+                <span class="nav-icon">🔖</span>
+                <span>Kaydedilenler</span>
+            </a>
+            <a href="/messages" class="nav-item {% if page == 'messages' %}active{% endif %}">
+                <span class="nav-icon">💬</span>
+                <span>Mesajlar</span>
+            </a>
+            <a href="/notifications" class="nav-item {% if page == 'notifications' %}active{% endif %}">
+                <span class="nav-icon">🔔</span>
+                <span>Bildirimler</span>
+                {% if unread_notifs > 0 %}<span class="badge-notification">{{ unread_notifs }}</span>{% endif %}
+            </a>
+            <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' %}active{% endif %}">
+                <span class="nav-icon">👤</span>
+                <span>Profil</span>
+            </a>
+        </nav>
+        
+        <button class="compose-btn" onclick="openModal('composeModal')">Yazı Yaz 📝</button>
+        
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border);">
+            <button class="nav-item" onclick="toggleMenu()">
+                <span class="nav-icon">⚙️</span>
+                <span>Menü</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        {% if page == 'home' %}
+            <div class="header">
+                <h1 class="header-title">Ana Sayfa</h1>
+                <div class="header-actions">
+                    <button class="icon-btn" onclick="toggleTheme()" title="Tema Değiştir">🌙</button>
+                </div>
+            </div>
+            
+            <!-- Stories -->
+            {% if stories %}
             <div class="stories">
-                <div class="story" onclick="document.getElementById('storyModal').style.display='flex'">
-                    <div class="story-img" style="border-style: dashed; color: var(--blue)">+</div>
-                    <div>Sen</div>
-                </div>
-                {% for s in stories %}
-                <div class="story" onclick="alert('{{s.content}}')">
-                    <div class="story-img">{{s.author[0].upper()}}</div>
-                    <div style="overflow:hidden; text-overflow:ellipsis">{{s.author}}</div>
-                </div>
+                <a onclick="openModal('storyModal')" class="story-item" title="Hikaye Ekle">
+                    <div class="story-avatar add">+</div>
+                    <div class="story-name">Senin</div>
+                </a>
+                {% for story in stories %}
+                <a onclick="viewStory('{{ story.content }}', '{{ story.author }}')" class="story-item" title="{{ story.author }}">
+                    <div class="story-avatar" style="background-color: {{ story.avatar_color }};">{{ story.author[0].upper() }}</div>
+                    <div class="story-name">{{ story.author }}</div>
+                </a>
                 {% endfor %}
             </div>
-
-            <div class="post">
-                <div class="avatar">{{current_user[0].upper()}}</div>
-                <div class="post-content">
-                    <textarea id="postInput" placeholder="Neler oluyor?" style="width:100%; font-size:18px; border:none; resize:none;"></textarea>
-                    <div style="text-align:right; margin-top:10px;"><button class="btn-black" style="padding:8px 20px; border-radius:20px; width:auto;" onclick="sendPost()">Paylaş</button></div>
-                </div>
-            </div>
-
-            <div id="feed">
-                {% for post in posts %}
-                <div class="post">
-                    <div class="avatar">{{post.author[0].upper()}}</div>
-                    <div class="post-content">
-                        <div class="post-meta">
-                            <b>{{post.author}}</b> {% if post.is_verified %}<svg viewBox="0 0 24 24" class="verified-svg"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"></path></svg>{% endif %} 
-                            <span style="color:var(--gray)">· {{post.created_at}}</span>
-                        </div>
-                        <div class="post-text raw-text">{{post.content}}</div>
-                        <div class="post-actions">
-                            <button onclick="action('like', {{post.id}})">❤️ {{post.likes_count}}</button>
-                            <button onclick="openChat('{{post.author}}')">💬 DM</button>
-                            <button onclick="copyUrl({{post.id}})">🔗</button>
-                            {% if is_admin or current_user == post.author %}<button onclick="action('delete', {{post.id}})">🗑️</button>{% endif %}
+            {% endif %}
+            
+            <!-- Compose -->
+            <div class="compose-area">
+                <div class="compose-form">
+                    <div class="compose-avatar" style="background-color: var(--primary);">{{ current_user[0].upper() }}</div>
+                    <div class="compose-body">
+                        <textarea id="postInput" class="compose-textarea" placeholder="Neler oluyor?" maxlength="500"></textarea>
+                        <div class="compose-footer">
+                            <span class="char-count" id="charCount">0/500</span>
+                            <button class="btn-primary" onclick="sendPost()" style="padding: 8px 24px;">Paylaş</button>
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Feed -->
+            <div class="feed" id="feed">
+                {% if posts %}
+                    {% for post in posts %}
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar" style="background-color: {{ post.avatar_color }};">{{ post.author[0].upper() }}</div>
+                            <div class="post-info">
+                                <div class="post-author">
+                                    <span class="post-name">{{ post.author }}</span>
+                                    {% if post.is_verified %}
+                                    <svg class="verified-svg" viewBox="0 0 24 24">
+                                        <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"/>
+                                    </svg>
+                                    {% endif %}
+                                    <span class="post-handle">@{{ post.author }}</span>
+                                    <span class="post-time">· {{ post.created_at }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content" id="post-{{ post.id }}">{{ post.content }}</div>
+                        
+                        <div class="post-actions">
+                            <button class="action-btn" onclick="action('comment', {{ post.id }}, event)">
+                                💬 <span id="reply-count-{{ post.id }}">{{ post.replies_count }}</span>
+                            </button>
+                            <button class="action-btn" onclick="action('retweet', {{ post.id }}, event)">
+                                🔄 <span id="rt-count-{{ post.id }}">{{ post.retweets_count }}</span>
+                            </button>
+                            <button class="action-btn" onclick="action('like', {{ post.id }}, event)" id="like-btn-{{ post.id }}">
+                                ❤️ <span id="like-count-{{ post.id }}">{{ post.likes_count }}</span>
+                            </button>
+                            <button class="action-btn" onclick="action('bookmark', {{ post.id }}, event)">
+                                🔖
+                            </button>
+                            {% if is_admin or current_user == post.author %}
+                            <button class="action-btn" onclick="action('delete', {{ post.id }}, event)" style="color: var(--danger);">
+                                🗑️
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <div>Henüz yazı yok</div>
+                </div>
+                {% endif %}
+            </div>
+        
+        {% elif page == 'explore' %}
+            <div class="header">
+                <h1 class="header-title">Keşfet</h1>
+            </div>
+            
+            <div class="search-container">
+                <form action="/search" method="GET">
+                    <input type="text" name="q" class="search-input" placeholder="Yazı, kullanıcı veya hashtag ara...">
+                </form>
+            </div>
+            
+            {% if trends %}
+            <div style="padding: 16px; border-bottom: 1px solid var(--border);">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Trend Edeni</h3>
+                {% for trend in trends %}
+                <a href="/search?q={{ trend.tag }}" style="display: block; padding: 12px 0; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border);">
+                    <div style="font-weight: 700;">#{{ trend.tag }}</div>
+                    <div style="color: var(--text-secondary); font-size: 14px;">{{ trend.count }} yazı</div>
+                </a>
                 {% endfor %}
             </div>
-        {% endif %}
-
-        {% if page == "profile" %}
-            <div style="padding:20px; text-align:center;">
-                <div class="avatar" style="width:100px; height:100px; font-size:40px; margin:0 auto 15px;">{{profile_user.username[0].upper()}}</div>
-                <h2>{{profile_user.username}} {% if profile_user.is_verified %}<svg viewBox="0 0 24 24" class="verified-svg"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"></path></svg>{% endif %}</h2>
-                <p style="color:var(--gray); margin:10px 0;">{{profile_user.bio}}</p>
-                <div style="display:flex; justify-content:center; gap:20px; font-size:14px;">
-                    <span><b>{{followers}}</b> Takipçi</span>
-                    <span>🔥 <b>{{profile_user.streak}}</b> Seri</span>
-                    <span>👀 <b>{{profile_user.profile_views}}</b> Ziyaret</span>
+            {% endif %}
+            
+            <div class="feed">
+                {% if posts %}
+                    {% for post in posts %}
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar" style="background-color: {{ post.avatar_color }};">{{ post.author[0].upper() }}</div>
+                            <div class="post-info">
+                                <div class="post-author">
+                                    <span class="post-name">{{ post.author }}</span>
+                                    {% if post.is_verified %}<svg class="verified-svg" viewBox="0 0 24 24"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"/></svg>{% endif %}
+                                    <span class="post-handle">@{{ post.author }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">{{ post.content }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <div>Yazı bulunamadı</div>
+                </div>
+                {% endif %}
+            </div>
+        
+        {% elif page == 'bookmarks' %}
+            <div class="header">
+                <h1 class="header-title">Kaydedilenler</h1>
+            </div>
+            
+            <div class="feed">
+                {% if posts %}
+                    {% for post in posts %}
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar" style="background-color: {{ post.avatar_color }};">{{ post.author[0].upper() }}</div>
+                            <div class="post-info">
+                                <div class="post-author">
+                                    <span class="post-name">{{ post.author }}</span>
+                                    {% if post.is_verified %}<svg class="verified-svg" viewBox="0 0 24 24"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"/></svg>{% endif %}
+                                    <span class="post-handle">@{{ post.author }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">{{ post.content }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔖</div>
+                    <div>Henüz kaydedilmiş yazı yok</div>
+                </div>
+                {% endif %}
+            </div>
+        
+        {% elif page == 'messages' %}
+            <div class="header">
+                <h1 class="header-title">Mesajlar</h1>
+            </div>
+            
+            <div class="feed">
+                {% if chats %}
+                    {% for chat in chats %}
+                    <a onclick="openChat('{{ chat.partner }}')" class="post" style="cursor: pointer; border: none;">
+                        <div class="post-avatar" style="background-color: var(--primary);">{{ chat.partner[0].upper() }}</div>
+                        <div class="post-info">
+                            <div class="post-name">{{ chat.partner }}</div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">💬</div>
+                    <div>Henüz mesaj yok</div>
+                </div>
+                {% endif %}
+            </div>
+        
+        {% elif page == 'notifications' %}
+            <div class="header">
+                <h1 class="header-title">Bildirimler</h1>
+            </div>
+            
+            <div class="feed">
+                {% if notifs %}
+                    {% for notif in notifs %}
+                    <div class="notification-item {% if not notif.is_read %}unread{% endif %}">
+                        <div class="notification-avatar" style="background-color: {{ notif.avatar_color }};">{{ notif.sender[0].upper() }}</div>
+                        <div class="notification-content">
+                            <div class="notification-text">
+                                <strong>{{ notif.sender }}</strong>
+                                {% if notif.type == 'like' %}
+                                    yazını beğendi
+                                {% elif notif.type == 'follow' %}
+                                    seni takip etti
+                                {% elif notif.type == 'reply' %}
+                                    yazına yanıt verdi
+                                {% elif notif.type == 'message' %}
+                                    sana mesaj gönderdi
+                                {% endif %}
+                            </div>
+                            <div class="notification-time">{{ notif.created_at }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔔</div>
+                    <div>Bildirim yok</div>
+                </div>
+                {% endif %}
+            </div>
+        
+        {% elif page == 'profile' %}
+            <div class="profile-header">
+                <div class="profile-cover"></div>
+                
+                <div class="profile-info">
+                    <div class="profile-avatar" style="background-color: {{ profile_user.avatar_color }};">{{ profile_user.username[0].upper() }}</div>
+                    <div class="profile-details">
+                        <div class="profile-name">
+                            {{ profile_user.username }}
+                            {% if profile_user.is_verified %}<svg class="verified-svg" viewBox="0 0 24 24"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"/></svg>{% endif %}
+                        </div>
+                        <div class="profile-handle">@{{ profile_user.username }}</div>
+                    </div>
+                </div>
+                
+                <div class="profile-bio">{{ profile_user.bio }}</div>
+                <div class="profile-bio" style="color: var(--text-secondary); font-size: 14px;">{{ profile_user.mood }}</div>
+                
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-value">{{ followers }}</span>
+                        <span class="stat-label">Takipçi</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">{{ profile_user.posts_count }}</span>
+                        <span class="stat-label">Yazı</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">{{ profile_user.profile_views }}</span>
+                        <span class="stat-label">Ziyaret</span>
+                    </div>
+                </div>
+                
+                {% if current_user != profile_user.username %}
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-primary" onclick="toggleFollow('{{ profile_user.username }}')" style="flex: 1;">
+                        {% if is_following %}Takibi Bırak{% else %}Takip Et{% endif %}
+                    </button>
+                    <button class="btn-secondary" onclick="openChat('{{ profile_user.username }}')" style="flex: 1;">Mesaj</button>
+                </div>
+                {% else %}
+                <button class="btn-primary" onclick="openModal('editProfileModal')" style="width: 100%;">Profili Düzenle</button>
+                {% endif %}
+            </div>
+            
+            <div class="feed">
+                {% if posts %}
+                    {% for post in posts %}
+                    <div class="post">
+                        <div class="post-content">{{ post.content }}</div>
+                        <div class="post-time">{{ post.created_at }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <div>Henüz yazı yok</div>
+                </div>
+                {% endif %}
+            </div>
+        
+        {% elif page == 'search' %}
+            <div class="header">
+                <h1 class="header-title">Ara</h1>
+            </div>
+            
+            <div class="search-container">
+                <form action="/search" method="GET">
+                    <input type="text" name="q" class="search-input" placeholder="Yazı, kullanıcı veya hashtag ara..." value="{{ query }}">
+                </form>
+            </div>
+            
+            {% if query %}
+                {% if results.users %}
+                <div class="result-section">
+                    <div class="result-title">Kullanıcılar</div>
+                    {% for user in results.users %}
+                    <a href="/profile/{{ user.username }}" class="post" style="border: none;">
+                        <div class="post-avatar" style="background-color: {{ user.avatar_color }};">{{ user.username[0].upper() }}</div>
+                        <div class="post-info">
+                            <div class="post-name">{{ user.username }} {% if user.is_verified %}<svg class="verified-svg" viewBox="0 0 24 24"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"/></svg>{% endif %}</div>
+                            <div class="post-handle">@{{ user.username }} · {{ user.followers_count }} takipçi</div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if results.posts %}
+                <div class="result-section">
+                    <div class="result-title">Yazılar</div>
+                    {% for post in results.posts %}
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar" style="background-color: {{ post.avatar_color }};">{{ post.author[0].upper() }}</div>
+                            <div class="post-info">
+                                <div class="post-author">
+                                    <span class="post-name">{{ post.author }}</span>
+                                    {% if post.is_verified %}<svg class="verified-svg" viewBox="0 0 24 24"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"/></svg>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">{{ post.content }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if results.hashtags %}
+                <div class="result-section">
+                    <div class="result-title">Hashtagler</div>
+                    {% for hashtag in results.hashtags %}
+                    <a href="/search?q={{ hashtag.tag }}" class="post" style="border: none;">
+                        <div style="flex: 1;">
+                            <div class="post-name">#{{ hashtag.tag }}</div>
+                            <div class="post-handle">{{ hashtag.count }} yazı</div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if not results.users and not results.posts and not results.hashtags %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <div>Sonuç bulunamadı</div>
+                </div>
+                {% endif %}
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">🔍</div>
+                <div>Aramaya başla</div>
+            </div>
+            {% endif %}
+        
+        {% elif page == 'settings' %}
+            <div class="header">
+                <h1 class="header-title">Ayarlar</h1>
+            </div>
+            
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-weight: 700; margin-bottom: 10px;">Tema</h3>
+                    <button class="btn-secondary" onclick="toggleTheme()" style="width: 100%;">Tema Değiştir 🌙</button>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-weight: 700; margin-bottom: 10px;">Hesap</h3>
+                    <button class="btn-secondary" onclick="openModal('editProfileModal')" style="width: 100%;">Profili Düzenle ✏️</button>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-weight: 700; margin-bottom: 10px;">Çıkış</h3>
+                    <a href="/logout" class="btn-secondary" style="width: 100%; text-decoration: none; display: block; text-align: center;">Çıkış Yap 👋</a>
                 </div>
             </div>
         {% endif %}
     </div>
+</div>
 
-    <div class="bottom-nav">
-        <a href="/" class="nav-icon">🏠</a>
-        <a href="/messages_page" class="nav-icon">💬</a>
-        <a href="/notifications" class="nav-icon">🔔{% if unread_notifs > 0 %}<span class="badge">{{unread_notifs}}</span>{% endif %}</a>
-        <a href="/profile/{{current_user}}" class="nav-icon">👤</a>
+<!-- Chat Panel -->
+<div class="side-panel" id="chatPanel">
+    <div class="panel-header">
+        <button onclick="closePanel('chatPanel')" class="icon-btn">←</button>
+        <span id="chatTitle">Sohbet</span>
     </div>
+    <div class="chat-messages" id="chatBox"></div>
+    <div class="chat-input-area">
+        <input type="text" id="chatInput" class="chat-input" placeholder="Mesaj yaz..." onkeypress="if(event.key==='Enter') sendChat()">
+        <button onclick="sendChat()" class="icon-btn" style="color: var(--primary);">📤</button>
+    </div>
+</div>
 
-    <div class="side-panel" id="chatPanel">
-        <div class="panel-header"><button onclick="togglePanel('chatPanel')">←</button> <span id="chatTitle">Sohbet</span></div>
-        <div class="chat-msgs" id="chatBox"></div>
-        <div class="chat-input-area">
-            <input type="text" id="chatInput" class="chat-input" placeholder="Mesaj yaz..." onkeypress="if(event.key==='Enter') sendChat()">
-            <button onclick="sendChat()" style="color:var(--blue); font-weight:bold;">Gönder</button>
+<!-- Modals -->
+<div class="modal" id="composeModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Yazı Yaz</div>
+            <button onclick="closeModal('composeModal')" class="close-btn">✕</button>
+        </div>
+        <textarea id="modalPostInput" class="compose-textarea" placeholder="Neler oluyor?" maxlength="500" style="margin-bottom: 16px;"></textarea>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <button onclick="closeModal('composeModal')" class="btn-secondary">İptal</button>
+            <button onclick="sendPostFromModal()" class="btn-primary">Paylaş</button>
         </div>
     </div>
+</div>
 
-    <div class="side-panel" id="newUsersPanel" style="right: auto; left: -100%; transition: left 0.3s;">
-        <div class="panel-header"><span>🌟 Yeni Katılanlar</span> <button onclick="togglePanel('newUsersPanel')" style="margin-left:auto">✕</button></div>
-        <div style="padding:15px;">
-            {% for u in new_users %}
-                <a href="/profile/{{u.username}}" class="post" style="align-items:center; border:none;">
-                    <div class="avatar">{{u.username[0].upper()}}</div>
-                    <b>{{u.username}}</b>
-                </a>
-            {% endfor %}
+<div class="modal" id="storyModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Hikaye Ekle</div>
+            <button onclick="closeModal('storyModal')" class="close-btn">✕</button>
+        </div>
+        <textarea id="storyInput" class="compose-textarea" placeholder="Hikayeni yaz..." maxlength="500" style="margin-bottom: 16px;"></textarea>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <button onclick="closeModal('storyModal')" class="btn-secondary">İptal</button>
+            <button onclick="postStory()" class="btn-primary">Paylaş</button>
         </div>
     </div>
+</div>
 
-    <div class="modal" id="storyModal">
-        <div class="modal-content">
-            <h3>Yeni Hikaye</h3>
-            <textarea id="storyContent" style="width:100%; height:100px; margin-top:15px; background:var(--bg); color:var(--text); padding:10px; border:1px solid var(--border)"></textarea>
-            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
-                <button onclick="document.getElementById('storyModal').style.display='none'">İptal</button>
-                <button onclick="postStory()" class="btn-black" style="width:auto; padding:8px 20px;">Paylaş</button>
+<div class="modal" id="editProfileModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Profili Düzenle</div>
+            <button onclick="closeModal('editProfileModal')" class="close-btn">✕</button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+                <label style="display: block; font-weight: 700; margin-bottom: 4px;">Bio</label>
+                <textarea id="bioInput" class="input-field" placeholder="Biyografi..." maxlength="150" style="height: 80px;"></textarea>
+            </div>
+            <div>
+                <label style="display: block; font-weight: 700; margin-bottom: 4px;">Mood</label>
+                <input type="text" id="moodInput" class="input-field" placeholder="Örn: 😊 Mutlu" maxlength="30">
+            </div>
+            <div>
+                <label style="display: block; font-weight: 700; margin-bottom: 4px;">Avatar Rengi</label>
+                <input type="color" id="avatarColorInput" class="input-field" style="height: 45px;">
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="closeModal('editProfileModal')" class="btn-secondary" style="flex: 1;">İptal</button>
+                <button onclick="updateProfile()" class="btn-primary" style="flex: 1;">Kaydet</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        let chatPartner = "";
-        let chatInt = null;
+<!-- Menu -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<div class="menu" id="menu">
+    <a href="/" class="menu-item">🏠 Ana Sayfa</a>
+    <a href="/explore" class="menu-item">🔍 Keşfet</a>
+    <a href="/bookmarks" class="menu-item">🔖 Kaydedilenler</a>
+    <a href="/messages" class="menu-item">💬 Mesajlar</a>
+    <a href="/notifications" class="menu-item">🔔 Bildirimler</a>
+    <a href="/profile/{{ current_user }}" class="menu-item">👤 Profil</a>
+    <button onclick="toggleTheme()" class="menu-item">🌙 Tema Değiştir</button>
+    <a href="/logout" class="menu-item danger">👋 Çıkış Yap</a>
+</div>
+```
 
-        function togglePanel(id) {
-            const p = document.getElementById(id);
-            if(id === 'newUsersPanel') p.style.left = p.style.left === '0px' ? '-100%' : '0px';
-            else p.classList.toggle('active');
-            if(!p.classList.contains('active')) clearInterval(chatInt);
-        }
+{% endif %}
 
-        async function openChat(name) {
-            chatPartner = name;
-            document.getElementById('chatTitle').innerText = name;
-            document.getElementById('chatPanel').classList.add('active');
-            loadMsgs();
-            chatInt = setInterval(loadMsgs, 2000);
-        }
-
-        async function loadMsgs() {
+<script>
+    let chatPartner = "";
+    let chatInterval = null;
+    
+    // Auth
+    function toggleAuthForm() {
+        document.getElementById('loginForm').classList.toggle('hidden');
+        document.getElementById('registerForm').classList.toggle('hidden');
+    }
+    
+    // Modal & Panel
+    function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
+    }
+    
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+    
+    function openPanel(id) {
+        document.getElementById(id).classList.add('active');
+    }
+    
+    function closePanel(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+    
+    function toggleMenu() {
+        document.getElementById('menu').classList.toggle('active');
+        document.getElementById('menuOverlay').classList.toggle('active');
+    }
+    
+    // Chat
+    async function openChat(name) {
+        chatPartner = name;
+        document.getElementById('chatTitle').innerText = name;
+        openPanel('chatPanel');
+        await loadChat();
+        chatInterval = setInterval(loadChat, 2000);
+    }
+    
+    async function loadChat() {
+        try {
             const res = await fetch(`/api/chat/${chatPartner}`);
             const data = await res.json();
             const box = document.getElementById('chatBox');
             box.innerHTML = data.map(m => `
-                <div class="bubble ${m.sender === '{{current_user}}' ? 'me' : 'them'}">
-                    ${m.content}
-                    <div style="font-size:9px; text-align:right; opacity:0.7">${m.created_at.split(' ')[1]} ${m.sender === '{{current_user}}' && m.is_read ? '✓✓' : ''}</div>
+                <div class="message ${m.sender === '{{ current_user }}' ? 'sent' : 'received'}">
+                    <div class="bubble ${m.sender === '{{ current_user }}' ? 'sent' : 'received'}">
+                        ${m.content}
+                        <div class="message-time">${m.created_at.split(' ')[1]}</div>
+                    </div>
                 </div>
             `).join('');
             box.scrollTop = box.scrollHeight;
+        } catch (e) {
+            console.log('Chat yükleme hatası:', e);
         }
-
-        async function sendChat() {
-            const inp = document.getElementById('chatInput');
-            const fd = new FormData(); fd.append('content', inp.value);
-            await fetch(`/api/chat/${chatPartner}`, {method:'POST', body:fd});
-            inp.value = ''; loadMsgs();
-        }
-
-        async function sendPost() {
-            const fd = new FormData(); fd.append('content', document.getElementById('postInput').value);
-            await fetch('/api/post', {method:'POST', body:fd}); location.reload();
-        }
-
-        async function postStory() {
-            const fd = new FormData(); fd.append('content', document.getElementById('storyContent').value);
-            await fetch('/api/post_story', {method:'POST', body:fd}); location.reload();
-        }
-
-        async function action(type, id) {
-            await fetch(`/api/action/${type}/${id}`, {method:'POST'});
-            if(type === 'delete') location.reload();
-            else location.reload();
-        }
-
-        function formatContent() {
-            document.querySelectorAll('.raw-text').forEach(el => {
-                let t = el.innerText;
-                t = t.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
-                t = t.replace(/@(\w+)/g, '<a href="/profile/$1" style="color:var(--blue); font-weight:bold;">@$1</a>');
-                t = t.replace(/(https?:\/\/[^\s]+?\.(?:jpg|jpeg|png|gif))/ig, '<img src="$1" class="raw-img">');
-                el.innerHTML = t;
-            });
-        }
-        formatContent();
-
-        function toggleTheme() {
-            const b = document.body;
-            const theme = b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            b.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        }
-        if(localStorage.getItem('theme')) document.body.setAttribute('data-theme', localStorage.getItem('theme'));
+    }
+    
+    async function sendChat() {
+        const inp = document.getElementById('chatInput');
+        if (!inp.value.trim()) return;
         
-        function copyUrl(id) { navigator.clipboard.writeText(window.location.origin + "#post-" + id); alert("Kopyalandı!"); }
-    </script>
-{% endif %}
+        const fd = new FormData();
+        fd.append('content', inp.value);
+        
+        try {
+            await fetch(`/api/chat/${chatPartner}`, { method: 'POST', body: fd });
+            inp.value = '';
+            await loadChat();
+        } catch (e) {
+            console.log('Mesaj gönderme hatası:', e);
+        }
+    }
+    
+    // Posts
+    function updateCharCount() {
+        const textarea = document.getElementById('postInput');
+        const count = textarea.value.length;
+        document.getElementById('charCount').innerText = `${count}/500`;
+        
+        const el = document.getElementById('charCount');
+        el.classList.remove('warning', 'danger');
+        if (count > 400) el.classList.add('danger');
+        else if (count > 300) el.classList.add('warning');
+    }
+    
+    document.getElementById('postInput')?.addEventListener('input', updateCharCount);
+    
+    async function sendPost() {
+        const inp = document.getElementById('postInput');
+        if (!inp.value.trim() || inp.value.length > 500) return;
+        
+        const fd = new FormData();
+        fd.append('content', inp.value);
+        
+        try {
+            await fetch('/api/post', { method: 'POST', body: fd });
+            location.reload();
+        } catch (e) {
+            console.log('Yazı gönderme hatası:', e);
+        }
+    }
+    
+    async function sendPostFromModal() {
+        const inp = document.getElementById('modalPostInput');
+        if (!inp.value.trim() || inp.value.length > 500) return;
+        
+        const fd = new FormData();
+        fd.append('content', inp.value);
+        
+        try {
+            await fetch('/api/post', { method: 'POST', body: fd });
+            closeModal('composeModal');
+            location.reload();
+        } catch (e) {
+            console.log('Yazı gönderme hatası:', e);
+        }
+    }
+    
+    async function postStory() {
+        const inp = document.getElementById('storyInput');
+        if (!inp.value.trim() || inp.value.length > 500) return;
+        
+        const fd = new FormData();
+        fd.append('content', inp.value);
+        
+        try {
+            await fetch('/api/story', { method: 'POST', body: fd });
+            closeModal('storyModal');
+            location.reload();
+        } catch (e) {
+            console.log('Hikaye gönderme hatası:', e);
+        }
+    }
+    
+    async function action(type, id, event) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        try {
+            await fetch(`/api/action/${type}/${id}`, { method: 'POST' });
+            
+            if (type === 'delete') {
+                location.reload();
+            } else if (type === 'like') {
+                const btn = document.getElementById(`like-btn-${id}`);
+                const count = document.getElementById(`like-count-${id}`);
+                btn.classList.toggle('liked');
+                const newCount = parseInt(count.innerText) + (btn.classList.contains('liked') ? 1 : -1);
+                count.innerText = newCount;
+            }
+        } catch (e) {
+            console.log('İşlem hatası:', e);
+        }
+    }
+    
+    function viewStory(content, author) {
+        alert(`${author}''nin Hikayesi:\n\n${content}`);
+    }
+    
+    // Follow
+    async function toggleFollow(username) {
+        try {
+            await fetch(`/api/follow/${username}`, { method: 'POST' });
+            location.reload();
+        } catch (e) {
+            console.log('Takip hatası:', e);
+        }
+    }
+    
+    // Profile
+    async function updateProfile() {
+        const bio = document.getElementById('bioInput').value.trim();
+        const mood = document.getElementById('moodInput').value.trim();
+        const color = document.getElementById('avatarColorInput').value;
+        
+        const fd = new FormData();
+        fd.append('bio', bio);
+        fd.append('mood', mood);
+        fd.append('avatar_color', color);
+        
+        try {
+            await fetch('/api/update_profile', { method: 'POST', body: fd });
+            closeModal('editProfileModal');
+            location.reload();
+        } catch (e) {
+            console.log('Profil güncelleme hatası:', e);
+        }
+    }
+    
+    // Theme
+    function toggleTheme() {
+        const body = document.body;
+        const theme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', theme);
+        localStorage.setItem('mekan-theme', theme);
+    }
+    
+    if (localStorage.getItem('mekan-theme')) {
+        document.body.setAttribute('data-theme', localStorage.getItem('mekan-theme'));
+    }
+    
+    // Modal dışına tıklanınca kapat
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
