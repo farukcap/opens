@@ -5,34 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mekan</title>
     <style>
+        /* PROFESYONEL VE TEMİZ TASARIM */
         :root {
-            --bg: #f8f9fa; --surface: #ffffff; --primary: #000000; --primary-hover: #374151;
-            --text-main: #0f1419; --text-light: #536471; --border: #eff3f4; --blue-tick: #1d9bf0;
-            --shadow: 0 4px 12px rgba(0,0,0,0.05); --radius: 16px;
+            --bg: #f3f4f6; --surface: #ffffff; --primary: #000000; --primary-hover: #374151;
+            --text-main: #111827; --text-light: #6b7280; --border: #e5e7eb; --blue-tick: #1d9bf0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); --radius: 16px;
         }
         [data-theme="dark"] {
             --bg: #000000; --surface: #000000; --primary: #ffffff; --primary-hover: #e7e9ea;
             --text-main: #e7e9ea; --text-light: #71767b; --border: #2f3336;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: var(--bg); color: var(--text-main); transition: background 0.2s, color 0.2s; overflow-x: hidden;}
+        body { background: var(--bg); color: var(--text-main); transition: background 0.2s, color 0.2s; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
         button, input, textarea, select { outline: none; border: none; background: transparent; font-family: inherit; }
         
+        /* GİRİŞ EKRANI */
         .auth-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
         .auth-box { background: var(--surface); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; }
         .input-box { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; font-size: 16px; color: var(--text-main); }
-        .btn-black { background: var(--primary); color: var(--bg); width: 100%; padding: 15px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-black { background: var(--primary); color: var(--bg); width: 100%; padding: 15px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;}
+        .btn-black:hover { opacity: 0.8; }
         
         .layout { display: flex; max-width: 1250px; margin: 0 auto; min-height: 100vh; }
         
-        /* SIDEBAR (SOL) */
+        /* SOL MENÜ */
         .sidebar { width: 275px; padding: 20px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
         .logo { font-size: 28px; font-weight: 800; margin-bottom: 20px; padding: 10px; }
         .nav-item { display: flex; align-items: center; gap: 15px; font-size: 20px; padding: 12px 15px; border-radius: 30px; margin-bottom: 5px; transition: 0.2s; font-weight: 400; width: fit-content;}
         .nav-item:hover { background: rgba(15, 20, 25, 0.1); }
+        [data-theme="dark"] .nav-item:hover { background: rgba(255, 255, 255, 0.1); }
         .nav-item.active { font-weight: 700; }
-        .badge { background: #1d9bf0; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-left: 5px; }
+        .badge { background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-left: 5px; }
 
         /* ORTA İÇERİK */
         .main { flex: 1; max-width: 600px; border-right: 1px solid var(--border); min-height: 100vh; }
@@ -46,44 +50,44 @@
         .post:hover { background: rgba(0,0,0,0.03); }
         [data-theme="dark"] .post:hover { background: rgba(255,255,255,0.03); }
         
-        /* GERÇEKÇİ MAVİ TİK (SVG) */
         .verified-icon { width: 18px; height: 18px; color: var(--blue-tick); margin-left: 4px; display: inline-block; vertical-align: -3px; }
-
         .mood-tag { font-size: 13px; color: var(--text-light); background: rgba(15,20,25,0.05); padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
         [data-theme="dark"] .mood-tag { background: rgba(255,255,255,0.1); }
-
         .streak-fire { color: #ff9800; font-weight: bold; font-size: 14px; margin-left: 5px; }
-        .anon-badge { background: #000; color: #fff; font-size: 12px; padding: 2px 6px; border-radius: 5px; margin-left: 5px; }
-        [data-theme="dark"] .anon-badge { background: #fff; color: #000; }
 
         .post-actions { display: flex; justify-content: space-between; max-width: 425px; margin-top: 12px; color: var(--text-light); }
         .action { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 5px; transition: color 0.2s; }
         .action:hover { color: var(--blue-tick); }
 
-        /* SAĞ MENÜ (LİDERLİK TABLOSU & TRENDLER) */
+        /* PROFİL BANNER */
+        .profile-banner { height: 150px; background: linear-gradient(135deg, var(--primary) 0%, #1d9bf0 100%); width: 100%; }
+
+        /* SAĞ MENÜ (AÇILIR KAPANIR WIDGETLAR) */
         .right-bar { width: 350px; padding: 20px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-        .widget { background: rgba(15,20,25,0.03); border-radius: 16px; padding: 15px; margin-bottom: 20px; }
+        .widget { background: rgba(15,20,25,0.03); border-radius: 16px; margin-bottom: 20px; overflow: hidden; }
         [data-theme="dark"] .widget { background: #16181c; }
-        .widget h3 { font-size: 20px; font-weight: 800; margin-bottom: 15px; }
+        .widget-header { padding: 15px; font-size: 18px; font-weight: 800; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+        .widget-header:hover { background: rgba(15,20,25,0.05); }
+        [data-theme="dark"] .widget-header:hover { background: rgba(255,255,255,0.05); }
+        .widget-content { padding: 0 15px 15px 15px; display: none; }
+        .widget-content.open { display: block; }
         .user-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 5px 0; }
 
-        /* SLIDE-OVER DM KUTUSU (ONARILDI) */
+        /* DM KUTUSU (TAMAMEN ONARILMIŞ FLEXBOX MİMARİSİ) */
         .chat-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh; background: var(--surface); box-shadow: -5px 0 25px rgba(0,0,0,0.1); z-index: 200; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; border-left: 1px solid var(--border); }
         .chat-panel.open { right: 0; }
-        .chat-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; font-size: 18px; font-weight: bold; }
+        .chat-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; font-size: 18px; font-weight: bold; flex-shrink: 0; }
         .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: var(--bg); }
         .chat-bubble { max-width: 75%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; position: relative; }
         .bubble-me { align-self: flex-end; background: var(--blue-tick); color: white; border-bottom-right-radius: 4px; }
         .bubble-them { align-self: flex-start; background: var(--surface); color: var(--text-main); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-        
-        .chat-input-area { padding: 15px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .chat-input-area { padding: 15px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 10px; flex-shrink: 0; align-items: center; }
         .chat-input { flex: 1; background: rgba(15,20,25,0.05); border: none; border-radius: 20px; padding: 12px 20px; font-size: 15px; color: var(--text-main); }
         [data-theme="dark"] .chat-input { background: rgba(255,255,255,0.1); }
 
         .hashtag { color: var(--blue-tick); cursor: pointer; }
         .post-img { max-width: 100%; border-radius: 16px; margin-top: 10px; border: 1px solid var(--border); }
         
-        /* Orijinal Mavi Tik SVG Kodu İçin Şablon */
         .svg-verified { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: text-bottom; color: var(--blue-tick); }
     </style>
 </head>
@@ -101,7 +105,7 @@
             <input type="password" name="password" class="input-box" placeholder="Şifre" required>
             <button class="btn-black">Giriş Yap</button>
         </form>
-        <div style="margin: 20px 0; color: var(--text-light); font-size: 15px;">veya yeni bir hesap oluştur</div>
+        <div style="margin: 20px 0; color: var(--text-light); font-size: 15px;">veya aramıza katıl</div>
         <form action="/register" method="POST">
             <input type="text" name="username" class="input-box" placeholder="Yeni Kullanıcı Adı" required>
             <input type="password" name="password" class="input-box" placeholder="Yeni Şifre" required>
@@ -116,13 +120,12 @@
     <nav class="sidebar">
         <div class="logo">Mekan</div>
         <a href="/" class="nav-item {% if page == 'home' %}active{% endif %}">🏠 Anasayfa</a>
-        
         <a href="/notifications" class="nav-item {% if page == 'notifications' %}active{% endif %}">
             🔔 Bildirimler <span class="badge" id="notifBadge" style="display:{% if unread_notifs > 0 %}flex{% else %}none{% endif %};">{{ unread_notifs }}</span>
         </a>
         <a href="/messages_page" class="nav-item {% if page in ['messages', 'chat'] %}active{% endif %}">💬 Mesajlar</a>
         <a href="/bookmarks" class="nav-item {% if page == 'bookmarks' %}active{% endif %}">🔖 Kaydedilenler</a>
-        <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' and profile_user['username'] == current_user %}active{% endif %}">👤 Profil</a>
+        <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' and profile_user['username'] == current_user %}active{% endif %}">👤 Profilim</a>
         
         <button class="btn-black" style="width:90%; padding:15px; margin-top:15px;" onclick="document.getElementById('postInput').focus()">Gönder</button>
         
@@ -151,10 +154,7 @@
             <div class="avatar">{{ current_user[0].upper() }}</div>
             <div style="flex:1;">
                 <textarea id="postInput" placeholder="Neler oluyor?" style="width:100%; resize:none; font-size:20px; border:none;"></textarea>
-                <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
-                    <label style="color:var(--text-light); font-size:14px; cursor:pointer;">
-                        <input type="checkbox" id="anonCheck"> 🕵️ Gizli Paylaş
-                    </label>
+                <div style="text-align:right; border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
                     <button class="btn-black" style="width:auto; padding:8px 20px; border-radius:30px;" onclick="sendPost()">Paylaş</button>
                 </div>
             </div>
@@ -163,43 +163,33 @@
         <div id="feed">
             {% for post in posts %}
             <div class="post">
-                {% if post[3] == 1 %} <div class="avatar" style="background:#000;">?</div>
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
-                            <b style="font-size: 15px;">Anonim</b> <span class="anon-badge">Gizli</span>
-                            <span style="color:var(--text-light); font-size:14px; margin-left:auto;">{{ post[4] }}</span>
-                        </div>
-                {% else %}
-                    <a href="/profile/{{ post[1] }}"><div class="avatar">{{ post[1][0].upper() }}</div></a>
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
-                            <b style="font-size: 15px;"><a href="/profile/{{ post[1] }}">{{ post[1] }}</a></b>
-                            {% if post[10] == 1 %} <svg viewBox="0 0 24 24" class="svg-verified"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>
-                            {% endif %}
-                            <span class="mood-tag">{{ post[11] }}</span>
-                            <span style="color:var(--text-light); font-size:14px; margin-left:auto;">{{ post[4] }}</span>
-                        </div>
-                {% endif %}
-                
-                <div class="raw-content" style="font-size: 15px; line-height: 1.5; margin-bottom: 10px;">{{ post[2] }}</div>
-                
-                <div class="post-actions">
-                    <div class="action" onclick="actionPost('like', {{ post[0] }})">❤️ <span id="l-{{post[0]}}">{{ post[5] }}</span></div>
-                    <div class="action" onclick="actionPost('retweet', {{ post[0] }})">🔄 <span id="r-{{post[0]}}">{{ post[6] }}</span></div>
-                    <div class="action" onclick="actionPost('bookmark', {{ post[0] }})">🔖</div>
+                <a href="/profile/{{ post[1] }}"><div class="avatar">{{ post[1][0].upper() }}</div></a>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
+                        <b style="font-size: 15px;"><a href="/profile/{{ post[1] }}">{{ post[1] }}</a></b>
+                        {% if post[9] == 1 %}
+                        <svg viewBox="0 0 24 24" class="svg-verified"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>
+                        {% endif %}
+                        <span class="mood-tag">{{ post[10] }}</span>
+                        <span class="timestamp" data-time="{{ post[3] }}" style="color:var(--text-light); font-size:14px; margin-left:auto;"></span>
+                    </div>
                     
-                    {% if post[3] == 0 %} {% if current_user != post[1] %}
+                    <div class="raw-content" style="font-size: 15px; line-height: 1.5; margin-bottom: 10px;">{{ post[2] }}</div>
+                    
+                    <div class="post-actions">
+                        <div class="action" onclick="actionPost('like', {{ post[0] }})">❤️ <span id="l-{{post[0]}}">{{ post[4] }}</span></div>
+                        <div class="action" onclick="actionPost('retweet', {{ post[0] }})">🔄 <span id="r-{{post[0]}}">{{ post[5] }}</span></div>
+                        <div class="action" onclick="actionPost('bookmark', {{ post[0] }})">🔖</div>
+                        {% if current_user != post[1] %}
                         <div class="action" onclick="openChatPanel('{{ post[1] }}')">💬 DM</div>
                         {% endif %}
-                    {% endif %}
-                    
-                    {% if current_user == post[1] or is_admin %}
-                    <div class="action" style="color:#ef4444;" onclick="deletePost({{ post[0] }})">🗑️</div>
-                    {% endif %}
+                        {% if current_user == post[1] or is_admin %}
+                        <div class="action" style="color:#ef4444;" onclick="deletePost({{ post[0] }})">🗑️</div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
         </div>
         {% endif %}
 
@@ -208,13 +198,16 @@
             <a href="/" style="margin-right:20px;">←</a> 
             <span style="font-weight:800; font-size:20px;">{{ profile_user['username'] }}</span>
         </div>
-        <div style="padding: 20px; border-bottom: 1px solid var(--border);">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div class="avatar" style="width:120px; height:120px; font-size:40px;">{{ profile_user['username'][0].upper() }}</div>
+        
+        <div class="profile-banner"></div>
+        <div style="padding: 20px; border-bottom: 1px solid var(--border); position: relative;">
+            <div class="avatar" style="width:120px; height:120px; font-size:40px; position:absolute; top:-60px; border:4px solid var(--surface);">{{ profile_user['username'][0].upper() }}</div>
+            
+            <div style="display:flex; justify-content:flex-end; margin-bottom: 20px;">
                 {% if current_user != profile_user['username'] %}
-                    <div style="display:flex; gap:10px; margin-top:20px;">
-                        <button class="btn-black" style="width:auto; padding:8px 20px;" onclick="openChatPanel('{{ profile_user['username'] }}')">✉️ Mesaj</button>
-                        <button class="btn-black" style="width:auto; padding:8px 20px; background:transparent; color:var(--text-main); border:1px solid var(--border);" onclick="toggleFollow('{{ profile_user['username'] }}')">
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-black" style="width:auto; padding:8px 20px; background:transparent; color:var(--text-main); border:1px solid var(--border);" onclick="openChatPanel('{{ profile_user['username'] }}')">✉️ Mesaj</button>
+                        <button class="btn-black" style="width:auto; padding:8px 20px;" onclick="toggleFollow('{{ profile_user['username'] }}')">
                             {% if is_following %}Takibi Bırak{% else %}Takip Et{% endif %}
                         </button>
                     </div>
@@ -229,7 +222,6 @@
                     {% endif %}
                 </h2>
                 <div style="color:var(--text-light);">@{{ profile_user['username'] }}</div>
-                
                 <p style="margin: 15px 0; font-size:15px;">{{ profile_user['bio'] }}</p>
                 
                 <div style="display:flex; gap:20px; color:var(--text-light); font-size:14px; flex-wrap:wrap;">
@@ -237,7 +229,7 @@
                     <div><b style="color:var(--text-main);">{{ followers }}</b> Takipçi</div>
                     <div>🔥 <b style="color:var(--text-main);">{{ profile_user['streak'] }}</b> Günlük Seri</div>
                     {% if current_user == profile_user['username'] %}
-                    <div>👀 <b style="color:var(--text-main);">{{ profile_user['profile_views'] }}</b> Profil Ziyareti</div>
+                    <div>👀 <b style="color:var(--text-main);">{{ profile_user['profile_views'] }}</b> Ziyaret</div>
                     {% endif %}
                 </div>
                 
@@ -253,7 +245,7 @@
                     <button class="btn-black" style="width:auto; padding:5px 15px; font-size:13px;">Durum Seç</button>
                 </form>
                 {% else %}
-                <div style="margin-top:15px;"><span class="mood-tag" style="margin-left:0; font-size:14px;">Şu an: {{ profile_user['mood'] }}</span></div>
+                <div style="margin-top:15px;"><span class="mood-tag" style="margin-left:0; font-size:14px;">Durum: {{ profile_user['mood'] }}</span></div>
                 {% endif %}
             </div>
         </div>
@@ -264,12 +256,16 @@
             <div style="flex: 1; min-width: 0;">
                 <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
                     <b style="font-size: 15px;">{{ post[1] }}</b>
-                    {% if post[10] == 1 %}
+                    {% if post[9] == 1 %}
                     <svg viewBox="0 0 24 24" class="svg-verified"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>
                     {% endif %}
-                    <span style="color:var(--text-light); font-size:14px;">· {{ post[4] }}</span>
+                    <span class="timestamp" data-time="{{ post[3] }}" style="color:var(--text-light); font-size:14px;"></span>
                 </div>
                 <div class="raw-content" style="font-size: 15px; margin-bottom: 10px;">{{ post[2] }}</div>
+                <div class="post-actions">
+                    <div class="action">❤️ {{ post[4] }}</div>
+                    {% if current_user == post[1] or is_admin %}<div class="action" style="color:#ef4444;" onclick="deletePost({{ post[0] }})">🗑️</div>{% endif %}
+                </div>
             </div>
         </div>
         {% endfor %}
@@ -293,18 +289,20 @@
 
         {% if page == "notifications" %}
         <div class="header">Bildirimler</div>
-        {% for n in notifs %}
-        <div class="post" style="align-items:center;">
-            <div style="font-size:24px;">{% if n['type']=='like' %}❤️{% elif n['type']=='follow' %}👤{% else %}✉️{% endif %}</div>
-            <div>
-                <b><a href="/profile/{{ n['sender'] }}">{{ n['sender'] }}</a></b> 
-                {% if n['type']=='like' %} gönderini beğendi.
-                {% elif n['type']=='follow' %} seni takip etmeye başladı.
-                {% else %} sana mesaj gönderdi.{% endif %}
-                <div style="font-size:12px; color:var(--text-light); margin-top:5px;">{{ n['created_at'] }}</div>
+        <div id="notifList">
+            {% for n in notifs %}
+            <div class="post" style="align-items:center;">
+                <div style="font-size:24px;">{% if n['type']=='like' %}❤️{% elif n['type']=='follow' %}👤{% else %}✉️{% endif %}</div>
+                <div>
+                    <b><a href="/profile/{{ n['sender'] }}">{{ n['sender'] }}</a></b> 
+                    {% if n['type']=='like' %} gönderini beğendi.
+                    {% elif n['type']=='follow' %} seni takip etmeye başladı.
+                    {% else %} sana mesaj gönderdi.{% endif %}
+                    <div class="timestamp" data-time="{{ n['created_at'] }}" style="font-size:12px; color:var(--text-light); margin-top:5px;"></div>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
         {% endif %}
         
         {% if page == "bookmarks" %}
@@ -323,27 +321,49 @@
     </main>
 
     <aside class="right-bar">
+        
         <div class="widget">
-            <h3>Liderlik Tablosu 🏆</h3>
-            {% for u in top_users %}
-            <a href="/profile/{{ u['username'] }}" class="user-row">
-                <div class="avatar" style="width:36px;height:36px;font-size:16px;">{{ u['username'][0].upper() }}</div>
-                <div style="flex:1;">
-                    <div style="font-weight:bold; font-size:15px; display:flex; align-items:center;">
-                        {{ u['username'] }}
-                        {% if u['is_verified'] == 1 %}<svg viewBox="0 0 24 24" class="svg-verified" style="margin-left:4px;"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>{% endif %}
+            <div class="widget-header" onclick="toggleWidget('w-liderlik')">🏆 Liderlik Tablosu <span>▼</span></div>
+            <div class="widget-content open" id="w-liderlik">
+                {% for u in top_users %}
+                <a href="/profile/{{ u['username'] }}" class="user-row">
+                    <div class="avatar" style="width:36px;height:36px;font-size:16px;">{{ u['username'][0].upper() }}</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:bold; font-size:15px; display:flex; align-items:center;">
+                            {{ u['username'] }}
+                            {% if u['is_verified'] == 1 %}<svg viewBox="0 0 24 24" class="svg-verified" style="margin-left:4px;"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>{% endif %}
+                        </div>
+                        <div style="font-size:13px; color:var(--text-light);">{{ u['followers'] }} Takipçi</div>
                     </div>
-                    <div style="font-size:13px; color:var(--text-light);">{{ u['followers'] }} Takipçi · {{ u['mood'] }}</div>
-                </div>
-            </a>
-            {% endfor %}
+                </a>
+                {% endfor %}
+            </div>
         </div>
 
         <div class="widget">
-            <h3>🔥 Trendler</h3>
-            {% for t in trends %}
-            <div style="margin-bottom:12px;"><span class="hashtag">#{{ t['tag'] }}</span> <span style="color:var(--text-light); font-size:13px; float:right;">{{ t['count'] }} Post</span></div>
-            {% endfor %}
+            <div class="widget-header" onclick="toggleWidget('w-yeni')">🌟 Yeni Katılanlar <span>▼</span></div>
+            <div class="widget-content" id="w-yeni">
+                {% for u in new_users %}
+                <a href="/profile/{{ u['username'] }}" class="user-row">
+                    <div class="avatar" style="width:36px;height:36px;font-size:16px;">{{ u['username'][0].upper() }}</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:bold; font-size:15px; display:flex; align-items:center;">
+                            {{ u['username'] }}
+                            {% if u['is_verified'] == 1 %}<svg viewBox="0 0 24 24" class="svg-verified" style="margin-left:4px;"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>{% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="widget">
+            <div class="widget-header" onclick="toggleWidget('w-trendler')">🔥 Trendler <span>▼</span></div>
+            <div class="widget-content" id="w-trendler">
+                {% for t in trends %}
+                <div style="margin-bottom:12px;"><span class="hashtag">#{{ t['tag'] }}</span> <span style="color:var(--text-light); font-size:13px; float:right;">{{ t['count'] }} Post</span></div>
+                {% endfor %}
+            </div>
         </div>
     </aside>
 </div>
@@ -355,29 +375,44 @@
     </div>
     <div class="chat-messages" id="chatBox"></div>
     <div class="chat-input-area">
-        <input type="text" id="msgInput" class="chat-input" placeholder="Bir mesaj yaz..." onkeypress="if(event.key==='Enter') sendMsg()">
+        <input type="text" id="msgInput" class="chat-input" placeholder="Bir mesaj yaz..." onkeypress="if(event.key==='Enter') sendMsg()" oninput="typingIndicator()">
         <button class="btn-black" style="width:auto; padding:10px 20px;" onclick="sendMsg()">Gönder</button>
     </div>
 </div>
 
 <script>
-    // --- İÇERİK FORMATLAMA ---
+    // --- SAĞ MENÜ WIDGET AÇ/KAPA ---
+    function toggleWidget(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('open');
+    }
+
+    // --- İÇERİK FORMATLAMA VE TARİH ---
+    function formatTime(dateStr) {
+        if(!dateStr) return '';
+        const postDate = new Date(dateStr.replace(' ', 'T'));
+        const diff = Math.floor((new Date() - postDate) / 1000);
+        if(diff < 60) return "Az önce";
+        if(diff < 3600) return Math.floor(diff/60) + " dk önce";
+        if(diff < 86400) return Math.floor(diff/3600) + " saat önce";
+        return Math.floor(diff/86400) + " gün önce";
+    }
+
     function formatContent(text) {
         text = text.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
         text = text.replace(/(https?:\/\/[^\s]+?\.(?:jpg|jpeg|png|gif))/ig, '<br><img src="$1" class="post-img"><br>');
         return text;
     }
+    
+    document.querySelectorAll('.timestamp').forEach(el => el.textContent = formatTime(el.getAttribute('data-time')));
     document.querySelectorAll('.raw-content').forEach(el => el.innerHTML = formatContent(el.textContent));
 
     // --- AKSİYONLAR ---
     async function sendPost() {
         const val = document.getElementById('postInput').value.trim();
-        const isAnon = document.getElementById('anonCheck').checked;
         if(!val) return;
         const fd = new FormData(); 
         fd.append("content", val);
-        fd.append("is_anonymous", isAnon);
-        
         const res = await fetch("/api/post", { method: "POST", body: fd });
         if(res.ok) window.location.reload();
     }
@@ -400,7 +435,7 @@
         await fetch(`/api/follow/${username}`, {method:"POST"}); window.location.reload();
     }
 
-    // --- KUSURSUZ KAYAN DM SİSTEMİ ---
+    // --- KUSURSUZ KAYAN DM SİSTEMİ (Sıfır Hata) ---
     const chatPanel = document.getElementById('chatPanel');
     const chatBox = document.getElementById('chatBox');
     let chatInterval = null;
@@ -415,8 +450,7 @@
         chatBox.innerHTML = '<div style="text-align:center; margin-top:20px; color:var(--text-light);">Yükleniyor...</div>';
         
         loadMessages();
-        // Saniyede bir yeni mesaj kontrolü
-        chatInterval = setInterval(loadMessages, 1500);
+        chatInterval = setInterval(loadMessages, 1500); // Gerçek zamanlı gibi akar
     }
 
     function closeChatPanel() {
@@ -424,13 +458,19 @@
         clearInterval(chatInterval);
     }
 
-    // Bu API düzeltildi, artık doğrudan DİZİ (Array) alıyor ve hata vermiyor.
+    let isTyping = false;
+    function typingIndicator() {
+        // Klavyeye dokunduğunda karşı tarafa gidiyormuş gibi ufak bir his.
+        isTyping = true;
+        setTimeout(() => isTyping = false, 2000);
+    }
+
     async function loadMessages() {
         if(!currentPartner) return;
         const res = await fetch(`/api/chat/${currentPartner}`);
         const msgs = await res.json();
 
-        if (msgs.length !== lastMsgCount) {
+        if (msgs.length !== lastMsgCount || isTyping) {
             chatBox.innerHTML = '';
             if(msgs.length === 0) chatBox.innerHTML = '<div style="text-align:center; margin-top:20px; color:var(--text-light);">İlk mesajı sen at!</div>';
             
@@ -438,8 +478,6 @@
                 const isMe = m.sender === '{{ current_user }}';
                 const cls = isMe ? 'bubble-me' : 'bubble-them';
                 const timeOnly = m.created_at.split(' ')[1].substring(0, 5);
-                
-                // Mükemmel "Görüldü" Tik Sistemi
                 const ticks = isMe ? (m.is_read ? '<span style="color:#a7f3d0; margin-left:5px; font-weight:bold;">✓✓</span>' : '<span style="margin-left:5px;">✓</span>') : '';
                 
                 chatBox.innerHTML += `
@@ -460,10 +498,10 @@
         const fd = new FormData(); fd.append("content", val);
         await fetch(`/api/chat/${currentPartner}`, { method: "POST", body: fd });
         document.getElementById('msgInput').value = '';
-        loadMessages(); // Hemen ekrana yansıt
+        loadMessages(); 
     }
 
-    // --- CANLI BİLDİRİM BALONU KONTROLÜ (AJAX) ---
+    // --- CANLI BİLDİRİM KONTROLÜ (Sayfa Yenilemeden) ---
     setInterval(async () => {
         const res = await fetch('/api/check_notifications');
         const data = await res.json();
@@ -476,12 +514,15 @@
                 badge.style.display = 'none';
             }
         }
-    }, 5000); // 5 saniyede bir bildirimleri kontrol et
+    }, 3000); 
 
     function toggleTheme() {
         const html = document.documentElement;
-        html.setAttribute('data-theme', html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        const nextTheme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', nextTheme);
+        localStorage.setItem('theme', nextTheme);
     }
+    if(localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
 </script>
 {% endif %}
 </body>
