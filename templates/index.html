@@ -6,123 +6,83 @@
     <title>Mekan V7 - Floral Edition</title>
     <style>
         :root {
-            --primary: #5da399; /* Ferah Su Yeşili */
-            --primary-dark: #4a827a;
-            --primary-light: rgba(93, 163, 153, 0.1);
-            --accent: #f4a261; /* Çiçeksi Turuncu */
-            --success: #00ba7c;
-            --danger: #e63946;
-            --warning: #ffb703;
-            --bg: #f8faf9; /* Ferah Off-White */
-            --surface: #ffffff;
-            --surface-2: #f1f5f4;
-            --text: #1a2e2b;
-            --text-secondary: #607d7a;
-            --border: #e2edea;
-            --glass: rgba(255, 255, 255, 0.8);
-            --shadow: 0 10px 30px rgba(93, 163, 153, 0.08);
-            --shadow-float: 0 15px 45px rgba(0,0,0,0.1);
+            --primary: #5da399; --primary-dark: #4a827a; --primary-light: rgba(93, 163, 153, 0.1);
+            --accent: #f4a261; --success: #00ba7c; --danger: #e63946; --warning: #ffb703;
+            --bg: #f8faf9; --surface: #ffffff; --surface-2: #f1f5f4;
+            --text: #1a2e2b; --text-secondary: #607d7a; --border: #e2edea;
+            --glass: rgba(255, 255, 255, 0.85); --shadow: 0 10px 30px rgba(93, 163, 153, 0.08);
         }
-
         [data-theme="dark"] {
-            --bg: #0d1a18;
-            --surface: #142624;
-            --surface-2: #1b3330;
-            --text: #e0f2f1;
-            --text-secondary: #8da3a1;
-            --border: #223d3a;
+            --bg: #0d1a18; --surface: #142624; --surface-2: #1b3330;
+            --text: #e0f2f1; --text-secondary: #8da3a1; --border: #223d3a;
             --glass: rgba(20, 38, 36, 0.8);
         }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', Roboto, -apple-system, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; scroll-behavior: smooth; transition: background 0.3s; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
         button, input, textarea { font-family: inherit; color: inherit; outline: none; }
 
-        /* ============ GENEL TASARIM ============ */
+        /* LAYOUT */
         .app-wrapper { display: flex; min-height: 100dvh; justify-content: center; }
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100dvh; border-right: 1px solid var(--border); padding: 25px; background: var(--surface); display: flex; flex-direction: column; z-index: 1000; transition: transform 0.3s; }
+        .nav-item { padding: 14px 20px; border-radius: 20px; text-decoration: none; color: var(--text); font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 15px; transition: 0.2s; border: none; background: transparent; cursor: pointer; margin-bottom: 5px; }
+        .nav-item:hover { background: var(--primary-light); color: var(--primary); }
+        .nav-item.active { background: var(--primary); color: white; }
         
-        /* SIDEBAR (LEFT) */
-        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100dvh; border-right: 1px solid var(--border); padding: 25px; background: var(--surface); display: flex; flex-direction: column; z-index: 1000; transition: transform 0.3s ease; }
-        .logo { font-size: 32px; font-weight: 900; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
-        .logo span { color: var(--accent); }
+        .main-content { flex: 1; max-width: 650px; width: 100%; margin-left: 280px; margin-right: 350px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); background: var(--surface); min-height: 100dvh; }
+        .right-sidebar { position: fixed; right: 0; top: 0; width: 350px; height: 100dvh; padding: 25px; background: var(--bg); overflow-y: auto; }
         
-        .nav-menu { display: flex; flex-direction: column; gap: 8px; }
-        .nav-item { padding: 15px 20px; border-radius: 20px; text-decoration: none; color: var(--text); font-weight: 600; font-size: 19px; display: flex; align-items: center; gap: 18px; transition: 0.2s; border: none; background: transparent; cursor: pointer; }
-        .nav-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(5px); }
-        .nav-item.active { background: var(--primary); color: white; box-shadow: var(--shadow); }
-        
-        /* MAIN CONTENT */
-        .main-content { flex: 1; max-width: 650px; width: 100%; margin-left: 280px; margin-right: 350px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); background: var(--surface); min-height: 100dvh; padding-bottom: 100px; }
-        
-        /* RIGHT SIDEBAR */
-        .right-sidebar { position: fixed; right: 0; top: 0; width: 350px; height: 100dvh; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
-        .widget { background: var(--surface); border-radius: 24px; padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-        .coin-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
-        
-        /* HEADER */
-        .header { position: sticky; top: 0; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 15px 25px; z-index: 100; display: flex; align-items: center; gap: 15px; }
-        .header h2 { font-size: 22px; font-weight: 800; flex: 1; letter-spacing: -0.5px; }
-
-        /* STORIES */
-        .stories-bar { display: flex; gap: 15px; padding: 20px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); background: var(--bg); }
-        .story-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 75px; cursor: pointer; }
-        .story-ring { width: 70px; height: 70px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .story-ring:hover { transform: scale(1.05) rotate(5deg); }
-        .story-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--bg); background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 24px; }
+        .header { position: sticky; top: 0; background: var(--glass); backdrop-filter: blur(15px); padding: 15px 25px; border-bottom: 1px solid var(--border); z-index: 100; display: flex; align-items: center; gap: 15px; }
+        .header h2 { font-size: 20px; font-weight: 800; flex: 1; }
 
         /* POSTS */
-        .post { padding: 25px; border-bottom: 1px solid var(--border); transition: 0.2s; position: relative; }
+        .post { padding: 20px 25px; border-bottom: 1px solid var(--border); transition: 0.2s; cursor: pointer; }
         .post:hover { background: var(--bg); }
-        .post-avatar { width: 52px; height: 52px; border-radius: 18px; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 20px; box-shadow: var(--shadow); }
-        .post-content { font-size: 17px; line-height: 1.6; margin-left: 67px; margin-bottom: 15px; color: var(--text); }
-        
-        /* ACTIONS */
-        .post-actions { display: flex; justify-content: space-between; max-width: 480px; margin-left: 67px; }
-        .action-group { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); cursor: pointer; padding: 8px 12px; border-radius: 15px; transition: 0.2s; }
+        .post-avatar { width: 48px; height: 48px; border-radius: 15px; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; flex-shrink: 0; }
+        .post-content { font-size: 16px; line-height: 1.6; margin-left: 63px; margin-bottom: 12px; }
+        .post-actions { display: flex; justify-content: space-between; max-width: 450px; margin-left: 63px; }
+        .action-group { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); cursor: pointer; font-size: 14px; padding: 6px 10px; border-radius: 12px; transition: 0.2s; }
         .action-group:hover { background: var(--primary-light); color: var(--primary); }
-        .action-group.burn:hover { background: rgba(230, 57, 70, 0.1); color: var(--danger); }
         .action-group.liked { color: var(--danger); }
 
-        /* FLOATING DM BUTTON (SAĞ ALTA İSTEDİĞİN) */
-        .floating-dm { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: var(--shadow-float); z-index: 999; border: 4px solid var(--bg); cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .floating-dm:hover { transform: scale(1.1) rotate(-10deg); background: var(--primary-dark); }
-        .dm-badge { position: absolute; top: 0; right: 0; background: var(--accent); width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
-
-        /* STALK & KAOS */
-        .stalk-alert { background: var(--primary-light); border: 2px dashed var(--primary); padding: 15px; border-radius: 20px; margin: 15px 0; display: flex; align-items: center; gap: 12px; }
-        .mute-zone { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; }
-
-        /* RESPONSIVE */
-        @media (max-width: 1250px) { .right-sidebar { display: none; } .main-content { margin-right: 0; } }
-        @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); width: 280px; }
-            .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; border: none; }
-            .mobile-header-btn { display: block !important; background: none; border: none; font-size: 24px; cursor: pointer; }
-        }
+        /* DM & MODALS */
+        .floating-dm { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 999; cursor: pointer; border: 4px solid var(--bg); }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 3000; padding: 20px; }
+        .modal-content { background: var(--surface); padding: 25px; border-radius: 24px; width: 100%; max-width: 500px; box-shadow: var(--shadow); }
+        .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 450px; height: 100dvh; background: var(--surface); z-index: 2000; transition: 0.3s; display: flex; flex-direction: column; border-left: 1px solid var(--border); }
+        .side-panel.active { right: 0; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
+        .bubble { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 15px; }
+        .bubble.sent { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .bubble.received { background: var(--surface); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
+        
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 12px 25px; border-radius: 30px; font-weight: 700; z-index: 9999; animation: fUp 0.3s forwards; }
+        @keyframes fUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+        .stalk-box { background: var(--primary-light); padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary); margin: 15px 0; font-size: 14px; }
+        @media (max-width: 1200px) { .right-sidebar { display: none; } .main-content { margin-right: 0; } }
+        @media (max-width: 768px) { .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); } .main-content { margin-left: 0; } .mobile-btn { display: block !important; } }
     </style>
 </head>
 <body>
 
 {% if not current_user %}
-<div class="auth-wrapper" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #eef2f1;">
-    <div class="widget" style="width: 100%; max-width: 400px; padding: 40px; text-align: center;">
-        <h1 style="color: var(--primary); font-size: 42px; margin-bottom: 30px;">Mekan.</h1>
+<div class="auth-wrapper" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #eef2f1; padding: 20px;">
+    <div style="background: white; padding: 40px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.05);">
+        <h1 style="color: var(--primary); font-size: 36px; margin-bottom: 20px;">Mekan.</h1>
         <div id="loginForm">
             <form action="/login" method="POST">
-                <input type="text" name="username" class="input-field" placeholder="Kullanıcı Adı" required style="width:100%; margin-bottom:15px; padding:15px; border-radius:12px; border:1px solid var(--border);">
-                <input type="password" name="password" class="input-field" placeholder="Şifre" required style="width:100%; margin-bottom:15px; padding:15px; border-radius:12px; border:1px solid var(--border);">
-                <button type="submit" class="btn-primary" style="width:100%; padding:15px; border-radius:30px; border:none; background:var(--primary); color:white; font-weight:bold;">Giriş Yap</button>
+                <input type="text" name="username" placeholder="Kullanıcı Adı" required style="width:100%; padding:15px; margin-bottom:10px; border-radius:12px; border:1px solid var(--border);">
+                <input type="password" name="password" placeholder="Şifre" required style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; border:1px solid var(--border);">
+                <button type="submit" class="btn-primary">Giriş Yap</button>
             </form>
-            <p style="margin-top:20px; color:var(--text-secondary);">Mekanda yeni misin? <a href="#" onclick="toggleAuth()" style="color:var(--primary); font-weight:bold;">Kayıt Ol</a></p>
+            <p style="margin-top:20px;">Yoksa <a href="#" onclick="document.getElementById('loginForm').style.display='none';document.getElementById('regForm').style.display='block';">Kayıt Ol</a></p>
         </div>
-        <div id="registerForm" style="display:none;">
+        <div id="regForm" style="display:none;">
             <form action="/register" method="POST">
-                <input type="text" name="username" class="input-field" placeholder="Yeni Kullanıcı Adı" minlength="3" required style="width:100%; margin-bottom:15px; padding:15px; border-radius:12px; border:1px solid var(--border);">
-                <input type="password" name="password" class="input-field" placeholder="Güçlü Bir Şifre" minlength="4" required style="width:100%; margin-bottom:15px; padding:15px; border-radius:12px; border:1px solid var(--border);">
-                <button type="submit" class="btn-primary" style="width:100%; padding:15px; border-radius:30px; border:none; background:var(--primary); color:white; font-weight:bold;">Aramıza Katıl</button>
+                <input type="text" name="username" placeholder="Kullanıcı Adı" required style="width:100%; padding:15px; margin-bottom:10px; border-radius:12px; border:1px solid var(--border);">
+                <input type="password" name="password" placeholder="Şifre" required style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; border:1px solid var(--border);">
+                <button type="submit" class="btn-primary">Aramıza Katıl</button>
             </form>
-            <p style="margin-top:20px; color:var(--text-secondary);">Zaten buralı mısın? <a href="#" onclick="toggleAuth()" style="color:var(--primary); font-weight:bold;">Giriş Yap</a></p>
+            <p style="margin-top:20px;"><a href="#" onclick="location.reload()">Giriş Yap'a dön</a></p>
         </div>
     </div>
 </div>
@@ -130,417 +90,168 @@
 
 <div class="app-wrapper">
     <div class="sidebar" id="sidebar">
-        <a href="/" class="logo">Mekan<span>.</span></a>
-        <nav class="nav-menu">
-            <a href="/" class="nav-item {% if page == 'home' %}active{% endif %}">🏠 Ana Sayfa</a>
-            <a href="/explore" class="nav-item {% if page == 'explore' %}active{% endif %}">🔍 Keşfet</a>
-            <a href="/arena" class="nav-item {% if page == 'arena' %}active{% endif %}">⚔️ Arena</a>
-            <a href="/messages" class="nav-item {% if page == 'messages' %}active{% endif %}">✉️ Mesajlar</a>
-            <a href="/notifications" class="nav-item {% if page == 'notifications' %}active{% endif %}">
-                🔔 Bildirimler {% if unread_notifs > 0 %}<span style="background:var(--accent); color:white; padding:2px 8px; border-radius:10px; font-size:12px;">{{ unread_notifs }}</span>{% endif %}
-            </a>
-            <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' %}active{% endif %}">👤 Profil</a>
-            <button class="nav-item" onclick="openModal('settingsModal')">⚙️ Ayarlar</button>
-        </nav>
-        
-        <button class="btn-primary" style="margin-top: 30px; border-radius: 20px; height: 55px; font-size: 18px; border:none;" onclick="openModal('composeModal')">Tohum At 🌱</button>
-        
-        <div style="margin-top: auto; padding: 15px; background: var(--bg); border-radius: 20px; display: flex; align-items: center; gap: 12px;">
-            <div class="post-avatar" style="width:40px; height:40px; font-size:14px;">{{ current_user[0].upper() }}</div>
-            <div style="flex:1; overflow:hidden;">
-                <div style="font-weight:700; font-size:14px;">{{ current_user }}</div>
-                <div style="font-size:12px; color:var(--text-secondary);">@{{ current_user }}</div>
-            </div>
-            <a href="/logout" style="text-decoration:none; font-size:18px;">👋</a>
+        <h2 style="color: var(--primary); margin-bottom: 30px;">Mekan.</h2>
+        <a href="/" class="nav-item {% if page == 'home' %}active{% endif %}">🏠 Ana Sayfa</a>
+        <a href="/explore" class="nav-item {% if page == 'explore' %}active{% endif %}">🔍 Keşfet</a>
+        <a href="/messages" class="nav-item {% if page == 'messages' %}active{% endif %}">✉️ Mesajlar</a>
+        <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' %}active{% endif %}">👤 Profil</a>
+        <button class="nav-item" onclick="openModal('settingsModal')">⚙️ Ayarlar</button>
+        <button class="btn-primary" style="margin-top: 20px;" onclick="openModal('composeModal')">Tohum At 🌱</button>
+        <div style="margin-top: auto; display: flex; align-items: center; gap: 10px;">
+            <div class="post-avatar" style="width:35px; height:35px; font-size:12px;">{{ current_user[0].upper() }}</div>
+            <span style="font-weight:700;">{{ current_user }}</span>
+            <a href="/logout" style="margin-left:auto; text-decoration:none;">👋</a>
         </div>
     </div>
 
-    <div class="floating-dm" onclick="location.href='/messages'">
-        ✉️
-        {% if unread_notifs > 0 %}<div class="dm-badge">{{ unread_notifs }}</div>{% endif %}
-    </div>
+    <div class="floating-dm" onclick="location.href='/messages'">✉️</div>
 
     <div class="main-content">
         <div class="header">
-            <button class="mobile-header-btn" style="display:none;" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
-            <h2>{{ 'Profil' if page=='profile' else ('Mesajlar' if page=='messages' else 'Ana Sayfa') }}</h2>
-            <button class="nav-item" style="font-size:22px; padding:5px;" onclick="toggleTheme()">🌿</button>
+            <button class="mobile-btn" style="display:none; background:none; border:none; font-size:24px;" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+            <h2>{{ 'Profil' if page=='profile' else 'Mekan' }}</h2>
+            <button class="action-group" style="margin-left:auto;" onclick="toggleTheme()">🌿</button>
         </div>
 
         {% if page == 'home' %}
-            <div class="stories-bar">
-                <div class="story-item" onclick="openModal('storyModal')">
-                    <div class="story-ring" style="background:var(--border);">
-                        <div class="story-img" style="background:var(--surface); color:var(--primary);">+</div>
-                    </div>
-                    <div class="story-name">Sen</div>
-                </div>
-                {% for s in stories %}
-                <div class="story-item" onclick="viewStory('{{ s.author }}', '{{ s.content }}')">
-                    <div class="story-ring">
-                        <div class="story-img" style="background:{{ s.avatar_color }}">{{ s.author[0].upper() }}</div>
-                    </div>
-                    <div class="story-name">{{ s.author }}</div>
-                </div>
-                {% endfor %}
-            </div>
-
             <div id="feedContainer"></div>
-
         {% elif page == 'profile' %}
-            <div style="height: 180px; background: linear-gradient(to right, var(--primary), var(--accent));"></div>
-            <div style="padding: 25px; margin-top: -60px;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                    <div class="post-avatar" style="width:110px; height:110px; font-size:45px; border:6px solid var(--surface); background:{{ profile_user.avatar_color }};">{{ profile_user.username[0].upper() }}</div>
-                    {% if current_user == profile_user.username %}
-                        <button class="btn-secondary" onclick="openModal('settingsModal')">Profili Düzenle</button>
-                    {% else %}
-                        <div style="display:flex; gap:10px;">
-                            <button class="btn-primary" style="padding:10px 25px; border-radius:20px; border:none;" onclick="location.href='/messages'">Mesaj At</button>
-                            <button class="btn-secondary" style="border-color:var(--danger); color:var(--danger);" onclick="muteUser('{{ profile_user.username }}')">🤫 Sustur</button>
-                        </div>
-                    {% endif %}
-                </div>
-                <h2 style="margin-top:15px; font-size:26px;">{{ profile_user.username }} {% if profile_user.is_verified %}<span style="color:var(--primary);">✔️</span>{% endif %}</h2>
-                <div style="color:var(--text-secondary);">@{{ profile_user.username }} · <span style="color:var(--accent); font-weight:bold;">{{ profile_user.mekan_coin }} Coin</span></div>
-                <p style="margin:15px 0; font-size:16px;">{{ profile_user.bio }}</p>
-                
-                <div class="stalk-alert">
-                    <span style="font-size:24px;">🕵️</span>
-                    <div>
-                        <div style="font-size:12px; font-weight:bold; opacity:0.7;">İSTİHBARAT</div>
-                        <div style="font-weight:700;">En son <span style="color:var(--danger);">@{{ last_dm_to }}</span> ile fısıldaştı.</div>
-                    </div>
-                </div>
-
-                <div class="widget" style="margin-top:20px; background:var(--bg);">
-                    <h3 style="font-size:16px; margin-bottom:10px;">🤫 Anonim İtiraf Bırak</h3>
-                    <textarea id="confessionInput" style="width:100%; height:60px; border:1px solid var(--border); border-radius:15px; padding:10px; background:var(--surface); resize:none;" placeholder="Kimse senin olduğunu bilmeyecek..."></textarea>
-                    <button class="btn-primary" style="margin-top:10px; width:auto; padding:8px 20px; font-size:14px; border:none;" onclick="sendConfession('{{ profile_user.username }}')">Kutuya At</button>
+            <div style="height:150px; background:linear-gradient(45deg, var(--primary), var(--accent));"></div>
+            <div style="padding:20px;">
+                <div class="post-avatar" style="width:100px; height:100px; font-size:40px; border:5px solid var(--surface); margin-top:-60px; background:{{ profile_user.avatar_color }};">{{ profile_user.username[0].upper() }}</div>
+                <h2 style="margin-top:10px;">{{ profile_user.username }}</h2>
+                <p style="color:var(--text-secondary);">@{{ profile_user.username }} · {{ mekan_coin }} 🪙</p>
+                <div class="stalk-box">🕵️ En son <strong style="color:var(--danger)">@{{ last_dm_to }}</strong> ile konuştu.</div>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button class="btn-primary" style="width:auto; padding:10px 30px;" onclick="openChat('{{ profile_user.username }}')">Mesaj At</button>
+                    <button class="btn-secondary" style="width:auto; padding:10px 20px; color:var(--danger); border-color:var(--danger);" onclick="muteUser('{{ profile_user.username }}')">🤫 Sustur</button>
                 </div>
             </div>
         {% endif %}
     </div>
 
     <div class="right-sidebar">
-        <div class="widget coin-card">
-            <div style="font-size:14px; opacity:0.9;">Mekan Cüzdanın</div>
+        <div style="background:var(--primary); color:white; padding:25px; border-radius:24px; margin-bottom:20px;">
+            <div style="font-size:14px; opacity:0.8;">Bakiyen</div>
             <div style="font-size:32px; font-weight:900;">{{ mekan_coin }} 🪙</div>
-            <div style="font-size:12px; margin-top:10px;">Her gün giriş yaparak 100 Coin kazan!</div>
         </div>
-
-        <div class="widget">
-            <h3 style="margin-bottom:15px;">Aramıza Katılanlar</h3>
+        <div style="background:var(--surface); padding:20px; border-radius:24px; border:1px solid var(--border);">
+            <h3 style="margin-bottom:15px;">Yeni Katılanlar</h3>
             {% for u in new_users %}
-            <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px; cursor:pointer;" onclick="location.href='/profile/{{ u.username }}'">
-                <div class="post-avatar" style="width:35px; height:35px; font-size:14px; background:{{ u.avatar_color }}">{{ u.username[0].upper() }}</div>
-                <div style="font-weight:700;">{{ u.username }}</div>
-                {% if u.is_verified %}✔️{% endif %}
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; cursor:pointer;" onclick="location.href='/profile/{{ u.username }}'">
+                <div class="post-avatar" style="width:30px; height:30px; font-size:10px; background:{{ u.avatar_color }}">{{ u.username[0].upper() }}</div>
+                <span style="font-weight:700;">{{ u.username }}</span>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
-<div id="toast-container"></div>
 
-<div class="modal" id="composeModal" onclick="closeOnOutside(event, 'composeModal')">
+<div class="modal" id="composeModal" onclick="if(event.target==this) this.style.display='none'">
     <div class="modal-content">
-        <h2 style="margin-bottom: 20px; font-weight: 900; color: var(--primary);">Tohum At 🌱</h2>
-        <textarea id="modalPostInput" class="input-field" placeholder="Mekan'ı sarsacak ne var aklında?" style="height: 150px; resize: none; font-size: 18px; border: none; background: var(--bg);"></textarea>
-        
-        <div style="display: flex; gap: 10px; margin: 15px 0;">
-            <label class="nav-item" style="font-size: 14px; padding: 8px 15px; background: var(--bg); cursor: pointer;">
-                <input type="checkbox" id="isWhisperModal"> 🔒 Fısıltı (Özel)
-            </label>
-            <label class="nav-item" style="font-size: 14px; padding: 8px 15px; background: var(--bg); cursor: pointer;">
-                <input type="checkbox" id="isOfflineModal"> 📵 Çevrimdışı Sır
-            </label>
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--border); padding-top: 20px;">
-            <button class="btn-secondary" onclick="closeModal('composeModal')">Vazgeç</button>
-            <button class="btn-primary" style="width: auto; padding: 12px 35px;" onclick="sendPost('modalPostInput', 'isWhisperModal')">Paylaş</button>
+        <h3 style="margin-bottom:15px;">Yeni Tohum 🌱</h3>
+        <textarea id="postInp" style="width:100%; height:120px; border:none; background:var(--bg); padding:15px; border-radius:15px; font-size:18px; resize:none;" placeholder="Neler oluyor?"></textarea>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+            <button class="btn-primary" style="width:auto; padding:10px 30px;" onclick="sendPost()">Paylaş</button>
         </div>
     </div>
 </div>
 
-<div class="modal" id="storyModal" onclick="closeOnOutside(event, 'storyModal')">
-    <div class="modal-content" style="max-width: 400px;">
-        <h2 style="margin-bottom: 15px;">Günün Özeti 🌸</h2>
-        <textarea id="storyInput" class="input-field" placeholder="Hikayeni yaz..." style="height: 100px; resize: none;"></textarea>
-        <button class="btn-primary" onclick="postStory()">Hikayeme Ekle</button>
-    </div>
-</div>
-
-<div class="modal" id="settingsModal" onclick="closeOnOutside(event, 'settingsModal')">
+<div class="modal" id="settingsModal" onclick="if(event.target==this) this.style.display='none'">
     <div class="modal-content">
-        <h2 style="margin-bottom: 25px; font-weight: 900;">Mekan Ayarları</h2>
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div>
-                <label style="font-weight: 700; font-size: 14px; display: block; margin-bottom: 8px;">Biyografi</label>
-                <textarea id="bioInput" class="input-field" rows="2" style="resize: none;">{{ profile_user.bio if profile_user else '' }}</textarea>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div style="background: var(--bg); padding: 15px; border-radius: 15px;">
-                    <div style="font-weight: 800; font-size: 14px;">👻 Hayalet Modu</div>
-                    <p style="font-size: 11px; color: var(--text-secondary);">Mavi tık kapatılır.</p>
-                    <input type="checkbox" id="ghostModeInput" style="margin-top: 10px; transform: scale(1.3);">
-                </div>
-                <div style="background: var(--bg); padding: 15px; border-radius: 15px;">
-                    <div style="font-weight: 800; font-size: 14px;">🔒 Gizli Hesap</div>
-                    <p style="font-size: 11px; color: var(--text-secondary);">Takipçisiz erişim yok.</p>
-                    <input type="checkbox" id="isPrivateInput" style="margin-top: 10px; transform: scale(1.3);">
-                </div>
-            </div>
-
-            <div style="background: var(--primary-light); padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <div style="font-weight: 800; font-size: 14px;">🌙 Gece Sarhoş Kilidi</div>
-                    <p style="font-size: 11px; color: var(--text-secondary);">02:00-06:00 arası mat testi!</p>
-                </div>
-                <input type="checkbox" id="nightLockInput" style="transform: scale(1.3);">
-            </div>
-
-            <button class="btn-primary" onclick="updateProfile()">Ayarları Kilitle</button>
-        </div>
+        <h3 style="margin-bottom:20px;">⚙️ Ayarlar</h3>
+        <input type="color" id="pColor" style="width:100%; height:50px; border:none; cursor:pointer; margin-bottom:20px;">
+        <button class="btn-primary" onclick="updateProfile()">Kaydet</button>
     </div>
 </div>
 
 <div class="side-panel" id="chatPanel">
     <div class="header">
-        <button class="nav-item" style="font-size: 24px; padding: 5px;" onclick="closePanel('chatPanel')">←</button>
-        <h2 id="chatTitle" style="flex: 1; margin-left: 10px;">Sohbet</h2>
+        <button style="background:none; border:none; font-size:24px;" onclick="document.getElementById('chatPanel').classList.remove('active')">←</button>
+        <h3 id="chatTitle" style="margin-left:15px;">Sohbet</h3>
     </div>
     <div class="chat-messages" id="chatBox"></div>
-    <div style="padding: 20px; background: var(--surface); border-top: 1px solid var(--border);">
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <input type="text" id="chatInput" class="input-field" placeholder="Bir şeyler fısılda..." style="margin-bottom: 0; border-radius: 25px;">
-            <button class="btn-primary" style="width: auto; height: 50px; border-radius: 25px; padding: 0 20px;" onclick="sendChat()">🚀</button>
-        </div>
-        <div style="margin-top: 10px; display: flex; gap: 15px; padding-left: 10px;">
-            <label style="font-size: 12px; font-weight: bold; color: var(--accent); cursor: pointer;">
-                <input type="checkbox" id="isSnapMsg"> 💣 60s Snap
-            </label>
-        </div>
+    <div style="padding:15px; border-top:1px solid var(--border); display:flex; gap:10px;">
+        <input type="text" id="chatInp" style="flex:1; padding:12px 20px; border-radius:25px; border:1px solid var(--border); background:var(--bg);" placeholder="Fısılda...">
+        <button class="btn-primary" style="width:auto; padding:0 20px;" onclick="sendChat()">🚀</button>
     </div>
 </div>
 
+<div id="tCont"></div>
+
+{% endif %}
+
 <script>
-    const currentUser = "{{ current_user }}";
-    let chatInterval = null;
-    let activeChatPartner = "";
-
-    /* --- UI YÖNETİMİ --- */
-    function showToast(msg, type = "success") {
-        const c = document.getElementById('toast-container');
-        const t = document.createElement('div');
-        t.className = 'toast';
-        if(type === "error") t.style.background = "var(--danger)";
-        t.innerText = msg;
-        c.appendChild(t);
-        setTimeout(() => t.remove(), 4000);
+    function showT(m) {
+        const c = document.getElementById('tCont');
+        const t = document.createElement('div'); t.className = 'toast'; t.innerText = m;
+        c.appendChild(t); setTimeout(() => t.remove(), 3000);
     }
 
-    function toggleAuth() {
-        const l = document.getElementById('loginForm');
-        const r = document.getElementById('registerForm');
-        l.style.display = l.style.display === 'none' ? 'block' : 'none';
-        r.style.display = r.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function openModal(id) {
-        const m = document.getElementById(id);
-        m.style.display = 'flex';
-        setTimeout(() => m.classList.add('show'), 10);
-    }
-    function closeModal(id) {
-        const m = document.getElementById(id);
-        m.classList.remove('show');
-        setTimeout(() => m.style.display = 'none', 300);
-    }
-    function closeOnOutside(e, id) { if(e.target.id === id) closeModal(id); }
-
-    function openPanel(id) { document.getElementById(id).classList.add('active'); }
-    function closePanel(id) { 
-        document.getElementById(id).classList.remove('active');
-        if(id === 'chatPanel') { clearInterval(chatInterval); activeChatPartner = ""; }
-    }
-
-    function toggleTheme() {
-        const body = document.body;
-        const current = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', current);
-        localStorage.setItem('mekan-theme', current);
-        showToast(current === 'dark' ? "Karanlık gece başladı 🌙" : "Güneş doğdu 🌿");
-    }
-    if (localStorage.getItem('mekan-theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
-
-    /* --- AKIŞ VE POST MOTORU --- */
     async function loadFeed() {
-        const container = document.getElementById('feedContainer');
-        if(!container) return;
-
-        const res = await fetch('/api/feed');
-        const posts = await res.json();
-        
-        if(posts.length === 0) {
-            container.innerHTML = `<div class="empty-state"><h3>🌱 Burası seninle yeşerecek...</h3><p>Henüz kimse bir şey paylaşmadı.</p></div>`;
-            return;
-        }
-
-        container.innerHTML = posts.map(p => `
+        const c = document.getElementById('feedContainer'); if(!c) return;
+        const res = await fetch('/api/feed'); const posts = await res.json();
+        c.innerHTML = posts.map(p => `
             <div class="post" onclick="location.href='/profile/${p.author}'">
-                <div style="display: flex; gap: 15px;">
-                    <div class="post-avatar" style="background: ${p.avatar_color}">${p.author[0].toUpperCase()}</div>
-                    <div style="flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <span style="font-weight: 800;">${p.author}</span>
-                            ${p.is_verified ? '<span style="color: var(--primary); font-size: 12px;">✔️</span>' : ''}
-                            <span style="color: var(--text-secondary); font-size: 13px;">@${p.author}</span>
-                        </div>
-                        <div class="post-content" style="margin-left: 0; margin-top: 8px;">
-                            ${p.is_offline_vault ? '<span style="filter: blur(4px); user-select: none;">GİZLİ İÇERİK</span>' : p.content}
-                        </div>
-                        <div class="post-actions" onclick="event.stopPropagation()" style="margin-left: 0;">
-                            <div class="action-group like ${p.is_liked_by_me ? 'liked' : ''}" onclick="doAction('like', ${p.id}, this)">
-                                <span>❤️</span> <strong>${p.likes_count}</strong>
-                            </div>
-                            <div class="action-group burn" onclick="doAction('burn', ${p.id}, this)">
-                                <span>🔥</span> <strong>Ateşe Ver</strong>
-                            </div>
-                            ${p.author === currentUser ? `
-                                <div class="action-group" onclick="doAction('delete', ${p.id}, this)" style="color: var(--danger);">
-                                    <span>🗑️</span>
-                                </div>
-                            ` : ''}
+                <div style="display:flex; gap:12px;">
+                    <div class="post-avatar" style="background:${p.avatar_color}">${p.author[0].toUpperCase()}</div>
+                    <div style="flex:1">
+                        <div style="font-weight:800">${p.author} ${p.is_verified ? '✔️' : ''}</div>
+                        <div style="margin-top:5px">${p.content}</div>
+                        <div class="post-actions" style="margin-left:0; margin-top:10px;">
+                            <div class="action-group" onclick="event.stopPropagation(); doA('like', ${p.id}, this)">❤️ <span>${p.likes_count}</span></div>
+                            <div class="action-group" onclick="event.stopPropagation(); doA('burn', ${p.id}, this)">🔥 Yak</div>
                         </div>
                     </div>
                 </div>
             </div>
-        `).join('');
+        `).join('') || '<div style="padding:50px; text-align:center; opacity:0.5;">Henüz ses seda yok...</div>';
     }
     if(window.location.pathname === "/") loadFeed();
 
-    async function doAction(type, id, el) {
-        const res = await fetch(`/api/action/${type}/${id}`, {method: 'POST'});
-        const data = await res.json();
-        if(type === 'like') {
-            el.classList.toggle('liked');
-            const countEl = el.querySelector('strong');
-            countEl.innerText = parseInt(countEl.innerText) + (el.classList.contains('liked') ? 1 : -1);
-            if(navigator.vibrate) navigator.vibrate(40);
-        } else if(type === 'burn') {
-            showToast("Gönderi ateşe verildi! 🔥");
-            if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
-        } else if(type === 'delete') {
-            showToast("Küller savruldu...");
-            loadFeed();
-        }
+    async function sendPost() {
+        const v = document.getElementById('postInp').value; if(!v) return;
+        const fd = new FormData(); fd.append('content', v);
+        const res = await fetch('/api/post', {method:'POST', body:fd});
+        const d = await res.json();
+        if(d.success) { location.reload(); } else { showT(d.error); }
     }
 
-    async function sendPost(inputId, whisperId) {
-        const content = document.getElementById(inputId).value.trim();
-        if(!content) return;
-        const fd = new FormData();
-        fd.append('content', content);
-        if(document.getElementById(whisperId).checked) fd.append('is_whisper', 1);
-        
-        const res = await fetch('/api/post', {method: 'POST', body: fd});
-        const data = await res.json();
-        if(data.success) {
-            document.getElementById(inputId).value = "";
-            closeModal('composeModal');
-            showToast("Tohum saçıldı! 🚀");
-            loadFeed();
-        } else {
-            showToast(data.error, "error");
-        }
+    async function doA(t, id, el) {
+        await fetch(`/api/action/${t}/${id}`, {method:'POST'});
+        if(t==='like') { el.classList.toggle('liked'); loadFeed(); } else { showT("Ateşlendi! 🔥"); }
     }
 
-    /* --- CHAT SİSTEMİ (GOD MODE) --- */
-    async function openChat(partner) {
-        activeChatPartner = partner;
-        document.getElementById('chatTitle').innerText = "@" + partner;
-        openPanel('chatPanel');
-        await loadChat();
-        chatInterval = setInterval(loadChat, 2000);
+    let cInt = null; let activeP = "";
+    async function openChat(p) {
+        activeP = p; document.getElementById('chatTitle').innerText = "@"+p;
+        document.getElementById('chatPanel').classList.add('active');
+        loadChat(); clearInterval(cInt); cInt = setInterval(loadChat, 2000);
     }
-
     async function loadChat() {
-        if(!activeChatPartner) return;
-        const res = await fetch(`/api/chat/${activeChatPartner}`);
-        const msgs = await res.json();
-        const box = document.getElementById('chatBox');
-        
-        const isAtBottom = box.scrollHeight - box.scrollTop <= box.clientHeight + 100;
-        
-        box.innerHTML = msgs.map(m => {
-            const isMe = m.sender === currentUser;
-            const tick = isMe ? (m.is_read ? '<span style="color: #fff;">✓✓</span>' : '✓') : '';
-            return `
-                <div class="bubble ${isMe ? 'sent' : 'received'}">
-                    ${m.content}
-                    <div style="font-size: 10px; margin-top: 5px; opacity: 0.7; text-align: right;">
-                        ${m.is_snap ? '💣' : ''} ${m.created_at.split(' ')[1].slice(0,5)} ${tick}
-                    </div>
-                </div>
-            `;
-        }).join('');
-        
-        if(isAtBottom) box.scrollTop = box.scrollHeight;
+        if(!activeP) return; const res = await fetch(`/api/chat/${activeP}`); const msgs = await res.json();
+        const b = document.getElementById('chatBox');
+        b.innerHTML = msgs.map(m => `<div class="bubble ${m.sender==='{{ current_user }}'?'sent':'received'}">${m.content}</div>`).join('');
+        b.scrollTop = b.scrollHeight;
     }
-
     async function sendChat() {
-        const inp = document.getElementById('chatInput');
-        const snap = document.getElementById('isSnapMsg').checked ? 1 : 0;
-        if(!inp.value.trim()) return;
-
-        const fd = new FormData();
-        fd.append('content', inp.value);
-        fd.append('is_snap', snap);
-        
-        inp.value = "";
-        document.getElementById('isSnapMsg').checked = false;
-        
-        await fetch(`/api/chat/${activeChatPartner}`, {method: 'POST', body: fd});
-        loadChat();
+        const i = document.getElementById('chatInp'); if(!i.value) return;
+        const fd = new FormData(); fd.append('content', i.value); i.value = "";
+        await fetch(`/api/chat/${activeP}`, {method:'POST', body:fd}); loadChat();
     }
-
-    /* --- DİĞER FONKSİYONLAR --- */
-    async function muteUser(target) {
-        if(confirm(`${target} kişisini 50 Mekan Coin karşılığında 10 dakika susturmak istiyor musun?`)) {
-            const res = await fetch(`/api/mute/${target}`, {method: 'POST'});
-            const data = await res.json();
-            if(data.success) showToast(data.msg);
-            else showToast(data.error, "error");
-        }
+    function toggleTheme() {
+        const b = document.body; const t = b.getAttribute('data-theme')==='dark'?'light':'dark';
+        b.setAttribute('data-theme', t); localStorage.setItem('theme', t);
     }
-
-    async function sendConfession(target) {
-        const inp = document.getElementById('confessionInput');
-        const fd = new FormData();
-        fd.append('content', inp.value);
-        const res = await fetch(`/api/confess/${target}`, {method: 'POST', body: fd});
-        const data = await res.json();
-        if(data.success) {
-            inp.value = "";
-            showToast("İtirafın gizlice kutuya düştü... 👀");
-        }
-    }
-
+    if(localStorage.getItem('theme')==='dark') document.body.setAttribute('data-theme','dark');
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
     async function updateProfile() {
-        const fd = new FormData();
-        fd.append('bio', document.getElementById('bioInput').value);
-        fd.append('ghost_mode', document.getElementById('ghostModeInput').checked ? 1 : 0);
-        fd.append('is_private', document.getElementById('isPrivateInput').checked ? 1 : 0);
-        fd.append('night_lock', document.getElementById('nightLockInput').checked ? 1 : 0);
-        
-        const res = await fetch('/api/update_profile', {method: 'POST', body: fd});
-        if(res.ok) {
-            showToast("Mekan mühürlendi! ✨");
-            setTimeout(() => location.reload(), 1000);
-        }
+        const fd = new FormData(); fd.append('avatar_color', document.getElementById('pColor').value);
+        await fetch('/api/update_profile', {method:'POST', body:fd}); location.reload();
+    }
+    async function muteUser(t) {
+        const res = await fetch(`/api/mute/${t}`, {method:'POST'}); const d = await res.json();
+        showT(d.msg || d.error);
     }
 </script>
 </body>
