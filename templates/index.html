@@ -3,99 +3,754 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mekan - God Mode</title>
+    <title>Mekan - Sınırları Zorla</title>
     <style>
-        /* ============ FERAH BAHAR TEMASI (SPRING MINT) ============ */
         :root {
-            --primary: #4ade80; /* Taze nane yeşili */
-            --primary-dark: #22c55e;
-            --secondary: #f472b6; /* Çiçek pembesi tonu (bildirimler/kalpler için) */
-            --bg-gradient: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
-            --bg-app: #f8fafc;
-            --surface: rgba(255, 255, 255, 0.75); /* Cam efekti için transparanlık */
-            --surface-solid: #ffffff;
-            --surface-2: #f1f5f9;
-            --text: #334155;
-            --text-secondary: #64748b;
-            --border: rgba(226, 232, 240, 0.6);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-            --glass-blur: blur(12px);
+            --primary: #1d9bf0;
+            --primary-dark: #1a8cd8;
+            --primary-light: rgba(29, 155, 240, 0.1);
+            --success: #00ba7c;
+            --danger: #f91880;
+            --warning: #ffd400;
+            --bg: #ffffff;
+            --surface: #f7f9fa;
+            --surface-2: #eff3f4;
+            --text: #0f1419;
+            --text-secondary: #536471;
+            --border: #eff3f4;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-float: 0 8px 24px rgba(0,0,0,0.1);
+            --glass: rgba(255, 255, 255, 0.85);
         }
 
         [data-theme="dark"] {
-            --primary: #4ade80;
-            --primary-dark: #22c55e;
-            --secondary: #f472b6;
-            --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-            --bg-app: #0f172a;
-            --surface: rgba(30, 41, 59, 0.75);
-            --surface-solid: #1e293b;
-            --surface-2: #334155;
-            --text: #f8fafc;
-            --text-secondary: #94a3b8;
-            --border: rgba(51, 65, 85, 0.6);
+            --bg: #000000;
+            --surface: #16181c;
+            --surface-2: #202327;
+            --text: #e7e9ea;
+            --text-secondary: #71767b;
+            --border: #2f3336;
+            --shadow: 0 4px 12px rgba(255,255,255,0.02);
+            --shadow-float: 0 8px 24px rgba(0,0,0,0.4);
+            --glass: rgba(0, 0, 0, 0.75);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text);
-            overflow-x: hidden;
-        }
-        
+        html, body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; scroll-behavior: smooth; }
         button, input, textarea { font-family: inherit; color: inherit; }
         input::placeholder, textarea::placeholder { color: var(--text-secondary); }
         
-        /* ============ AUTH & BAŞLANGIÇ ============ */
-        .auth-wrapper { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .auth-container { 
-            background: var(--surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            padding: 40px 30px; border-radius: 24px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.3);
-        }
-        .auth-container h1 { font-size: 36px; font-weight: 800; margin-bottom: 30px; text-align: center; color: var(--primary-dark); letter-spacing: -1px; }
-        .auth-form { display: flex; flex-direction: column; gap: 15px; }
-        .input-field { 
-            padding: 14px 18px; border: 1px solid var(--border); border-radius: 16px; 
-            font-size: 16px; background: var(--surface-solid); transition: all 0.3s; 
-        }
-        .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2); }
-        .btn-primary { 
-            padding: 14px 20px; background: var(--primary); color: white; border: none; 
-            border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; 
-            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(74, 222, 128, 0.4); }
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         
-        /* ============ ANA YAPI (CAM EFEKTLİ) ============ */
-        .app-wrapper { display: flex; min-height: 100dvh; justify-content: center; max-width: 1200px; margin: 0 auto; }
+        /* ============ AUTH ============ */
+        .auth-wrapper { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+        .auth-container { background: var(--bg); padding: 40px 30px; border-radius: 24px; width: 100%; max-width: 420px; box-shadow: var(--shadow-float); }
+        .auth-container h1 { font-size: 36px; font-weight: 900; margin-bottom: 30px; text-align: center; color: var(--primary); letter-spacing: -1px; }
+        .auth-form { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        .input-field { padding: 15px 18px; border: 1px solid var(--border); border-radius: 12px; font-size: 16px; background: var(--surface); transition: all 0.2s ease; }
+        .input-field:focus { outline: none; border-color: var(--primary); background: var(--bg); box-shadow: 0 0 0 3px var(--primary-light); }
+        .btn-primary { padding: 15px 20px; background: var(--primary); color: white; border: none; border-radius: 30px; font-size: 17px; font-weight: 700; cursor: pointer; transition: 0.2s ease; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-primary:active { transform: translateY(1px); }
+        .btn-secondary { padding: 14px 20px; background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-secondary:hover { background: var(--surface); }
+        .toggle-auth { text-align: center; color: var(--text-secondary); margin-top: 25px; font-size: 15px; }
+        .toggle-auth a { color: var(--primary); text-decoration: none; font-weight: 700; }
+
+        /* ============ LAYOUT ============ */
+        .app-wrapper { display: flex; min-height: 100dvh; justify-content: center; }
         
-        .sidebar-wrapper {
-            position: fixed; left: 50%; transform: translateX(-600px); top: 20px; bottom: 20px; width: 260px;
-            background: var(--surface); backdrop-filter: var(--glass-blur); border-radius: 24px; border: 1px solid var(--border);
-            padding: 20px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--shadow);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* LEFT SIDEBAR */
+        .sidebar-wrapper { position: fixed; left: 0; top: 0; width: 280px; height: 100dvh; border-right: 1px solid var(--border); padding: 20px 25px; display: flex; flex-direction: column; background: var(--bg); z-index: 1000; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; backdrop-filter: blur(2px); }
+        .logo { font-size: 30px; font-weight: 900; margin-bottom: 30px; text-decoration: none; color: var(--text); padding-left: 10px; letter-spacing: -1px;}
+        .logo span { color: var(--primary); }
+        
+        .nav-menu { display: flex; flex-direction: column; gap: 6px; }
+        .nav-item { padding: 14px 20px; border-radius: 30px; text-decoration: none; color: var(--text); font-weight: 500; font-size: 20px; display: flex; align-items: center; gap: 18px; cursor: pointer; border: none; background: none; width: max-content; transition: 0.2s; }
+        .nav-item:hover { background: var(--surface); }
+        .nav-item.active { font-weight: 800; }
+        .nav-icon { font-size: 26px; position: relative; }
+        .badge-notification { position: absolute; top: -4px; right: -6px; background: var(--primary); color: white; border-radius: 50%; min-width: 20px; height: 20px; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid var(--bg); }
+        
+        /* MAIN CONTENT */
+        .main-content { flex: 1; max-width: 620px; width: 100%; min-height: 100dvh; border-left: 1px solid var(--border); border-right: 1px solid var(--border); margin-left: 280px; margin-right: 350px; padding-bottom: 80px;}
+        
+        /* RIGHT SIDEBAR */
+        .right-sidebar { position: fixed; right: 0; top: 0; width: 350px; height: 100dvh; padding: 20px; overflow-y: auto; background: var(--bg); }
+        .search-bar { width: 100%; padding: 16px 24px; background: var(--surface); border: 1px solid transparent; border-radius: 30px; font-size: 15px; margin-bottom: 20px; transition: 0.2s; }
+        .search-bar:focus { outline: none; border-color: var(--primary); background: var(--bg); box-shadow: 0 0 0 2px var(--primary-light); }
+        
+        .widget { background: var(--surface); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .widget-title { font-weight: 800; font-size: 20px; margin-bottom: 15px; color: var(--text); }
+        .widget-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; text-decoration: none; color: var(--text); transition: 0.2s; border-radius: 12px; }
+        .widget-item:hover { background: var(--surface-2); padding-left: 10px; margin-left: -10px; margin-right: -10px; width: calc(100% + 20px);}
+        
+        /* HEADER (Glassmorphism) */
+        .header { position: sticky; top: 0; background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 15px 20px; z-index: 50; display: flex; align-items: center; gap: 15px; }
+        .header-title { font-size: 22px; font-weight: 800; flex: 1; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--text); }
+
+        @media (max-width: 1250px) { .right-sidebar { display: none; } .main-content { margin-right: 0; } }
+        @media (max-width: 768px) {
+            .sidebar-wrapper { transform: translateX(-100%); width: 280px; padding: 20px; }
+            .sidebar-wrapper.open { transform: translateX(0); }
+            .main-content { margin-left: 0; border-left: none; border-right: none; }
+            .menu-toggle { display: block; }
+            .header-title { font-size: 20px; }
+            .fab { display: flex; }
         }
         
-        .main-content {
-            flex: 1; max-width: 600px; width: 100%; min-height: 100dvh;
-            background: var(--surface); backdrop-filter: var(--glass-blur);
-            margin: 0; box-shadow: var(--shadow-lg); position: relative;
+        /* FLOATING ACTION BUTTON (Mobil) */
+        .fab { display: none; position: fixed; bottom: 30px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; font-size: 28px; align-items: center; justify-content: center; border: none; box-shadow: var(--shadow-float); z-index: 90; cursor: pointer; transition: transform 0.2s; }
+        .fab:active { transform: scale(0.9); }
+
+        /* ============ POSTS & FEED ============ */
+        .post { padding: 18px 20px; border-bottom: 1px solid var(--border); transition: background 0.2s; cursor: pointer; }
+        .post:hover { background: var(--surface); }
+        .post-header { display: flex; gap: 12px; margin-bottom: 6px; align-items: flex-start; }
+        .post-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; font-size: 18px; flex-shrink: 0; cursor: pointer; box-shadow: var(--shadow); }
+        .post-info { flex: 1; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .post-name { font-weight: 800; font-size: 16px; cursor: pointer; }
+        .post-name:hover { text-decoration: underline; }
+        .post-handle, .post-time { color: var(--text-secondary); font-size: 15px; }
+        
+        .whisper-badge { background: #8e44ad; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 8px;}
+        .post-content { font-size: 16px; line-height: 1.6; margin-left: 60px; margin-bottom: 12px; white-space: pre-wrap; word-break: break-word; }
+        
+        /* ALINTI KARTLARI (Quote Posts) */
+        .quote-box { margin-left: 60px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; background: transparent; transition: 0.2s; }
+        .quote-box:hover { background: var(--surface-2); }
+        .quote-header { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
+
+        .hashtag, .mention { color: var(--primary); text-decoration: none; }
+        .hashtag:hover, .mention:hover { text-decoration: underline; }
+
+        .post-actions { display: flex; justify-content: space-between; max-width: 450px; margin-left: 60px; margin-top: 15px; }
+        .action-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--text-secondary); font-size: 15px; cursor: pointer; padding: 8px; border-radius: 50%; transition: 0.2s; }
+        .action-group { display: flex; align-items: center; cursor: pointer; color: var(--text-secondary); transition: 0.2s; }
+        .action-group:hover { color: var(--primary); }
+        .action-group:hover .action-btn { background: var(--primary-light); color: var(--primary); }
+        
+        .action-group.like:hover { color: var(--danger); }
+        .action-group.like:hover .action-btn { background: rgba(249, 24, 128, 0.1); color: var(--danger); }
+        .action-group.like.liked { color: var(--danger); }
+        .action-group.like.liked .action-btn { color: var(--danger); }
+        
+        .action-group.rt:hover { color: var(--success); }
+        .action-group.rt:hover .action-btn { background: rgba(0, 186, 124, 0.1); color: var(--success); }
+        
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+        .anim-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* COMPOSE AREA */
+        .compose-area { padding: 20px; border-bottom: 1px solid var(--border); display: flex; gap: 15px; }
+        .compose-textarea { width: 100%; background: transparent; border: none; font-size: 20px; resize: none; outline: none; padding-top: 8px; min-height: 60px; }
+        .compose-options { display: flex; align-items: center; gap: 15px; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 10px; }
+        .option-toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--primary); cursor: pointer; padding: 6px 12px; border-radius: 20px; transition: 0.2s; background: var(--primary-light);}
+        .option-toggle:hover { background: rgba(29, 155, 240, 0.2); }
+        .option-toggle input { display: none; }
+        .option-toggle.active { background: #8e44ad; color: white; }
+
+        /* ============ CHAT PANEL ============ */
+        .side-panel { position: fixed; top: 0; right: -100%; width: 100%; height: 100dvh; background: var(--bg); z-index: 2000; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        @media (min-width: 768px) { .side-panel { width: 450px; border-left: 1px solid var(--border); box-shadow: var(--shadow-float); } }
+        .side-panel.active { right: 0; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: var(--surface); }
+        .bubble { max-width: 75%; padding: 12px 18px; border-radius: 22px; font-size: 16px; line-height: 1.4; word-break: break-word; position: relative; box-shadow: var(--shadow); }
+        .bubble.sent { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .bubble.received { background: var(--bg); color: var(--text); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
+        
+        .bubble-meta { font-size: 11px; opacity: 0.8; margin-top: 6px; display: flex; justify-content: flex-end; align-items: center; gap: 5px; }
+        .tick-read { color: #fff; font-weight: bold; } /* Mavi tık için */
+        .tick-unread { color: rgba(255,255,255,0.6); }
+        .snap-icon { color: #ff9f43; font-size: 14px; }
+
+        .chat-input-area { padding: 15px 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; background: var(--bg); padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
+        .chat-input-row { display: flex; gap: 10px; align-items: center; }
+        .chat-input { flex: 1; padding: 14px 20px; border-radius: 30px; border: 1px solid var(--border); background: var(--surface); font-size: 16px; outline: none; transition: 0.2s;}
+        .chat-input:focus { border-color: var(--primary); background: var(--bg); }
+        
+        /* ============ MODALS ============ */
+        .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); display: none; align-items: flex-end; z-index: 3000; opacity: 0; transition: opacity 0.3s; }
+        .modal.show { opacity: 1; display: flex; }
+        .modal-content { background: var(--bg); border-radius: 24px 24px 0 0; padding: 25px; width: 100%; max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1); padding-bottom: calc(25px + env(safe-area-inset-bottom)); }
+        .modal.show .modal-content { transform: translateY(0); }
+        @media (min-width: 768px) {
+            .modal { align-items: center; justify-content: center; }
+            .modal-content { border-radius: 24px; max-width: 600px; width: 90%; transform: scale(0.95); }
+            .modal.show .modal-content { transform: scale(1); }
         }
 
-        .header {
-            position: sticky; top: 0; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border); padding: 15px 20px; z-index: 50;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        [data-theme="dark"] .header { background: rgba(30, 41, 59, 0.6); }
+        /* PROFILE */
+        .profile-banner { height: 200px; background-color: var(--primary); width: 100%; position: relative; }
+        .profile-avatar-large { width: 120px; height: 120px; border-radius: 50%; border: 5px solid var(--bg); font-size: 50px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; background-color: var(--primary); position: absolute; bottom: -60px; left: 20px; }
 
-        /* ============ ÖZEL POST TASARIMLARI (Alıntı & Fısıltı) ============ */
-        .post { padding: 20px; border-bottom: 1px solid var(--border); transition: 0.2s; cursor: pointer; }
-        .post:hover { background: rgba(0,0,0,0.02); }
-        [data-theme="dark"] .post:hover { background: rgba(255,255,255,0.02); }
+        /* TOASTS */
+        #toast-container { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { background: var(--primary); color: white; padding: 14px 28px; border-radius: 30px; font-size: 15px; font-weight: 700; text-align: center; box-shadow: var(--shadow-float); animation: fadeUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), fadeOut 0.3s 3.5s forwards; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
         
-        .post-avatar { width: 48px; height: 48px; border-radius: 1
+        .verified-svg { width: 20px; height: 20px; fill: var(--primary); vertical-align: middle; margin-left: 4px; margin-bottom: 2px;}
+        .empty-state { text-align: center; padding: 80px 20px; color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+
+{% if not current_user %}
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <h1>Mekan <span>V5</span></h1>
+        <div id="loginForm">
+            <form action="/login" method="POST" class="auth-form">
+                <input type="text" name="username" class="input-field" placeholder="Kullanıcı Adı" required>
+                <input type="password" name="password" class="input-field" placeholder="Şifre" required>
+                <button type="submit" class="btn-primary">Giriş Yap</button>
+            </form>
+            <div class="toggle-auth">Sınırları zorla. <a href="#" onclick="toggleAuth()">Yeni Hesap Aç</a></div>
+        </div>
+        <div id="registerForm" style="display: none;">
+            <form action="/register" method="POST" class="auth-form">
+                <input type="text" name="username" class="input-field" placeholder="Kullanıcı Adı (Min 3)" minlength="3" required>
+                <input type="password" name="password" class="input-field" placeholder="Şifre (Min 4)" minlength="4" required>
+                <button type="submit" class="btn-primary">Aramıza Katıl</button>
+            </form>
+            <div class="toggle-auth">Zaten efsanelerden misin? <a href="#" onclick="toggleAuth()">Giriş yap</a></div>
+        </div>
+    </div>
+</div>
+{% else %}
+
+<div class="app-wrapper">
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar-wrapper" id="sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="/" class="logo">Mekan<span>.</span></a>
+            <button class="menu-toggle" onclick="toggleSidebar()">✕</button>
+        </div>
+        <nav class="nav-menu" style="margin-top: 30px;">
+            <a href="/" class="nav-item {% if page == 'home' %}active{% endif %}"><span class="nav-icon">🏠</span>Ana Sayfa</a>
+            <a href="/explore" class="nav-item {% if page == 'explore' %}active{% endif %}"><span class="nav-icon">🔍</span>Keşfet</a>
+            <a href="/messages" class="nav-item {% if page == 'messages' %}active{% endif %}"><span class="nav-icon">✉️</span>Mesajlar</a>
+            <a href="/notifications" class="nav-item {% if page == 'notifications' %}active{% endif %}">
+                <span class="nav-icon">🔔{% if unread_notifs > 0 %}<div class="badge-notification">{{ unread_notifs }}</div>{% endif %}</span> Bildirimler
+            </a>
+            <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' %}active{% endif %}"><span class="nav-icon">👤</span>Profil</a>
+            <a href="#" class="nav-item" onclick="openModal('settingsModal')"><span class="nav-icon">⚙️</span>Ayarlar</a>
+        </nav>
+        <button class="btn-primary" style="margin-top: 30px; width: 100%; height: 55px; font-size: 18px;" onclick="openModal('composeModal')">Gönder</button>
+        
+        <div style="margin-top: auto; display: flex; align-items: center; gap: 15px; padding: 10px; cursor: pointer; border-radius: 30px; transition: 0.2s;" onclick="window.location.href='/profile/{{ current_user }}'" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='transparent'">
+            <div style="width: 45px; height: 45px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">{{ current_user[0].upper() }}</div>
+            <div style="flex: 1; overflow: hidden;">
+                <div style="font-weight: 800; font-size: 16px;">{{ current_user }}</div>
+                <div style="color: var(--text-secondary); font-size: 14px;">@{{ current_user }}</div>
+            </div>
+            <div>•••</div>
+        </div>
+    </div>
+    
+    <button class="fab" onclick="openModal('composeModal')">＋</button>
+
+    <div class="main-content">
+        <div class="header" onclick="window.scrollTo(0,0)">
+            <button class="menu-toggle" onclick="toggleSidebar(event)">☰</button>
+            <h1 class="header-title">
+                {% if page == 'home' %}Ana Sayfa
+                {% elif page == 'explore' %}Keşfet
+                {% elif page == 'messages' %}Sohbetler
+                {% elif page == 'notifications' %}Bildirimler
+                {% elif page == 'profile' %}Profil
+                {% else %}Mekan{% endif %}
+            </h1>
+        </div>
+
+        {% if page == 'home' %}
+            <div class="compose-area">
+                <div class="post-avatar" style="background-color: var(--primary);">{{ current_user[0].upper() }}</div>
+                <div style="flex: 1;">
+                    <textarea id="mainPostInput" class="compose-textarea auto-expand" placeholder="Neler oluyor?" maxlength="500"></textarea>
+                    <div class="compose-options">
+                        <label class="option-toggle" id="whisperToggleMain">
+                            <input type="checkbox" id="isWhisperMain" onchange="toggleWhisperUI(this, 'whisperToggleMain')"> 🔒 Fısıltı
+                        </label>
+                        <div style="flex: 1;"></div>
+                        <span style="font-size: 14px; color: var(--text-secondary); font-weight: 500; margin-right: 15px;" id="mainCharCount">0/500</span>
+                        <button class="btn-primary" onclick="sendPost('mainPostInput', 'isWhisperMain')" style="padding: 10px 24px;">Gönder</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div id="feedContainer">
+            <div style="text-align:center; padding: 50px; color: var(--text-secondary);">
+                <div class="loading-spinner">Yükleniyor...</div>
+            </div>
+        </div>
+
+        {% if page == 'profile' %}
+            <div id="profileHeaderContainer"></div> {% endif %}
+
+    </div>
+
+    <div class="right-sidebar">
+        <form action="/explore" method="GET">
+            <input type="text" name="q" class="search-bar" placeholder="Mekan'da Ara...">
+        </form>
+
+        {% if trends %}
+        <div class="widget">
+            <div class="widget-title">Gündem</div>
+            {% for t in trends %}
+            <a href="/explore?q={{ t.tag }}" class="widget-item">
+                <div style="flex: 1;">
+                    <div style="font-size: 13px; color: var(--text-secondary);">Türkiye Gündemi</div>
+                    <div style="font-weight: 800; font-size: 16px; margin: 2px 0;">#{{ t.tag }}</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">{{ t.count }} Gönderi</div>
+                </div>
+                <div style="color: var(--text-secondary);">•••</div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if new_users %}
+        <div class="widget">
+            <div class="widget-title">Kimi Takip Etmeli</div>
+            {% for u in new_users %}
+            <div class="widget-item" style="justify-content: space-between; cursor: pointer;" onclick="window.location.href='/profile/{{ u.username }}'">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">{{ u.username[0].upper() }}</div>
+                    <div>
+                        <div style="font-weight: 800; font-size: 15px;">{{ u.username }}</div>
+                        <div style="font-size: 14px; color: var(--text-secondary);">@{{ u.username }}</div>
+                    </div>
+                </div>
+                <button class="btn-secondary" style="padding: 6px 16px; font-size: 14px;">Takip Et</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+</div> <div id="toast-container"></div>
+
+<div class="side-panel" id="chatPanel">
+    <div class="header">
+        <button onclick="closePanel('chatPanel')" class="menu-toggle" style="display: block; font-size: 24px;">←</button>
+        <div class="header-title" id="chatTitle">Sohbet</div>
+    </div>
+    <div class="chat-messages" id="chatBox"></div>
+    <div class="chat-input-area">
+        <div class="chat-input-row">
+            <textarea id="chatInput" class="chat-input auto-expand" placeholder="Yeni bir mesaj yaz..." rows="1" style="resize: none;"></textarea>
+            <button onclick="sendChat()" class="btn-primary" style="padding: 0 20px; height: 50px; border-radius: 25px;">Gönder</button>
+        </div>
+        <div style="display: flex; gap: 10px; padding-left: 5px;">
+            <label class="option-toggle" id="snapToggleBtn" style="font-size: 12px; padding: 4px 10px; background: var(--surface-2);">
+                <input type="checkbox" id="isSnapMsg" onchange="toggleSnapUI()"> 💣 60s Silinen Mesaj
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="composeModal" onclick="closeOnOutside(event, 'composeModal')">
+    <div class="modal-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <button class="menu-toggle" style="display: block; font-size: 20px;" onclick="closeModal('composeModal')">✕</button>
+            <button class="btn-primary" onclick="sendPost('modalPostInput', 'isWhisperModal', 'quoteIdHidden', 'replyIdHidden')" style="padding: 8px 20px;">Gönder</button>
+        </div>
+        
+        <input type="hidden" id="quoteIdHidden" value="">
+        <input type="hidden" id="replyIdHidden" value="">
+        
+        <div id="replyToPreview" style="display:none; font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; padding-left: 60px;">
+            Yanıtlanıyor: <span id="replyToName" style="color: var(--primary);"></span>
+        </div>
+
+        <div style="display: flex; gap: 15px;">
+            <div class="post-avatar" style="background-color: var(--primary);">{{ current_user[0].upper() }}</div>
+            <div style="flex: 1;">
+                <textarea id="modalPostInput" class="compose-textarea auto-expand" placeholder="Neler oluyor?" style="min-height: 120px;"></textarea>
+                
+                <div id="quotePreviewBox" class="quote-box" style="display: none; margin-left: 0; margin-top: 10px; border-color: var(--primary);">
+                    <div class="quote-header">
+                        <strong id="quotePreviewAuthor"></strong>
+                    </div>
+                    <div id="quotePreviewContent" style="font-size: 14px; color: var(--text-secondary);"></div>
+                </div>
+
+                <div class="compose-options">
+                    <label class="option-toggle" id="whisperToggleModal">
+                        <input type="checkbox" id="isWhisperModal" onchange="toggleWhisperUI(this, 'whisperToggleModal')"> 🔒 Fısıltı
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="settingsModal" onclick="closeOnOutside(event, 'settingsModal')">
+    <div class="modal-content">
+        <h2 style="margin-bottom: 20px; font-weight: 900;">Ayarlar</h2>
+        <div class="auth-form">
+            <label style="font-weight: 800; font-size: 15px;">Hakkımda</label>
+            <textarea id="bioInput" class="input-field auto-expand" placeholder="Kendinden bahset..." rows="2"></textarea>
+            
+            <label style="font-weight: 800; font-size: 15px;">Profil Rengi</label>
+            <input type="color" id="avatarColorInput" class="input-field" style="padding: 0; height: 50px; width: 100%; cursor: pointer; border: none; border-radius: 12px; overflow: hidden;">
+            
+            <div style="background: var(--surface); padding: 15px 20px; border-radius: 16px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: 800; font-size: 16px;">👻 Hayalet Modu</div>
+                    <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Okuduğun mesajlarda karşı tarafa mavi tık gitmez.</div>
+                </div>
+                <label class="option-toggle" id="ghostToggleBtn" style="background: transparent; border: 2px solid var(--border);">
+                    <input type="checkbox" id="ghostModeInput" {% if ghost_mode %}checked{% endif %} onchange="this.parentElement.style.borderColor = this.checked ? 'var(--primary)' : 'var(--border)'"> Açık
+                </label>
+            </div>
+            
+            <div style="background: var(--surface); padding: 15px 20px; border-radius: 16px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleTheme()">
+                <div style="font-weight: 800; font-size: 16px;">🌙 Temayı Değiştir</div>
+            </div>
+            
+            <a href="/logout" style="display: block; text-align: center; padding: 15px; color: var(--danger); font-weight: bold; text-decoration: none; margin-top: 10px; background: rgba(249, 24, 128, 0.1); border-radius: 16px;">Hesaptan Çıkış Yap</a>
+
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+            <button onclick="closeModal('settingsModal')" class="btn-secondary">İptal</button>
+            <button onclick="updateProfile()" class="btn-primary">Değişiklikleri Kaydet</button>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+<script>
+    const currentPage = "{{ page | default('') }}";
+    const currentUser = "{{ current_user | default('') }}";
+
+    /* ============ UI UTILS ============ */
+    function showToast(msg) {
+        const c = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = 'toast'; t.innerText = msg;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
+    }
+
+    function timeAgo(dateString) {
+        if(!dateString) return "";
+        const date = new Date(dateString.replace(' ', 'T'));
+        const seconds = Math.floor((new Date() - date) / 1000);
+        let i = seconds / 31536000; if (i > 1) return Math.floor(i) + "y";
+        i = seconds / 2592000; if (i > 1) return Math.floor(i) + "a";
+        i = seconds / 86400; if (i > 1) return Math.floor(i) + "g";
+        i = seconds / 3600; if (i > 1) return Math.floor(i) + "s";
+        i = seconds / 60; if (i > 1) return Math.floor(i) + "d";
+        return "Az önce";
+    }
+
+    function parseText(text) {
+        let h = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        h = h.replace(/@([a-zA-Z0-9_]+)/g, '<a href="/profile/$1" class="mention">@$1</a>');
+        h = h.replace(/#([a-zA-Z0-9_ğüşöçİĞÜŞÖÇ]+)/g, '<a href="/explore?q=$1" class="hashtag">#$1</a>');
+        return h;
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const currentTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', currentTheme);
+        localStorage.setItem('theme', currentTheme);
+    }
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.body.setAttribute('data-theme', 'dark');
+    }
+
+    function toggleAuth() {
+        const l = document.getElementById('loginForm');
+        const r = document.getElementById('registerForm');
+        l.style.display = l.style.display === 'none' ? 'block' : 'none';
+        r.style.display = r.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleSidebar(e) {
+        if(e) e.stopPropagation();
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('sidebarOverlay').style.display = document.getElementById('sidebar').classList.contains('open') ? 'block' : 'none';
+    }
+
+    function openModal(id) {
+        const m = document.getElementById(id);
+        m.style.display = 'flex';
+        setTimeout(() => m.classList.add('show'), 10);
+        const t = m.querySelector('textarea');
+        if(t) setTimeout(() => t.focus(), 300);
+    }
+    function closeModal(id) {
+        const m = document.getElementById(id);
+        m.classList.remove('show');
+        setTimeout(() => { m.style.display = 'none'; resetComposeModal(); }, 300);
+    }
+    function closeOnOutside(e, id) { if(e.target.id === id) closeModal(id); }
+
+    function openPanel(id) { document.getElementById(id).classList.add('active'); }
+    function closePanel(id) { 
+        document.getElementById(id).classList.remove('active'); 
+        if(id === 'chatPanel' && chatInterval) { clearInterval(chatInterval); chatInterval = null; }
+    }
+
+    // Toggle UI styles
+    function toggleWhisperUI(checkbox, labelId) {
+        const label = document.getElementById(labelId);
+        if(checkbox.checked) label.classList.add('active');
+        else label.classList.remove('active');
+    }
+    function toggleSnapUI() {
+        const cb = document.getElementById('isSnapMsg');
+        const label = document.getElementById('snapToggleBtn');
+        if(cb.checked) { label.style.background = '#ff9f43'; label.style.color = 'white'; }
+        else { label.style.background = 'var(--surface-2)'; label.style.color = 'inherit'; }
+    }
+
+    /* ============ FEED & API ENGINE ============ */
+    
+    async function loadFeed() {
+        if(!document.getElementById('feedContainer')) return;
+        try {
+            const res = await fetch('/api/feed');
+            const posts = await res.json();
+            const container = document.getElementById('feedContainer');
+            
+            if(posts.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div style="font-size:50px;margin-bottom:15px;">📭</div><div style="font-size:20px;font-weight:800;">Burası çok ıssız</div>Sessizliği ilk bozan sen ol.</div>';
+                return;
+            }
+
+            let html = '';
+            posts.forEach(p => {
+                html += `
+                <div class="post" onclick="window.location.href='/profile/${p.author}'">
+                    <div class="post-header">
+                        <div class="post-avatar" style="background-color: ${p.avatar_color || 'var(--primary)'};">${p.author[0].toUpperCase()}</div>
+                        <div class="post-info">
+                            <span class="post-name">${p.author}</span>
+                            ${p.is_verified ? '<svg class="verified-svg" viewBox="0 0 24 24"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"/></svg>' : ''}
+                            <span class="post-handle">@${p.author}</span>
+                            <span class="post-time">· ${timeAgo(p.created_at)}</span>
+                        </div>
+                    </div>
+                    
+                    ${p.is_whisper ? '<div style="margin-left:60px;"><span class="whisper-badge">🔒 Sadece Takipçiler</span></div>' : ''}
+                    
+                    <div class="post-content">${parseText(p.content)}</div>
+                    
+                    ${p.quote_id ? `
+                    <div class="quote-box" onclick="event.stopPropagation()">
+                        <div class="quote-header"><strong style="font-size:15px;">@${p.quote_author}</strong></div>
+                        <div style="font-size:15px;">${parseText(p.quote_content)}</div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="post-actions" onclick="event.stopPropagation()">
+                        <div class="action-group" onclick="prepReply(${p.id}, '${p.author}')">
+                            <button class="action-btn">💬</button> <span>${p.replies_count}</span>
+                        </div>
+                        <div class="action-group rt" onclick="doAction('retweet', ${p.id}, this)">
+                            <button class="action-btn">🔄</button> <span>${p.retweets_count}</span>
+                        </div>
+                        <div class="action-group like" onclick="doAction('like', ${p.id}, this)">
+                            <button class="action-btn">❤️</button> <span>${p.likes_count}</span>
+                        </div>
+                        <div class="action-group" onclick="prepQuote(${p.id}, '${p.author}', '${p.content.replace(/'/g, "\\'")}')">
+                            <button class="action-btn">🔁</button>
+                        </div>
+                        ${p.author === currentUser || {{ 'true' if is_admin else 'false' }} ? `
+                        <div class="action-group" onclick="doAction('delete', ${p.id}, this)" style="color:var(--danger)">
+                            <button class="action-btn" style="color:var(--danger)">🗑️</button>
+                        </div>` : ''}
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        } catch (e) { console.error(e); }
+    }
+
+    if(currentPage === 'home') loadFeed();
+
+    // POST ACTIONS
+    async function doAction(type, id, el) {
+        try {
+            await fetch(`/api/action/${type}/${id}`, { method: 'POST' });
+            if (type === 'delete') { showToast("Gönderi silindi"); setTimeout(loadFeed, 300); }
+            if (type === 'like') {
+                if(navigator.vibrate) navigator.vibrate(50);
+                const span = el.querySelector('span');
+                const btn = el.querySelector('.action-btn');
+                const isLiked = el.classList.toggle('liked');
+                btn.classList.add('anim-pop'); setTimeout(()=>btn.classList.remove('anim-pop'), 400);
+                span.innerText = parseInt(span.innerText) + (isLiked ? 1 : -1);
+            }
+            if (type === 'retweet') {
+                if(navigator.vibrate) navigator.vibrate(50);
+                const span = el.querySelector('span');
+                span.innerText = parseInt(span.innerText) + 1;
+                showToast("Yeniden paylaşıldı");
+            }
+        } catch(e) {}
+    }
+
+    // YAZI / YANIT / ALINTI GÖNDERME
+    function resetComposeModal() {
+        document.getElementById('modalPostInput').value = '';
+        document.getElementById('quoteIdHidden').value = '';
+        document.getElementById('replyIdHidden').value = '';
+        document.getElementById('quotePreviewBox').style.display = 'none';
+        document.getElementById('replyToPreview').style.display = 'none';
+        document.getElementById('isWhisperModal').checked = false;
+        toggleWhisperUI(document.getElementById('isWhisperModal'), 'whisperToggleModal');
+    }
+
+    function prepQuote(id, author, content) {
+        resetComposeModal();
+        document.getElementById('quoteIdHidden').value = id;
+        document.getElementById('quotePreviewBox').style.display = 'block';
+        document.getElementById('quotePreviewAuthor').innerText = '@' + author;
+        document.getElementById('quotePreviewContent').innerText = content.substring(0, 100) + (content.length > 100 ? '...' : '');
+        openModal('composeModal');
+    }
+
+    function prepReply(id, author) {
+        resetComposeModal();
+        document.getElementById('replyIdHidden').value = id;
+        document.getElementById('replyToPreview').style.display = 'block';
+        document.getElementById('replyToName').innerText = '@' + author;
+        openModal('composeModal');
+    }
+
+    async function sendPost(inputId, whisperId, quoteHiddenId = null, replyHiddenId = null) {
+        const val = document.getElementById(inputId).value.trim();
+        if (!val) { showToast("Boş gönderi atılamaz!"); return; }
+        
+        const fd = new FormData(); 
+        fd.append('content', val);
+        if(document.getElementById(whisperId)?.checked) fd.append('is_whisper', 1);
+        if(quoteHiddenId && document.getElementById(quoteHiddenId).value) fd.append('quote_id', document.getElementById(quoteHiddenId).value);
+        if(replyHiddenId && document.getElementById(replyHiddenId).value) fd.append('reply_to_id', document.getElementById(replyHiddenId).value);
+        
+        try { 
+            await fetch('/api/post', { method: 'POST', body: fd }); 
+            if(inputId === 'modalPostInput') closeModal('composeModal');
+            else document.getElementById(inputId).value = '';
+            showToast("Gönderildi 🚀");
+            if(currentPage === 'home') loadFeed(); else location.reload();
+        } catch (e) { showToast("Hata oluştu."); }
+    }
+
+    /* ============ CHAT & SNAP ============ */
+    let chatPartner = "";
+    let chatInterval = null;
+
+    async function openChat(name) {
+        chatPartner = name;
+        document.getElementById('chatTitle').innerText = name;
+        document.getElementById('chatBox').innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-secondary);">Şifrelenmiş bağlantı kuruluyor...</div>';
+        openPanel('chatPanel');
+        await loadChat(true);
+        chatInterval = setInterval(() => loadChat(false), 2000);
+    }
+    
+    async function loadChat(forceScroll = false) {
+        if(!chatPartner) return;
+        try {
+            const res = await fetch(`/api/chat/${chatPartner}`);
+            const data = await res.json();
+            const box = document.getElementById('chatBox');
+            const isAtBottom = box.scrollHeight - box.scrollTop <= box.clientHeight + 80;
+            
+            if(data.length === 0) {
+                box.innerHTML = '<div style="text-align:center; margin-top:20px; color: var(--text-secondary); font-weight: bold;">Bu sohbet tamamen boş.</div>';
+                return;
+            }
+            
+            box.innerHTML = data.map(m => {
+                const isMe = m.sender === currentUser;
+                // Mavi tık (Görüldü) mantığı
+                const readStatus = isMe ? (m.is_read ? '<span class="tick-read">✓✓</span>' : '<span class="tick-unread">✓</span>') : '';
+                const snapIcon = m.is_snap ? '<span class="snap-icon">💣</span>' : '';
+                
+                return `
+                <div class="bubble ${isMe ? 'sent' : 'received'}">
+                    ${parseText(m.content)}
+                    <div class="bubble-meta">
+                        ${snapIcon} ${m.created_at.split(' ')[1].slice(0,5)} ${readStatus}
+                    </div>
+                </div>`;
+            }).join('');
+            
+            if (forceScroll || isAtBottom) box.scrollTop = box.scrollHeight;
+        } catch (e) {}
+    }
+    
+    async function sendChat() {
+        const inp = document.getElementById('chatInput');
+        const val = inp.value.trim();
+        if (!val) return;
+        
+        const isSnap = document.getElementById('isSnapMsg').checked ? 1 : 0;
+        const fd = new FormData(); 
+        fd.append('content', val);
+        fd.append('is_snap', isSnap);
+        
+        inp.value = '';
+        inp.style.height = 'auto';
+        if(navigator.vibrate) navigator.vibrate(30);
+
+        // Optimistic UI
+        const box = document.getElementById('chatBox');
+        box.insertAdjacentHTML('beforeend', `<div class="bubble sent" style="opacity:0.6">${parseText(val)}<div class="bubble-meta">...</div></div>`);
+        box.scrollTop = box.scrollHeight;
+
+        try {
+            await fetch(`/api/chat/${chatPartner}`, { method: 'POST', body: fd });
+            if(isSnap) { document.getElementById('isSnapMsg').checked = false; toggleSnapUI(); showToast("Snap gönderildi!"); }
+            await loadChat(true);
+        } catch (e) {}
+    }
+
+    document.getElementById('chatInput')?.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+    });
+
+    // Otomatik textarea boyutlandırma
+    document.querySelectorAll('.auto-expand').forEach(ta => {
+        ta.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+
+    /* ============ SETTINGS / PROFILE ============ */
+    async function updateProfile() {
+        const fd = new FormData();
+        fd.append('bio', document.getElementById('bioInput').value);
+        fd.append('mood', document.getElementById('moodInput').value);
+        fd.append('avatar_color', document.getElementById('avatarColorInput').value);
+        fd.append('ghost_mode', document.getElementById('ghostModeInput').checked ? 1 : 0);
+        
+        try { 
+            await fetch('/api/update_profile', { method: 'POST', body: fd }); 
+            showToast("Ayarlar kaydedildi");
+            setTimeout(() => location.reload(), 500);
+        } catch (e) {}
+    }
+</script>
+</body>
+</html>
