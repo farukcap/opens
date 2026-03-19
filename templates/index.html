@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mekan</title>
     <style>
-        /* PROFESYONEL VE TEMİZ TASARIM */
+        /* GELİŞMİŞ PREMIUM TASARIM */
         :root {
-            --bg: #f3f4f6; --surface: #ffffff; --primary: #000000; --primary-hover: #374151;
-            --text-main: #111827; --text-light: #6b7280; --border: #e5e7eb; --blue-tick: #1d9bf0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); --radius: 16px;
+            --bg: #f8f9fa; --surface: #ffffff; --primary: #0f1419; --primary-hover: #272c30;
+            --text-main: #0f1419; --text-light: #536471; --border: #eff3f4; --blue-tick: #1d9bf0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05); --radius: 16px; --accent: #8b5cf6;
         }
         [data-theme="dark"] {
             --bg: #000000; --surface: #000000; --primary: #ffffff; --primary-hover: #e7e9ea;
@@ -20,7 +20,7 @@
         a { text-decoration: none; color: inherit; }
         button, input, textarea, select { outline: none; border: none; background: transparent; font-family: inherit; }
         
-        /* GİRİŞ EKRANI */
+        /* GİRİŞ */
         .auth-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
         .auth-box { background: var(--surface); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; }
         .input-box { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; font-size: 16px; color: var(--text-main); }
@@ -31,20 +31,28 @@
         
         /* SOL MENÜ */
         .sidebar { width: 275px; padding: 20px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
-        .logo { font-size: 28px; font-weight: 800; margin-bottom: 20px; padding: 10px; }
+        .logo { font-size: 32px; font-weight: 800; margin-bottom: 20px; padding: 10px; letter-spacing: -1px; }
         .nav-item { display: flex; align-items: center; gap: 15px; font-size: 20px; padding: 12px 15px; border-radius: 30px; margin-bottom: 5px; transition: 0.2s; font-weight: 400; width: fit-content;}
         .nav-item:hover { background: rgba(15, 20, 25, 0.1); }
         [data-theme="dark"] .nav-item:hover { background: rgba(255, 255, 255, 0.1); }
         .nav-item.active { font-weight: 700; }
-        .badge { background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-left: 5px; }
+        .badge { background: #ef4444; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-left: 5px; }
 
         /* ORTA İÇERİK */
         .main { flex: 1; max-width: 600px; border-right: 1px solid var(--border); min-height: 100vh; }
-        .header { padding: 15px 20px; font-size: 20px; font-weight: bold; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); z-index: 10; }
+        .header { padding: 15px 20px; font-size: 20px; font-weight: bold; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); z-index: 10; display:flex; justify-content: space-between; }
         [data-theme="dark"] .header { background: rgba(0,0,0,0.85); }
         
+        /* HİKAYELER (STORIES) EKLENDİ */
+        .stories-container { display: flex; gap: 15px; padding: 15px 20px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+        .stories-container::-webkit-scrollbar { display: none; }
+        .story-circle { width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--blue-tick); padding: 2px; cursor: pointer; flex-shrink: 0; }
+        .story-avatar { width: 100%; height: 100%; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }
+
+        /* GÖNDERİ KUTUSU */
         .compose { padding: 20px; border-bottom: 1px solid var(--border); display: flex; gap: 15px; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; background: #1d9bf0; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; flex-shrink: 0; }
+        .avatar { width: 44px; height: 44px; border-radius: 50%; background: #1d9bf0; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; flex-shrink: 0; }
+        .action-icons { display: flex; gap: 15px; color: var(--blue-tick); font-size: 20px; padding-top: 10px; cursor: pointer; }
         
         .post { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; transition: background 0.2s; cursor: pointer; }
         .post:hover { background: rgba(0,0,0,0.03); }
@@ -53,27 +61,24 @@
         .verified-icon { width: 18px; height: 18px; color: var(--blue-tick); margin-left: 4px; display: inline-block; vertical-align: -3px; }
         .mood-tag { font-size: 13px; color: var(--text-light); background: rgba(15,20,25,0.05); padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
         [data-theme="dark"] .mood-tag { background: rgba(255,255,255,0.1); }
-        .streak-fire { color: #ff9800; font-weight: bold; font-size: 14px; margin-left: 5px; }
+        .badge-pro { background: var(--accent); color: white; font-size: 11px; padding: 2px 6px; border-radius: 5px; margin-left: 5px; }
 
         .post-actions { display: flex; justify-content: space-between; max-width: 425px; margin-top: 12px; color: var(--text-light); }
         .action { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 5px; transition: color 0.2s; }
         .action:hover { color: var(--blue-tick); }
 
-        /* PROFİL BANNER */
-        .profile-banner { height: 150px; background: linear-gradient(135deg, var(--primary) 0%, #1d9bf0 100%); width: 100%; }
-
-        /* SAĞ MENÜ (AÇILIR KAPANIR WIDGETLAR) */
+        /* SAĞ MENÜ WIDGETLARI */
         .right-bar { width: 350px; padding: 20px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
         .widget { background: rgba(15,20,25,0.03); border-radius: 16px; margin-bottom: 20px; overflow: hidden; }
         [data-theme="dark"] .widget { background: #16181c; }
-        .widget-header { padding: 15px; font-size: 18px; font-weight: 800; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+        .widget-header { padding: 15px; font-size: 18px; font-weight: 800; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .widget-header:hover { background: rgba(15,20,25,0.05); }
         [data-theme="dark"] .widget-header:hover { background: rgba(255,255,255,0.05); }
         .widget-content { padding: 0 15px 15px 15px; display: none; }
         .widget-content.open { display: block; }
         .user-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 5px 0; }
 
-        /* DM KUTUSU (TAMAMEN ONARILMIŞ FLEXBOX MİMARİSİ) */
+        /* KUSURSUZ DM (FLEXBOX) */
         .chat-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh; background: var(--surface); box-shadow: -5px 0 25px rgba(0,0,0,0.1); z-index: 200; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; border-left: 1px solid var(--border); }
         .chat-panel.open { right: 0; }
         .chat-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; font-size: 18px; font-weight: bold; flex-shrink: 0; }
@@ -81,14 +86,17 @@
         .chat-bubble { max-width: 75%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; position: relative; }
         .bubble-me { align-self: flex-end; background: var(--blue-tick); color: white; border-bottom-right-radius: 4px; }
         .bubble-them { align-self: flex-start; background: var(--surface); color: var(--text-main); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-        .chat-input-area { padding: 15px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 10px; flex-shrink: 0; align-items: center; }
+        
+        .chat-input-area { padding: 15px; background: var(--surface); border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+        .typing-indicator { font-size: 12px; color: var(--text-light); height: 15px; padding-left: 10px; font-style: italic;}
+        .input-row { display: flex; gap: 10px; align-items: center; }
         .chat-input { flex: 1; background: rgba(15,20,25,0.05); border: none; border-radius: 20px; padding: 12px 20px; font-size: 15px; color: var(--text-main); }
         [data-theme="dark"] .chat-input { background: rgba(255,255,255,0.1); }
 
         .hashtag { color: var(--blue-tick); cursor: pointer; }
         .post-img { max-width: 100%; border-radius: 16px; margin-top: 10px; border: 1px solid var(--border); }
-        
         .svg-verified { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: text-bottom; color: var(--blue-tick); }
+        .read-time { font-size: 13px; color: var(--text-light); margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -127,14 +135,14 @@
         <a href="/bookmarks" class="nav-item {% if page == 'bookmarks' %}active{% endif %}">🔖 Kaydedilenler</a>
         <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' and profile_user['username'] == current_user %}active{% endif %}">👤 Profilim</a>
         
-        <button class="btn-black" style="width:90%; padding:15px; margin-top:15px;" onclick="document.getElementById('postInput').focus()">Gönder</button>
+        <button class="btn-black" style="width:90%; padding:15px; margin-top:15px; border-radius:30px;" onclick="document.getElementById('postInput').focus()">Gönder</button>
         
         <div style="margin-top: auto;">
             <button onclick="toggleTheme()" style="width:100%; padding:10px; border-radius:30px; margin-bottom:15px; font-weight:bold; border:1px solid var(--border); color:var(--text-main);">🌙 Tema Değiştir</button>
             <div style="display:flex; align-items:center; gap:10px; padding:10px; border-radius:30px; transition:0.2s;">
                 <div class="avatar">{{ current_user[0].upper() }}</div>
-                <div style="flex:1;">
-                    <div style="font-weight:bold; display:flex; align-items:center;">
+                <div style="flex:1; min-width:0;">
+                    <div style="font-weight:bold; display:flex; align-items:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                         {{ current_user }}
                         {% if current_user_verified == 1 %}
                         <svg viewBox="0 0 24 24" class="svg-verified"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>
@@ -149,12 +157,33 @@
 
     <main class="main">
         {% if page == "home" %}
-        <div class="header">Anasayfa</div>
+        <div class="header">
+            <span>Anasayfa</span>
+            <span style="font-size:16px;">✨</span>
+        </div>
+        
+        <div class="stories-container">
+            <div class="story-circle" onclick="document.getElementById('postInput').focus()" style="border-color: var(--border);">
+                <div class="story-avatar" style="background:var(--primary); color:var(--bg);">+</div>
+            </div>
+            {% for u in active_users %}
+            <div class="story-circle" onclick="window.location.href='/profile/{{ u['username'] }}'">
+                <div class="story-avatar">{{ u['username'][0].upper() }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
         <div class="compose">
             <div class="avatar">{{ current_user[0].upper() }}</div>
             <div style="flex:1;">
                 <textarea id="postInput" placeholder="Neler oluyor?" style="width:100%; resize:none; font-size:20px; border:none;"></textarea>
-                <div style="text-align:right; border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
+                    <div class="action-icons">
+                        <span title="Medya Ekle">🖼️</span>
+                        <span title="GIF Ekle">🎞️</span>
+                        <span title="Anket Ekle" onclick="alert('Anket özelliği yakında!')">📊</span>
+                        <span title="Konum Ekle">📍</span>
+                    </div>
                     <button class="btn-black" style="width:auto; padding:8px 20px; border-radius:30px;" onclick="sendPost()">Paylaş</button>
                 </div>
             </div>
@@ -174,7 +203,11 @@
                         <span class="timestamp" data-time="{{ post[3] }}" style="color:var(--text-light); font-size:14px; margin-left:auto;"></span>
                     </div>
                     
-                    <div class="raw-content" style="font-size: 15px; line-height: 1.5; margin-bottom: 10px;">{{ post[2] }}</div>
+                    <div class="raw-content" style="font-size: 15px; line-height: 1.5; margin-bottom: 5px;">{{ post[2] }}</div>
+                    
+                    {% if post[2]|length > 150 %}
+                    <div class="read-time">Tahmini okuma: 1 dk</div>
+                    {% endif %}
                     
                     <div class="post-actions">
                         <div class="action" onclick="actionPost('like', {{ post[0] }})">❤️ <span id="l-{{post[0]}}">{{ post[4] }}</span></div>
@@ -199,7 +232,8 @@
             <span style="font-weight:800; font-size:20px;">{{ profile_user['username'] }}</span>
         </div>
         
-        <div class="profile-banner"></div>
+        <div style="height: 150px; background: linear-gradient(135deg, var(--text-light) 0%, var(--primary) 100%); width: 100%;"></div>
+        
         <div style="padding: 20px; border-bottom: 1px solid var(--border); position: relative;">
             <div class="avatar" style="width:120px; height:120px; font-size:40px; position:absolute; top:-60px; border:4px solid var(--surface);">{{ profile_user['username'][0].upper() }}</div>
             
@@ -220,6 +254,7 @@
                     {% if profile_user['is_verified'] == 1 %}
                     <svg viewBox="0 0 24 24" class="svg-verified" style="width:22px; height:22px;"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>
                     {% endif %}
+                    {% if "2024" in profile_user['created_at']|string %}<span class="badge-pro">İlk 100</span>{% endif %}
                 </h2>
                 <div style="color:var(--text-light);">@{{ profile_user['username'] }}</div>
                 <p style="margin: 15px 0; font-size:15px;">{{ profile_user['bio'] }}</p>
@@ -242,7 +277,7 @@
                         <option value="🎧 Müzik">🎧 Müzik</option>
                         <option value="🚀 Kodluyor">🚀 Kodluyor</option>
                     </select>
-                    <button class="btn-black" style="width:auto; padding:5px 15px; font-size:13px;">Durum Seç</button>
+                    <button class="btn-black" style="width:auto; padding:5px 15px; font-size:13px; border-radius:10px;">Durum Seç</button>
                 </form>
                 {% else %}
                 <div style="margin-top:15px;"><span class="mood-tag" style="margin-left:0; font-size:14px;">Durum: {{ profile_user['mood'] }}</span></div>
@@ -375,8 +410,11 @@
     </div>
     <div class="chat-messages" id="chatBox"></div>
     <div class="chat-input-area">
-        <input type="text" id="msgInput" class="chat-input" placeholder="Bir mesaj yaz..." onkeypress="if(event.key==='Enter') sendMsg()" oninput="typingIndicator()">
-        <button class="btn-black" style="width:auto; padding:10px 20px;" onclick="sendMsg()">Gönder</button>
+        <div class="typing-indicator" id="typingIndicator"></div>
+        <div class="input-row">
+            <input type="text" id="msgInput" class="chat-input" placeholder="Bir mesaj yaz..." onkeypress="if(event.key==='Enter') sendMsg()" oninput="simulateTyping()">
+            <button class="btn-black" style="width:auto; padding:10px 20px;" onclick="sendMsg()">Gönder</button>
+        </div>
     </div>
 </div>
 
@@ -435,7 +473,7 @@
         await fetch(`/api/follow/${username}`, {method:"POST"}); window.location.reload();
     }
 
-    // --- KUSURSUZ KAYAN DM SİSTEMİ (Sıfır Hata) ---
+    // --- KUSURSUZ KAYAN DM SİSTEMİ ---
     const chatPanel = document.getElementById('chatPanel');
     const chatBox = document.getElementById('chatBox');
     let chatInterval = null;
@@ -450,7 +488,7 @@
         chatBox.innerHTML = '<div style="text-align:center; margin-top:20px; color:var(--text-light);">Yükleniyor...</div>';
         
         loadMessages();
-        chatInterval = setInterval(loadMessages, 1500); // Gerçek zamanlı gibi akar
+        chatInterval = setInterval(loadMessages, 1500);
     }
 
     function closeChatPanel() {
@@ -458,19 +496,22 @@
         clearInterval(chatInterval);
     }
 
-    let isTyping = false;
-    function typingIndicator() {
-        // Klavyeye dokunduğunda karşı tarafa gidiyormuş gibi ufak bir his.
-        isTyping = true;
-        setTimeout(() => isTyping = false, 2000);
+    let typingTimeout;
+    function simulateTyping() {
+        document.getElementById('typingIndicator').textContent = "Yazıyorsun...";
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            document.getElementById('typingIndicator').textContent = "";
+        }, 1500);
     }
 
     async function loadMessages() {
         if(!currentPartner) return;
         const res = await fetch(`/api/chat/${currentPartner}`);
-        const msgs = await res.json();
+        const data = await res.json();
+        const msgs = data.messages;
 
-        if (msgs.length !== lastMsgCount || isTyping) {
+        if (msgs.length !== lastMsgCount) {
             chatBox.innerHTML = '';
             if(msgs.length === 0) chatBox.innerHTML = '<div style="text-align:center; margin-top:20px; color:var(--text-light);">İlk mesajı sen at!</div>';
             
@@ -498,6 +539,7 @@
         const fd = new FormData(); fd.append("content", val);
         await fetch(`/api/chat/${currentPartner}`, { method: "POST", body: fd });
         document.getElementById('msgInput').value = '';
+        document.getElementById('typingIndicator').textContent = "";
         loadMessages(); 
     }
 
