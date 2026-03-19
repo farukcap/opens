@@ -3,1216 +3,396 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bizim Mekan - Samimi Sosyal Ağ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Mekan</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* MİLYONLAR İÇİN MİNİMALİST VE HIZLI TASARIM (X TEMA) */
         :root {
-            --primary: #FF6B9D;
-            --secondary: #FFA07A;
-            --accent: #FFD700;
-            --light-bg: #FFF9F5;
-            --white: #FFFFFF;
-            --text-dark: #2D3436;
-            --text-light: #636E72;
-            --border-light: #F5E6D3;
-            --success: #6DD5ED;
-            --shadow: 0 10px 30px rgba(255, 107, 157, 0.15);
-            --shadow-hover: 0 15px 40px rgba(255, 107, 157, 0.25);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Quicksand', 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #FFF9F5 0%, #FFEFE7 50%, #FFF5F0 100%);
-            color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 280px 1fr 320px;
-            gap: 20px;
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-            min-height: 100vh;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        }
-
-        .logo-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 30px 20px;
-            border-radius: 25px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            color: white;
-        }
-
-        .logo-text {
-            font-family: 'Poppins', sans-serif;
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            letter-spacing: -1px;
-        }
-
-        .tagline {
-            font-size: 13px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-
-        .nav-menu {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-
-        .nav-item {
-            margin-bottom: 12px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            text-decoration: none;
-            color: var(--text-dark);
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            background: rgba(255, 107, 157, 0.05);
-        }
-
-        .nav-link:hover {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 160, 122, 0.15) 100%);
-            transform: translateX(4px);
-            color: var(--primary);
-        }
-
-        .nav-link.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            box-shadow: var(--shadow);
-        }
-
-        .btn-compose {
-            width: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 20px;
-            font-size: 16px;
-            font-weight: 700;
-            font-family: 'Quicksand', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-        }
-
-        .btn-compose:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .btn-compose:active {
-            transform: translateY(-1px);
-        }
-
-        .user-card {
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .user-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .user-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .user-name {
-            font-weight: 700;
-            color: var(--text-dark);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .user-handle {
-            font-size: 12px;
-            color: var(--text-light);
-        }
-
-        .btn-logout {
-            width: 100%;
-            background: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            padding: 12px;
-            border-radius: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Quicksand', sans-serif;
-        }
-
-        .btn-logout:hover {
-            background: rgba(255, 107, 157, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* ===== MAIN FEED ===== */
-        .feed {
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
-
-        .feed-header {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 160, 122, 0.1) 100%);
-            padding: 24px;
-            border-bottom: 2px solid var(--border-light);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .feed-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        /* ===== LOGIN/REGISTER PAGE ===== */
-        .login-page {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .login-container {
-            background: white;
-            border-radius: 30px;
-            box-shadow: var(--shadow-hover);
-            overflow: hidden;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .login-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 40px 30px;
-            text-align: center;
-            color: white;
-        }
-
-        .login-logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-
-        .login-tagline {
-            font-size: 16px;
-            opacity: 0.95;
-            font-weight: 500;
-        }
-
-        .login-body {
-            padding: 40px 30px;
-        }
-
-        .tab-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .tab-btn {
-            padding: 12px;
-            border: 2px solid var(--border-light);
-            background: white;
-            color: var(--text-dark);
-            border-radius: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 14px;
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .tab-btn:hover {
-            border-color: var(--primary);
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .auth-form input {
-            background: var(--light-bg);
-            border: 2px solid var(--border-light);
-            color: var(--text-dark);
-            padding: 14px 16px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-family: 'Quicksand', sans-serif;
-            transition: all 0.3s ease;
-        }
-
-        .auth-form input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
-        }
-
-        .btn-submit {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-family: 'Quicksand', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 15px;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        /* ===== COMPOSE SECTION ===== */
-        .compose-section {
-            padding: 24px;
-            border-bottom: 2px solid var(--border-light);
-        }
-
-        .compose-inner {
-            display: flex;
-            gap: 16px;
-        }
-
-        .compose-textarea {
-            flex: 1;
-            background: var(--light-bg);
-            border: 2px solid var(--border-light);
-            color: var(--text-dark);
-            padding: 16px;
-            border-radius: 15px;
-            font-size: 16px;
-            font-family: 'Quicksand', sans-serif;
-            resize: none;
-            min-height: 120px;
-            transition: all 0.3s ease;
-        }
-
-        .compose-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
-        }
-
-        .compose-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-        }
-
-        .char-counter {
-            color: var(--text-light);
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .char-counter.warning {
-            color: var(--secondary);
-        }
-
-        .char-counter.danger {
-            color: #FF6B6B;
-        }
-
-        .btn-post {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 15px;
-            font-weight: 700;
-            font-family: 'Quicksand', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .btn-post:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .btn-post:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ===== POSTS ===== */
-        .posts-container {
-            padding: 0;
-        }
-
-        .post {
-            padding: 20px 24px;
-            border-bottom: 2px solid var(--border-light);
-            display: flex;
-            gap: 16px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .post:hover {
-            background: rgba(255, 107, 157, 0.02);
-        }
-
-        .post.new-post {
-            animation: slideDown 0.4s ease-out;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.05) 0%, rgba(255, 160, 122, 0.05) 100%);
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .post-avatar {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 20px;
-            flex-shrink: 0;
-            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .post-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .post-body {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-
-        .post-author {
-            font-weight: 700;
-            color: var(--text-dark);
-            text-decoration: none;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .post-author:hover {
-            color: var(--primary);
-        }
-
-        .post-handle {
-            color: var(--text-light);
-            font-size: 14px;
-        }
-
-        .post-time {
-            color: var(--text-light);
-            font-size: 13px;
-            margin-left: auto;
-        }
-
-        .post-content {
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--text-dark);
-            margin-bottom: 14px;
-            word-break: break-word;
-            white-space: pre-wrap;
-        }
-
-        .post-actions {
-            display: flex;
-            justify-content: flex-start;
-            gap: 24px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .post-action {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            color: var(--text-light);
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .post-action:hover {
-            background: rgba(255, 107, 157, 0.1);
-            color: var(--primary);
-        }
-
-        .post-action.liked {
-            color: #FF6B6B;
-        }
-
-        .post-action.retweeted {
-            color: var(--success);
-        }
-
-        .post-action-delete {
-            margin-left: auto;
-            background: rgba(255, 107, 157, 0.1);
-            color: #FF6B6B;
-            padding: 6px 12px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            font-family: 'Quicksand', sans-serif;
-        }
-
-        .post-action-delete:hover {
-            background: #FF6B6B;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .btn-message {
-            background: linear-gradient(135deg, var(--success) 0%, #5BC0DE 100%);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-message:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(107, 213, 237, 0.3);
-        }
-
-        /* ===== EMPTY STATE ===== */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--text-light);
-        }
-
-        .empty-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .empty-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
+            --bg: #ffffff;
+            --surface: #ffffff;
+            --border: #eff3f4;
+            --text-main: #0f1419;
+            --text-muted: #536471;
+            --primary: #1d9bf0;
+            --primary-hover: #1a8cd8;
+            --danger: #f4212e;
+            --danger-bg: #fee8ea;
+            --hover-bg: #f7f9f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.5; }
+        a { text-decoration: none; color: inherit; }
+        button { border: none; cursor: pointer; font-family: inherit; }
+
+        .app-container { display: flex; max-width: 1250px; margin: 0 auto; min-height: 100vh; }
+
+        /* SOL MENÜ */
+        .sidebar { width: 275px; padding: 20px 20px; border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+        .logo { font-size: 28px; font-weight: 800; color: var(--text-main); margin-bottom: 20px; padding: 10px; }
+        .nav-link { display: flex; align-items: center; gap: 15px; font-size: 20px; padding: 12px 16px; border-radius: 30px; margin-bottom: 8px; font-weight: 400; transition: background 0.2s; width: fit-content; }
+        .nav-link:hover { background: var(--hover-bg); }
+        .nav-link.active { font-weight: 700; }
+        
+        .btn-post-large { background: var(--primary); color: white; width: 90%; padding: 15px; border-radius: 30px; font-size: 17px; font-weight: 700; margin-top: 10px; transition: background 0.2s; }
+        .btn-post-large:hover { background: var(--primary-hover); }
+
+        .profile-pill { margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 30px; transition: background 0.2s; cursor: pointer; }
+        .profile-pill:hover { background: var(--hover-bg); }
+        .avatar { width: 40px; height: 40px; background: var(--text-main); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        
+        .btn-logout { background: var(--danger-bg); color: var(--danger); padding: 10px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; width: 100%; margin-top: 10px; text-align: center; }
+        .btn-logout:hover { background: var(--danger); color: white; }
+
+        /* ORTA AKIŞ (FEED) */
+        .feed { flex: 1; max-width: 600px; border-right: 1px solid var(--border); }
+        .header { padding: 15px 20px; font-size: 20px; font-weight: 700; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); z-index: 10; }
+        
+        .compose-box { display: flex; padding: 20px; border-bottom: 1px solid var(--border); gap: 15px; }
+        .compose-textarea { flex: 1; border: none; outline: none; font-size: 20px; resize: none; min-height: 50px; font-family: inherit; margin-top: 8px; }
+        .compose-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+        .btn-post-small { background: var(--primary); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 15px; }
+        .btn-post-small:disabled { opacity: 0.5; }
+
+        .post { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; cursor: pointer; transition: background 0.2s; }
+        .post:hover { background: var(--hover-bg); }
+        .post-body { flex: 1; min-width: 0; }
+        .post-meta { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+        .author-name { font-weight: 700; font-size: 15px; }
+        .author-handle, .post-time { color: var(--text-muted); font-size: 15px; }
+        .post-content { font-size: 15px; word-break: break-word; line-height: 1.4; margin-bottom: 12px; }
+        
+        .actions { display: flex; justify-content: space-between; max-width: 425px; color: var(--text-muted); }
+        .action-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; transition: color 0.2s; padding: 5px; border-radius: 50%; }
+        .action-item:hover { color: var(--primary); }
+        .action-item.delete:hover { color: var(--danger); }
+
+        /* YANITLAR (REPLIES) */
+        .replies-container { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: none; }
+        .reply-item { display: flex; gap: 10px; margin-bottom: 10px; }
+        .reply-content { background: var(--hover-bg); padding: 10px; border-radius: 15px; flex: 1; font-size: 14px; }
+        .reply-input-box { display: flex; gap: 10px; margin-top: 10px; }
+        .reply-input { flex: 1; border: 1px solid var(--border); border-radius: 20px; padding: 8px 15px; font-size: 14px; outline: none; }
+        .btn-reply { background: var(--text-main); color: white; border-radius: 20px; padding: 6px 15px; font-size: 13px; font-weight: bold; }
+
+        /* SAĞ MENÜ (GELİŞMİŞ) */
+        .right-sidebar { width: 350px; padding: 20px; }
+        .search-bar { background: var(--hover-bg); border-radius: 30px; padding: 12px 20px; border: 1px solid transparent; outline: none; width: 100%; font-size: 15px; margin-bottom: 20px; }
+        .search-bar:focus { border-color: var(--primary); background: var(--bg); }
+        
+        .widget { background: var(--hover-bg); border-radius: 16px; margin-bottom: 20px; padding: 15px 0; }
+        .widget-title { font-size: 20px; font-weight: 800; padding: 0 15px 15px; }
+        .user-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; cursor: pointer; transition: background 0.2s; }
+        .user-row:hover { background: rgba(0,0,0,0.03); }
+        .user-row-info { display: flex; align-items: center; gap: 10px; }
+        .btn-msg { background: var(--text-main); color: var(--bg); font-weight: bold; border-radius: 20px; padding: 6px 15px; font-size: 14px; }
+
+        /* GİRİŞ EKRANI */
+        .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: var(--hover-bg); }
+        .login-box { background: var(--bg); padding: 40px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .login-box h1 { font-size: 32px; font-weight: 800; margin-bottom: 30px; text-align: center; }
+        .login-input { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 15px; font-size: 16px; outline: none; }
+        .login-input:focus { border-color: var(--primary); }
+        .btn-login { width: 100%; background: var(--primary); color: white; padding: 15px; border-radius: 30px; font-size: 16px; font-weight: bold; margin-bottom: 10px; }
+        
+        /* DM MODAL (SOHBET PENCERESİ) */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 100; }
+        .chat-modal { background: var(--bg); width: 100%; max-width: 500px; border-radius: 16px; display: flex; flex-direction: column; height: 600px; overflow: hidden; }
+        .chat-header { padding: 15px; border-bottom: 1px solid var(--border); font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 18px; }
+        .close-btn { cursor: pointer; font-size: 20px; color: var(--text-muted); }
+        .chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: var(--hover-bg); }
+        .msg-bubble { max-width: 70%; padding: 10px 15px; border-radius: 20px; font-size: 15px; }
+        .msg-sent { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .msg-recv { background: var(--border); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 4px; }
+        .chat-footer { padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 10px; background: var(--bg); }
+        .chat-input { flex: 1; border: 1px solid var(--border); border-radius: 20px; padding: 10px 15px; outline: none; font-size: 15px; }
 
-        .empty-text {
-            font-size: 15px;
-            color: var(--text-light);
-        }
-
-        /* ===== RIGHT SIDEBAR ===== */
-        .right-sidebar {
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: white;
-            padding: 14px 16px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 2px solid var(--border-light);
-            transition: all 0.3s ease;
-        }
-
-        .search-box:focus-within {
-            border-color: var(--primary);
-            box-shadow: var(--shadow);
-        }
-
-        .search-box input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-dark);
-            outline: none;
-            font-size: 14px;
-            font-family: 'Quicksand', sans-serif;
-        }
-
-        .users-section {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .users-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 18px;
-            font-weight: 800;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 160, 122, 0.1) 100%);
-            border-bottom: 2px solid var(--border-light);
-            color: var(--primary);
-        }
-
-        .user-item {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-light);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .user-item:hover {
-            background: rgba(255, 107, 157, 0.05);
-            padding-left: 24px;
-        }
-
-        .user-item-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .user-item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .user-item-name {
-            font-weight: 700;
-            color: var(--text-dark);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 14px;
-        }
-
-        .user-item-handle {
-            font-size: 12px;
-            color: var(--text-light);
-        }
-
-        /* ===== ALERTS ===== */
-        .alert {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: var(--text-dark);
-            padding: 16px 24px;
-            border-radius: 15px;
-            border-left: 5px solid var(--primary);
-            z-index: 1000;
-            animation: slideDown 0.4s ease-out;
-            box-shadow: var(--shadow);
-            max-width: 90%;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar, .right-sidebar {
-                display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .login-page {
-                min-height: 100vh;
-            }
-
-            .login-container {
-                max-width: 100%;
-            }
-
-            .login-header {
-                padding: 30px 20px;
-            }
-
-            .login-logo {
-                font-size: 36px;
-            }
-
-            .login-body {
-                padding: 30px 20px;
-            }
-
-            .container {
-                padding: 12px;
-                gap: 12px;
-            }
-
-            .compose-inner {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .post {
-                padding: 16px;
-                gap: 12px;
-            }
-
-            .post-avatar {
-                width: 44px;
-                height: 44px;
-                font-size: 16px;
-            }
-
-            .feed-title {
-                font-size: 20px;
-            }
-
-            .compose-textarea {
-                min-height: 100px;
-                font-size: 14px;
-            }
-
-            .post-actions {
-                gap: 16px;
-            }
-
-            .logo-text {
-                font-size: 28px;
-            }
-
-            .post-action {
-                font-size: 12px;
-            }
-
-            .post-action-delete {
-                padding: 6px 10px;
-            }
-        }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--light-bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 107, 157, 0.3);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 107, 157, 0.5);
-        }
     </style>
 </head>
 <body>
-    {% if not session.get('username') %}
-    <div class="login-page">
-        <div class="login-container">
-            <div class="login-header">
-                <div class="login-logo">✨ Mekan</div>
-                <div class="login-tagline">Samimi Bir Sosyal Ağ</div>
-            </div>
 
-            <div class="login-body">
-                <div class="tab-buttons">
-                    <button class="tab-btn active" onclick="switchTab('login')">🔐 Giriş Yap</button>
-                    <button class="tab-btn" onclick="switchTab('register')">📝 Kayıt Ol</button>
+{% if not session.get('username') %}
+<div class="login-wrapper">
+    <div class="login-box">
+        <h1>Mekan'a Katıl</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="color: var(--danger); text-align: center; margin-bottom: 15px; font-weight: bold;">{{ messages[0] }}</div>
+            {% endif %}
+        {% endwith %}
+
+        <form action="/login" method="POST">
+            <input type="text" name="username" class="login-input" placeholder="Kullanıcı Adı" required>
+            <input type="password" name="password" class="login-input" placeholder="Şifre" required>
+            <button type="submit" class="btn-login">Giriş Yap</button>
+        </form>
+        
+        <div style="text-align: center; margin: 15px 0; color: var(--text-muted);">veya</div>
+        
+        <form action="/register" method="POST">
+            <input type="text" name="username" class="login-input" placeholder="Yeni Kullanıcı Adı" required>
+            <input type="password" name="password" class="login-input" placeholder="Yeni Şifre" required>
+            <button type="submit" class="btn-login" style="background: var(--text-main);">Kayıt Ol</button>
+        </form>
+    </div>
+</div>
+
+{% else %}
+<div class="app-container">
+    
+    <div class="sidebar">
+        <div class="logo">✨ Mekan</div>
+        <a href="/" class="nav-link active">🏠 Anasayfa</a>
+        <a href="#" class="nav-link">👤 Profil</a>
+        <button class="btn-post-large" onclick="document.getElementById('tweetInput').focus()">Gönder</button>
+        
+        <div style="margin-top: auto;">
+            <div class="profile-pill">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="avatar">{{ current_user[0].upper() }}</div>
+                    <div>
+                        <div style="font-weight: bold; font-size: 15px;">{{ current_user }}</div>
+                        <div style="color: var(--text-muted); font-size: 14px;">@{{ current_user }}</div>
+                    </div>
                 </div>
-
-                <form action="/login" method="POST" class="auth-form active" id="loginForm">
-                    <input type="text" name="username" placeholder="Kullanıcı Adı" required autofocus>
-                    <input type="password" name="password" placeholder="Şifre" required>
-                    <button type="submit" class="btn-submit">Giriş Yap 🚀</button>
-                </form>
-
-                <form action="/register" method="POST" class="auth-form" id="registerForm">
-                    <input type="text" name="username" placeholder="Kullanıcı Adı" required minlength="2">
-                    <input type="password" name="password" placeholder="Şifre (min 4 karakter)" required minlength="4">
-                    <button type="submit" class="btn-submit">Kayıt Ol ✨</button>
-                </form>
             </div>
+            <form action="/logout" method="GET">
+                <button type="submit" class="btn-logout">Çıkış Yap</button>
+            </form>
         </div>
     </div>
 
-    {% else %}
-    <div class="container">
-        <aside class="sidebar">
-            <div class="logo-section">
-                <div class="logo-text">✨ Mekan</div>
-                <div class="tagline">Samimi Bir Yer</div>
-            </div>
-
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="/" class="nav-link active">🏠 Anasayfa</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/messages" class="nav-link">💬 Mesajlar</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/profile/{{ session.get('username') }}" class="nav-link">👤 Profil</a>
-                </li>
-            </ul>
-
-            <button class="btn-compose" onclick="document.getElementById('composeArea').scrollIntoView({behavior: 'smooth'})">✍️ Yazı Yaz</button>
-
-            <div class="user-card">
-                <div class="user-avatar">{{ session.get('username')[0].upper() }}</div>
-                <div class="user-info">
-                    <div class="user-name">{{ session.get('username') }}</div>
-                    <div class="user-handle">@{{ session.get('username') }}</div>
+    <div class="feed">
+        <div class="header">Anasayfa</div>
+        
+        <div class="compose-box">
+            <div class="avatar">{{ current_user[0].upper() }}</div>
+            <div style="flex: 1;">
+                <textarea id="tweetInput" class="compose-textarea" placeholder="Neler oluyor?"></textarea>
+                <div class="compose-footer">
+                    <span id="charCount" style="color: var(--text-muted); font-size: 13px;">0/500</span>
+                    <button id="postBtn" class="btn-post-small" onclick="postTweet()" disabled>Gönder</button>
                 </div>
             </div>
+        </div>
 
-            <form action="/logout" method="GET">
-                <button type="submit" class="btn-logout">Çıkış Yap 👋</button>
-            </form>
-        </aside>
-
-        <main class="feed">
-            <div class="feed-header">
-                <div class="feed-title">✨ Akış</div>
-            </div>
-
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert" id="alert-{{ loop.index }}">{{ message }}</div>
-                        <script>
-                            setTimeout(() => {
-                                const alert = document.getElementById('alert-{{ loop.index }}');
-                                if(alert) alert.style.opacity = '0';
-                            }, 3000);
-                        </script>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            <div class="compose-section" id="composeArea">
-                <div class="compose-inner">
-                    <div class="user-avatar" style="width: 48px; height: 48px; font-size: 16px;">
-                        {{ session.get('username')[0].upper() }}
+        <div id="postsFeed">
+            {% for post in posts %}
+            <div class="post" id="post-{{ post[0] }}">
+                <div class="avatar">{{ post[1][0].upper() }}</div>
+                <div class="post-body">
+                    <div class="post-meta">
+                        <span class="author-name">{{ post[1] }}</span>
+                        <span class="author-handle">@{{ post[1] }}</span>
+                        <span style="color:var(--text-muted)">·</span>
+                        <span class="post-time">{{ post[3] }}</span>
                     </div>
-                    <div style="flex: 1;">
-                        <textarea 
-                            class="compose-textarea" 
-                            id="tweetInput" 
-                            placeholder="Neler düşünüyorsun? 💭" 
-                            maxlength="500"></textarea>
-                        <div class="compose-actions">
-                            <div class="char-counter" id="charCounter">0/500</div>
-                            <button class="btn-post" id="postBtn" disabled onclick="postTweet()">Gönder 🚀</button>
+                    <div class="post-content">{{ post[2] }}</div>
+                    
+                    <div class="actions">
+                        <div class="action-item" onclick="toggleReplies({{ post[0] }})">💬 Yanıtla</div>
+                        <div class="action-item" onclick="likePost({{ post[0] }})">❤️ <span id="likes-{{post[0]}}">{{ post[4] }}</span></div>
+                        <div class="action-item" onclick="retweetPost({{ post[0] }})">🔄 <span id="rts-{{post[0]}}">{{ post[5] }}</span></div>
+                        {% if current_user == post[1] or is_admin %}
+                        <div class="action-item delete" onclick="deletePost({{ post[0] }})">🗑️ Sil</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="replies-container" id="replies-box-{{ post[0] }}">
+                        <div id="replies-list-{{ post[0] }}"></div>
+                        <div class="reply-input-box">
+                            <input type="text" id="reply-input-{{ post[0] }}" class="reply-input" placeholder="Yanıtını yaz...">
+                            <button class="btn-reply" onclick="sendReply({{ post[0] }})">Gönder</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="posts-container" id="postsFeed">
-                {% if posts %}
-                    {% for post in posts %}
-                    <div class="post" id="post-{{ post[0] }}">
-                        <a href="/profile/{{ post[1] }}" style="text-decoration: none;">
-                            <div class="post-avatar">{{ post[1][0].upper() }}</div>
-                        </a>
-                        <div class="post-body">
-                            <div class="post-header">
-                                <a href="/profile/{{ post[1] }}" class="post-author">{{ post[1] }}</a>
-                                <span class="post-handle">@{{ post[1] }}</span>
-                                <span class="post-time">{{ post[3] }}</span>
-                            </div>
-                            <div class="post-content">{{ post[2] }}</div>
-                            <div class="post-actions">
-                                <div class="post-action" onclick="likePost({{ post[0] }})">
-                                    ❤️ <span class="like-count">{{ post[4] }}</span>
-                                </div>
-                                <div class="post-action" onclick="retweetPost({{ post[0] }})">
-                                    🔄 <span class="retweet-count">{{ post[5] }}</span>
-                                </div>
-                                {% if session.get('username') == post[1] or session.get('username') == 'faruk' %}
-                                <button class="post-action-delete" onclick="deletePost({{ post[0] }})">
-                                    🗑️ Sil
-                                </button>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                <div class="empty-state">
-                    <div class="empty-icon">🌸</div>
-                    <div class="empty-title">Henüz Yazı Yok</div>
-                    <div class="empty-text">İlk yazıyı sen yaz ve mekanı yaşat!</div>
-                </div>
-                {% endif %}
-            </div>
-        </main>
-
-        <aside class="right-sidebar">
-            <div class="search-box">
-                <span>🔍</span>
-                <input type="text" placeholder="Ara..." id="searchInput">
-            </div>
-
-            <div class="users-section">
-                <div class="users-title">👥 Kişiler</div>
-                
-                <div id="usersList">
-                    {% if current_user %}
-                        {% for user in all_users %}
-                            {% if user[0] != session.get('username') %}
-                            <div class="user-item">
-                                <div class="user-item-avatar">{{ user[0][0].upper() }}</div>
-                                <div class="user-item-info" onclick="goToProfile('{{ user[0] }}')">
-                                    <div class="user-item-name">{{ user[0] }}</div>
-                                    <div class="user-item-handle">@{{ user[0] }}</div>
-                                </div>
-                                <a href="/message/{{ user[0] }}" class="btn-message">Mesaj</a>
-                            </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
-        </aside>
+            {% endfor %}
+        </div>
     </div>
-    {% endif %}
 
-    <script>
-        function switchTab(tab) {
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            const buttons = document.querySelectorAll('.tab-btn');
+    <div class="right-sidebar">
+        <input type="text" class="search-bar" placeholder="Mekan'da Ara">
+        
+        <div class="widget">
+            <div class="widget-title">🌟 Yeni Katılanlar</div>
+            {% for user in new_users %}
+            <div class="user-row">
+                <div class="user-row-info">
+                    <div class="avatar" style="width:36px;height:36px;font-size:14px;">{{ user[0][0].upper() }}</div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 15px;">{{ user[0] }}</div>
+                        <div style="color: var(--text-muted); font-size: 13px;">@{{ user[0] }}</div>
+                    </div>
+                </div>
+                <button class="btn-msg" onclick="openChat('{{ user[0] }}')">Mesaj</button>
+            </div>
+            {% endfor %}
+        </div>
 
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            if (tab === 'login') {
-                loginForm.classList.add('active');
-                registerForm.classList.remove('active');
-                buttons[0].classList.add('active');
-                loginForm.querySelector('input').focus();
-            } else {
-                registerForm.classList.add('active');
-                loginForm.classList.remove('active');
-                buttons[1].classList.add('active');
-                registerForm.querySelector('input').focus();
-            }
+        <div class="widget">
+            <div class="widget-title">👥 Tüm Kişiler</div>
+            {% for user in all_users %}
+            <div class="user-row">
+                <div class="user-row-info">
+                    <div class="avatar" style="width:36px;height:36px;font-size:14px;">{{ user[0][0].upper() }}</div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 15px;">{{ user[0] }}</div>
+                        <div style="color: var(--text-muted); font-size: 13px;">@{{ user[0] }}</div>
+                    </div>
+                </div>
+                <button class="btn-msg" onclick="openChat('{{ user[0] }}')">Mesaj</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-overlay" id="chatOverlay">
+    <div class="chat-modal">
+        <div class="chat-header">
+            <span id="chatTitle">Sohbet</span>
+            <span class="close-btn" onclick="closeChat()">✕</span>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-footer">
+            <input type="hidden" id="chatRecipient">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Mesaj yaz..." onkeypress="if(event.key === 'Enter') sendChat()">
+            <button class="btn-post-small" onclick="sendChat()">Gönder</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Karakter Sayacı
+    const tweetInput = document.getElementById('tweetInput');
+    const postBtn = document.getElementById('postBtn');
+    
+    tweetInput?.addEventListener('input', function() {
+        const len = this.value.trim().length;
+        document.getElementById('charCount').textContent = `${len}/500`;
+        postBtn.disabled = len === 0 || len > 500;
+    });
+
+    // Gönderi Atma
+    async function postTweet() {
+        const content = tweetInput.value.trim();
+        if (!content) return;
+
+        const fd = new FormData(); fd.append('content', content);
+        const res = await fetch('/post', { method: 'POST', body: fd });
+        
+        if (res.ok) {
+            window.location.reload(); // En temizi sayfayı yenilemek
         }
+    }
 
-        function goToProfile(username) {
-            window.location.href = `/profile/${username}`;
-        }
+    // Beğen ve Retweet
+    async function likePost(id) {
+        const res = await fetch(`/like/${id}`, {method: 'POST'});
+        if(res.ok) { const data = await res.json(); document.getElementById(`likes-${id}`).textContent = data.likes_count; }
+    }
+    async function retweetPost(id) {
+        const res = await fetch(`/retweet/${id}`, {method: 'POST'});
+        if(res.ok) { const data = await res.json(); document.getElementById(`rts-${id}`).textContent = data.retweets_count; }
+    }
 
-        // Character counter
-        document.getElementById('tweetInput')?.addEventListener('input', function() {
-            const counter = document.getElementById('charCounter');
-            const btn = document.getElementById('postBtn');
-            const length = this.value.length;
-            
-            counter.textContent = `${length}/500`;
-            
-            if (length > 400) {
-                counter.classList.add('danger');
-                counter.classList.remove('warning');
-            } else if (length > 300) {
-                counter.classList.add('warning');
-                counter.classList.remove('danger');
-            } else {
-                counter.classList.remove('warning', 'danger');
-            }
-            
-            btn.disabled = length === 0;
+    // Gönderi Silme
+    async function deletePost(id) {
+        if(!confirm("Bu gönderiyi silmek istediğine emin misin?")) return;
+        const res = await fetch(`/delete_post/${id}`, {method: 'POST'});
+        if(res.ok) { document.getElementById(`post-${id}`).remove(); }
+    }
+
+    // --- YANIT (REPLY) SİSTEMİ ---
+    async function toggleReplies(postId) {
+        const box = document.getElementById(`replies-box-${postId}`);
+        if(box.style.display === 'block') { box.style.display = 'none'; return; }
+        
+        box.style.display = 'block';
+        const list = document.getElementById(`replies-list-${postId}`);
+        list.innerHTML = "<div style='text-align:center; color:gray; font-size:12px;'>Yükleniyor...</div>";
+        
+        const res = await fetch(`/api/replies/${postId}`);
+        const replies = await res.json();
+        
+        list.innerHTML = "";
+        if(replies.length === 0) list.innerHTML = "<div style='color:gray; font-size:13px; margin-bottom:10px;'>Henüz yanıt yok. İlk sen yaz!</div>";
+        
+        replies.forEach(r => {
+            list.innerHTML += `
+                <div class="reply-item">
+                    <div class="avatar" style="width:24px;height:24px;font-size:10px;">${r.author[0].toUpperCase()}</div>
+                    <div class="reply-content">
+                        <strong>${r.author}</strong> <span style="color:gray;font-size:12px;">${r.created_at}</span><br>
+                        ${r.content}
+                    </div>
+                </div>
+            `;
         });
+    }
 
-        // Post Tweet
-        async function postTweet() {
-            const content = document.getElementById('tweetInput').value.trim();
-            
-            if (!content) {
-                alert('Yazı boş olamaz!');
-                return;
-            }
+    async function sendReply(postId) {
+        const input = document.getElementById(`reply-input-${postId}`);
+        const content = input.value.trim();
+        if(!content) return;
 
-            try {
-                const formData = new FormData();
-                formData.append('content', content);
-                
-                const response = await fetch('/post', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const post = await response.json();
-                    
-                    const newPost = `
-                        <div class="post new-post" id="post-${post.id}">
-                            <a href="/profile/${post.author}" style="text-decoration: none;">
-                                <div class="post-avatar">${post.author[0].toUpperCase()}</div>
-                            </a>
-                            <div class="post-body">
-                                <div class="post-header">
-                                    <a href="/profile/${post.author}" class="post-author">${post.author}</a>
-                                    <span class="post-handle">@${post.author}</span>
-                                    <span class="post-time">${post.created_at}</span>
-                                </div>
-                                <div class="post-content">${escapeHtml(post.content)}</div>
-                                <div class="post-actions">
-                                    <div class="post-action" onclick="likePost(${post.id})">
-                                        ❤️ <span class="like-count">${post.likes_count}</span>
-                                    </div>
-                                    <div class="post-action" onclick="retweetPost(${post.id})">
-                                        🔄 <span class="retweet-count">${post.retweets_count}</span>
-                                    </div>
-                                    <button class="post-action-delete" onclick="deletePost(${post.id})">
-                                        🗑️ Sil
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    const feed = document.getElementById('postsFeed');
-                    feed.innerHTML = newPost + feed.innerHTML;
-                    
-                    document.getElementById('tweetInput').value = '';
-                    document.getElementById('charCounter').textContent = '0/500';
-                    document.getElementById('postBtn').disabled = true;
-                    
-                    showAlert('Yazı başarıyla gönderildi! ✨');
-                } else {
-                    const error = await response.json();
-                    alert('Hata: ' + error.error);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Gönderme hatası');
-            }
+        const fd = new FormData(); fd.append('content', content);
+        const res = await fetch(`/reply/${postId}`, { method: 'POST', body: fd });
+        if(res.ok) {
+            input.value = '';
+            toggleReplies(postId); // Kapat
+            setTimeout(() => toggleReplies(postId), 100); // Yeniden aç ve güncelle
         }
+    }
 
-        // Like Post
-        async function likePost(postId) {
-            try {
-                const response = await fetch(`/like/${postId}`, {
-                    method: 'POST'
-                });
+    // --- SOHBET (DM) SİSTEMİ ---
+    const chatOverlay = document.getElementById('chatOverlay');
+    const chatBody = document.getElementById('chatBody');
+    const currentUsername = "{{ session.get('username') }}";
 
-                if (response.ok) {
-                    const data = await response.json();
-                    const postEl = document.getElementById(`post-${postId}`);
-                    const likeBtn = postEl.querySelector('.post-action:nth-child(1)');
-                    const likeCount = likeBtn.querySelector('.like-count');
-                    
-                    likeCount.textContent = data.likes_count;
-                    
-                    if (data.action === 'liked') {
-                        likeBtn.classList.add('liked');
-                    } else {
-                        likeBtn.classList.remove('liked');
-                    }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+    async function openChat(recipient) {
+        document.getElementById('chatTitle').textContent = recipient + " ile Sohbet";
+        document.getElementById('chatRecipient').value = recipient;
+        chatOverlay.style.display = 'flex';
+        chatBody.innerHTML = "<div style='text-align:center;margin-top:20px;'>Yükleniyor...</div>";
+
+        const res = await fetch(`/api/messages/${recipient}`);
+        const msgs = await res.json();
+        
+        chatBody.innerHTML = "";
+        if(msgs.length === 0) chatBody.innerHTML = "<div style='text-align:center;color:gray;margin-top:20px;'>Mesaj geçmişi yok.</div>";
+        
+        msgs.forEach(m => {
+            const isMe = m.sender === currentUsername;
+            const cls = isMe ? 'msg-sent' : 'msg-recv';
+            chatBody.innerHTML += `<div class="msg-bubble ${cls}">${m.content}</div>`;
+        });
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function closeChat() { chatOverlay.style.display = 'none'; }
+
+    async function sendChat() {
+        const recipient = document.getElementById('chatRecipient').value;
+        const input = document.getElementById('chatInput');
+        const content = input.value.trim();
+        if(!content) return;
+
+        const fd = new FormData();
+        fd.append('recipient', recipient);
+        fd.append('content', content);
+
+        const res = await fetch('/api/send_message', { method: 'POST', body: fd });
+        if(res.ok) {
+            input.value = '';
+            chatBody.innerHTML += `<div class="msg-bubble msg-sent">${content}</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
         }
+    }
+</script>
+{% endif %}
 
-        // Retweet Post
-        async function retweetPost(postId) {
-            try {
-                const response = await fetch(`/retweet/${postId}`, {
-                    method: 'POST'
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    const postEl = document.getElementById(`post-${postId}`);
-                    const retweetBtn = postEl.querySelector('.post-action:nth-child(2)');
-                    const retweetCount = retweetBtn.querySelector('.retweet-count');
-                    
-                    retweetCount.textContent = data.retweets_count;
-                    
-                    if (data.action === 'retweeted') {
-                        retweetBtn.classList.add('retweeted');
-                    } else {
-                        retweetBtn.classList.remove('retweeted');
-                    }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
-        // Delete Post
-        async function deletePost(postId) {
-            if (!confirm('Bu yazıyı silmek istediğine emin misin?')) return;
-
-            try {
-                const response = await fetch(`/delete_post/${postId}`, {
-                    method: 'POST'
-                });
-
-                if (response.ok) {
-                    const postEl = document.getElementById(`post-${postId}`);
-                    postEl.style.animation = 'slideDown 0.4s ease-out reverse';
-                    setTimeout(() => postEl.remove(), 400);
-                    showAlert('Yazı silindi!');
-                } else {
-                    alert('Silme hatası!');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Silme hatası');
-            }
-        }
-
-        // Utilities
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function showAlert(message) {
-            const alert = document.createElement('div');
-            alert.className = 'alert';
-            alert.textContent = message;
-            document.body.appendChild(alert);
-
-            setTimeout(() => {
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 300);
-            }, 3000);
-        }
-    </script>
 </body>
 </html>
