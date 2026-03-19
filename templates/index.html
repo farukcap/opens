@@ -3,618 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mekan - Sınırları Zorla</title>
+    <title>Mekan v40</title>
     <style>
-        /* 28 ÖZELLİKLİ PREMIUM TASARIM */
-        :root {
-            --bg: #f8f9fa; --surface: #ffffff; --primary: #0f1419; --primary-hover: #272c30;
-            --text-main: #0f1419; --text-light: #536471; --border: #eff3f4; --blue-tick: #1d9bf0;
-            --shadow: 0 4px 12px rgba(0,0,0,0.05); --radius: 16px; --accent: #8b5cf6;
-        }
-        [data-theme="dark"] {
-            --bg: #000000; --surface: #000000; --primary: #ffffff; --primary-hover: #e7e9ea;
-            --text-main: #e7e9ea; --text-light: #71767b; --border: #2f3336;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: var(--bg); color: var(--text-main); transition: background 0.2s, color 0.2s; overflow-x: hidden; }
-        a { text-decoration: none; color: inherit; }
-        button, input, textarea, select { outline: none; border: none; background: transparent; font-family: inherit; }
+        :root { --bg: #ffffff; --surface: #ffffff; --text: #0f1419; --border: #eff3f4; --blue: #1d9bf0; --gray: #536471; }
+        [data-theme="dark"] { --bg: #000000; --surface: #000000; --text: #e7e9ea; --border: #2f3336; --gray: #71767b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+        button { cursor: pointer; transition: 0.2s; border: none; background: none; color: inherit; }
         
-        /* GİRİŞ */
-        .auth-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-        .auth-box { background: var(--surface); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; }
-        .input-box { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; font-size: 16px; color: var(--text-main); }
-        .btn-black { background: var(--primary); color: var(--bg); width: 100%; padding: 15px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;}
-        .btn-black:hover { opacity: 0.8; }
+        /* HEADER */
+        .top-nav { position: fixed; top: 0; width: 100%; height: 55px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 15px; z-index: 1000; justify-content: space-between; }
+        [data-theme="dark"] .top-nav { background: rgba(0,0,0,0.85); }
         
-        .layout { display: flex; max-width: 1250px; margin: 0 auto; min-height: 100vh; justify-content: center;}
+        /* LAYOUT */
+        .main-container { max-width: 600px; margin: 55px auto 60px auto; min-height: 100vh; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
         
-        /* SOL MENÜ */
-        .sidebar { width: 275px; padding: 20px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
-        .logo { font-size: 32px; font-weight: 800; margin-bottom: 20px; padding: 10px; letter-spacing: -1px; }
-        .nav-item { display: flex; align-items: center; gap: 15px; font-size: 20px; padding: 12px 15px; border-radius: 30px; margin-bottom: 5px; transition: 0.2s; font-weight: 400; width: fit-content;}
-        .nav-item:hover { background: rgba(15, 20, 25, 0.1); }
-        [data-theme="dark"] .nav-item:hover { background: rgba(255, 255, 255, 0.1); }
-        .nav-item.active { font-weight: 700; }
-        .badge { background: #ef4444; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-left: 5px; }
-
-        /* ORTA İÇERİK */
-        .main { flex: 1; max-width: 600px; border-right: 1px solid var(--border); min-height: 100vh; padding-bottom: 60px;}
-        .header { padding: 15px 20px; font-size: 20px; font-weight: bold; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); z-index: 10; display:flex; justify-content: space-between; }
-        [data-theme="dark"] .header { background: rgba(0,0,0,0.85); }
+        /* STORIES */
+        .stories { display: flex; gap: 15px; padding: 15px; overflow-x: auto; border-bottom: 1px solid var(--border); }
+        .story { width: 65px; flex-shrink: 0; text-align: center; font-size: 11px; }
+        .story-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--blue); padding: 2px; background: var(--bg); margin-bottom: 5px; display:flex; align-items:center; justify-content:center; font-weight:bold; }
         
-        /* HİKAYELER (STORIES) */
-        .stories-container { display: flex; gap: 15px; padding: 15px 20px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
-        .stories-container::-webkit-scrollbar { display: none; }
-        .story-circle { width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--blue-tick); padding: 2px; cursor: pointer; flex-shrink: 0; }
-        .story-avatar { width: 100%; height: 100%; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }
-
-        /* GÖNDERİ KUTUSU */
-        .compose { padding: 20px; border-bottom: 1px solid var(--border); display: flex; gap: 15px; }
-        .avatar { width: 44px; height: 44px; border-radius: 50%; background: #1d9bf0; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; flex-shrink: 0; }
+        /* POSTS */
+        .post { padding: 15px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; background: #ccc; flex-shrink: 0; display:flex; align-items:center; justify-content:center; font-weight:bold; }
+        .verified { width: 18px; color: var(--blue); margin-left: 3px; }
+        .post-content { flex: 1; }
+        .post-meta { font-size: 15px; margin-bottom: 5px; }
+        .post-text { font-size: 16px; line-height: 1.4; margin-bottom: 10px; }
+        .post-actions { display: flex; justify-content: space-between; max-width: 350px; color: var(--gray); font-size: 14px; }
         
-        .post { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; transition: background 0.2s; cursor: pointer; }
-        .post:hover { background: rgba(0,0,0,0.03); }
-        [data-theme="dark"] .post:hover { background: rgba(255,255,255,0.03); }
+        /* BOTTOM NAV */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 55px; background: var(--bg); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-icon { font-size: 24px; position: relative; }
+        .badge { position: absolute; top: -5px; right: -8px; background: #f4212e; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; }
+
+        /* PANELS (DM & NEW USERS) */
+        .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 600px; height: 100vh; background: var(--bg); z-index: 2000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .side-panel.active { right: 0; }
+        .panel-header { padding: 15px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 20px; font-weight: bold; }
+        .chat-msgs { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #f0f2f5; }
+        [data-theme="dark"] .chat-msgs { background: #15181c; }
+        .bubble { max-width: 75%; padding: 10px 15px; border-radius: 18px; font-size: 15px; }
+        .bubble.me { align-self: flex-end; background: var(--blue); color: white; border-bottom-right-radius: 2px; }
+        .bubble.them { align-self: flex-start; background: var(--border); border-bottom-left-radius: 2px; }
+        .chat-input-area { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
+        .chat-input { flex: 1; background: var(--border); padding: 12px; border-radius: 25px; font-size: 15px; }
+
+        /* MODALS */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; }
+        .modal-content { background: var(--bg); padding: 20px; border-radius: 20px; width: 90%; max-width: 500px; }
         
-        .verified-icon { width: 18px; height: 18px; color: var(--blue-tick); margin-left: 4px; display: inline-block; vertical-align: -3px; }
-        .mood-tag { font-size: 13px; color: var(--text-light); background: rgba(15,20,25,0.05); padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
-        [data-theme="dark"] .mood-tag { background: rgba(255,255,255,0.1); }
-        .badge-pro { background: var(--accent); color: white; font-size: 11px; padding: 2px 6px; border-radius: 5px; margin-left: 5px; }
-
-        .post-actions { display: flex; justify-content: space-between; max-width: 425px; margin-top: 12px; color: var(--text-light); }
-        .action { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 5px; transition: color 0.2s; font-size:14px;}
-        .action:hover { color: var(--blue-tick); }
-
-        /* SAĞ MENÜ (AÇILIR KAPANIR WIDGETLAR + YENİ KATILANLAR) */
-        .right-bar { width: 350px; padding: 20px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-        .search-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 12px 20px; width: 100%; font-size: 15px; margin-bottom: 20px; color: var(--text-main); }
-        .search-results { background: var(--surface); border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
-        .search-item { padding: 12px 15px; border-bottom: 1px solid var(--border); display: block; font-weight: bold; }
-        
-        .widget { background: rgba(15,20,25,0.03); border-radius: 16px; margin-bottom: 20px; overflow: hidden; }
-        [data-theme="dark"] .widget { background: #16181c; }
-        .widget-header { padding: 15px; font-size: 18px; font-weight: 800; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
-        .widget-header:hover { background: rgba(15,20,25,0.05); }
-        [data-theme="dark"] .widget-header:hover { background: rgba(255,255,255,0.05); }
-        .widget-content { padding: 0 15px 15px 15px; display: none; }
-        .widget-content.open { display: block; }
-        .user-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 5px 0; }
-
-        /* MÜKEMMEL DM KUTUSU (FLEXBOX, EKRAN KAYMAZ) */
-        .chat-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh; background: var(--surface); box-shadow: -5px 0 25px rgba(0,0,0,0.1); z-index: 200; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; border-left: 1px solid var(--border); }
-        .chat-panel.open { right: 0; }
-        .chat-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; font-size: 18px; font-weight: bold; flex-shrink: 0; background: var(--surface);}
-        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: var(--bg); }
-        .chat-bubble { max-width: 75%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; position: relative; }
-        .bubble-me { align-self: flex-end; background: var(--blue-tick); color: white; border-bottom-right-radius: 4px; }
-        .bubble-them { align-self: flex-start; background: var(--surface); color: var(--text-main); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-        
-        .chat-input-area { padding: 15px; background: var(--surface); border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
-        .typing-indicator { font-size: 12px; color: var(--text-light); height: 15px; padding-left: 10px; font-style: italic;}
-        .input-row { display: flex; gap: 10px; align-items: center; }
-        .chat-input { flex: 1; background: rgba(15,20,25,0.05); border: none; border-radius: 20px; padding: 12px 20px; font-size: 15px; color: var(--text-main); }
-        [data-theme="dark"] .chat-input { background: rgba(255,255,255,0.1); }
-
-        /* MOBİL ALT MENÜ */
-        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-top: 1px solid var(--border); justify-content: space-around; padding: 12px 0; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
-        [data-theme="dark"] .mobile-nav { background: rgba(0,0,0,0.9); }
-        .mobile-item { font-size: 24px; color: var(--text-light); position: relative; }
-        .mobile-item.active { color: var(--text-main); }
-
-        /* STORY MODAL */
-        .story-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.9); z-index: 300; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; }
-        .story-modal.active { display: flex; }
-        .story-content { font-size: 24px; text-align: center; padding: 20px; max-width: 80%; word-wrap: break-word; }
-
-        .hashtag { color: var(--blue-tick); cursor: pointer; }
-        .mention { color: var(--accent); font-weight: bold; }
-        .post-img { max-width: 100%; border-radius: 16px; margin-top: 10px; border: 1px solid var(--border); }
-        .svg-verified { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: text-bottom; color: var(--blue-tick); }
-        .read-time { font-size: 13px; color: var(--text-light); margin-top: 5px; }
-
-        @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .right-bar { display: none; }
-            .mobile-nav { display: flex; }
-            .main { border-right: none; border-left: none; }
-        }
+        .raw-img { max-width: 100%; border-radius: 12px; margin-top: 8px; border: 1px solid var(--border); }
+        .verified-svg { width: 1.2em; height: 1.2em; vertical-align: text-bottom; fill: var(--blue); }
     </style>
 </head>
 <body>
 
 {% if not current_user %}
-<div class="auth-container">
-    <div class="auth-box">
-        <h1 style="font-size: 40px; font-weight: 800; margin-bottom: 30px; letter-spacing: -2px;">Mekan</h1>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}<div style="color:#ef4444; margin-bottom:15px; font-weight:600;">{{ messages[0] }}</div>{% endif %}
-        {% endwith %}
-        <form action="/login" method="POST">
-            <input type="text" name="username" class="input-box" placeholder="Kullanıcı Adı" required>
-            <input type="password" name="password" class="input-box" placeholder="Şifre" required>
-            <button class="btn-black">Giriş Yap</button>
-        </form>
-        <div style="margin: 20px 0; color: var(--text-light); font-size: 15px;">veya aramıza katıl</div>
-        <form action="/register" method="POST">
-            <input type="text" name="username" class="input-box" placeholder="Yeni Kullanıcı Adı" required>
-            <input type="password" name="password" class="input-box" placeholder="Yeni Şifre" required>
-            <button class="btn-black" style="background: transparent; color: var(--text-main); border: 1px solid var(--border);">Kayıt Ol</button>
-        </form>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1 style="margin-bottom: 20px;">Mekan</h1>
+            <form action="/login" method="POST"><input type="text" name="username" class="input-box" placeholder="Kullanıcı Adı" required><input type="password" name="password" class="input-box" placeholder="Şifre" required><button class="btn-black">Giriş Yap</button></form>
+            <div style="margin:15px">veya</div>
+            <form action="/register" method="POST"><input type="text" name="username" class="input-box" placeholder="Yeni Kullanıcı Adı" required><input type="password" name="password" class="input-box" placeholder="Yeni Şifre" required><button class="btn-black" style="background:none; color:var(--text); border:1px solid var(--border)">Kayıt Ol</button></form>
+        </div>
     </div>
-</div>
 {% else %}
+    <div class="top-nav">
+        <button onclick="togglePanel('newUsersPanel')">🌟 Yeni</button>
+        <b style="font-size: 20px;">Mekan</b>
+        <button onclick="toggleTheme()">🌙</button>
+    </div>
 
-<div class="layout">
-    
-    <nav class="sidebar">
-        <div class="logo">Mekan</div>
-        <a href="/" class="nav-item {% if page == 'home' %}active{% endif %}">🏠 Anasayfa</a>
-        <a href="/notifications" class="nav-item {% if page == 'notifications' %}active{% endif %}">
-            🔔 Bildirimler <span class="badge" id="notifBadge" style="display:{% if unread_notifs > 0 %}flex{% else %}none{% endif %};">{{ unread_notifs }}</span>
-        </a>
-        <a href="/messages_page" class="nav-item {% if page in ['messages', 'chat'] %}active{% endif %}">💬 Mesajlar</a>
-        <a href="/bookmarks" class="nav-item {% if page == 'bookmarks' %}active{% endif %}">🔖 Kaydedilenler</a>
-        <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' and profile_user['username'] == current_user %}active{% endif %}">👤 Profilim</a>
-        
-        <button class="btn-black" style="width:90%; padding:15px; margin-top:15px; border-radius:30px;" onclick="document.getElementById('postInput').focus()">Gönder</button>
-        
-        <div style="margin-top: auto;">
-            <button onclick="toggleTheme()" style="width:100%; padding:10px; border-radius:30px; margin-bottom:15px; font-weight:bold; border:1px solid var(--border); color:var(--text-main);">🌙 Tema Değiştir</button>
-            <div style="display:flex; align-items:center; gap:10px; padding:10px; border-radius:30px; transition:0.2s;">
-                <div class="avatar">{{ current_user[0].upper() }}</div>
-                <div style="flex:1; min-width:0;">
-                    <div style="font-weight:bold; display:flex; align-items:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                        {{ current_user }}
-                        {% if current_user_verified == 1 %}
-                        <svg viewBox="0 0 24 24" class="svg-verified"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>
-                        {% endif %}
-                    </div>
-                    <div style="font-size:13px; color:var(--text-light);">@{{ current_user }}</div>
-                </div>
-                <a href="/logout" style="color:var(--text-main); font-size:20px; padding:5px;">🚪</a>
-            </div>
-        </div>
-    </nav>
-
-    <main class="main">
+    <div class="main-container">
         {% if page == "home" %}
-        <div class="header">
-            <span>Anasayfa</span>
-        </div>
-        
-        <div class="stories-container">
-            <div class="story-circle" onclick="openStoryInput()" style="border-color: var(--border);">
-                <div class="story-avatar" style="background:var(--primary); color:var(--bg);">+</div>
+            <div class="stories">
+                <div class="story" onclick="document.getElementById('storyModal').style.display='flex'">
+                    <div class="story-img" style="border-style: dashed; color: var(--blue)">+</div>
+                    <div>Sen</div>
+                </div>
+                {% for s in stories %}
+                <div class="story" onclick="alert('{{s.content}}')">
+                    <div class="story-img">{{s.author[0].upper()}}</div>
+                    <div style="overflow:hidden; text-overflow:ellipsis">{{s.author}}</div>
+                </div>
+                {% endfor %}
             </div>
-            {% for s in stories %}
-            <div class="story-circle" onclick="viewStory('{{ s['author'] }}', '{{ s['content'] }}')">
-                <div class="story-avatar">{{ s['author'][0].upper() }}</div>
-            </div>
-            {% endfor %}
-        </div>
 
-        <div class="compose">
-            <div class="avatar">{{ current_user[0].upper() }}</div>
-            <div style="flex:1;">
-                <textarea id="postInput" placeholder="Neler oluyor? (#trend veya @kullanici yazabilirsin)" style="width:100%; resize:none; font-size:20px; border:none;"></textarea>
-                <div style="text-align:right; border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
-                    <button class="btn-black" style="width:auto; padding:8px 20px; border-radius:30px;" onclick="sendPost()">Paylaş</button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="feed">
-            {% for post in posts %}
             <div class="post">
-                <a href="/profile/{{ post[1] }}"><div class="avatar">{{ post[1][0].upper() }}</div></a>
-                <div style="flex: 1; min-width: 0;">
-                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
-                        <b style="font-size: 15px;"><a href="/profile/{{ post[1] }}">{{ post[1] }}</a></b>
-                        {% if post[9] == 1 %}
-                        <svg viewBox="0 0 24 24" class="svg-verified"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>
-                        {% endif %}
-                        <span class="mood-tag">{{ post[10] }}</span>
-                        <span class="timestamp" data-time="{{ post[3] }}" style="color:var(--text-light); font-size:14px; margin-left:auto;"></span>
-                    </div>
-                    
-                    <div class="raw-content" style="font-size: 15px; line-height: 1.5; margin-bottom: 5px;">{{ post[2] }}</div>
-                    {% if post[2]|length > 150 %}<div class="read-time">Tahmini okuma: 1 dk</div>{% endif %}
-                    
-                    <div class="post-actions">
-                        <div class="action" onclick="actionPost('like', {{ post[0] }})">❤️ <span id="l-{{post[0]}}">{{ post[4] }}</span></div>
-                        <div class="action" onclick="actionPost('retweet', {{ post[0] }})">🔄 <span id="r-{{post[0]}}">{{ post[5] }}</span></div>
-                        <div class="action" onclick="actionPost('bookmark', {{ post[0] }})" title="Kaydet">🔖</div>
-                        <div class="action" onclick="copyLink('{{ post[0] }}')" title="Linki Kopyala">🔗</div>
-                        {% if current_user != post[1] %}
-                        <div class="action" onclick="openChatPanel('{{ post[1] }}')">💬 DM</div>
-                        {% endif %}
-                        {% if current_user == post[1] or is_admin %}
-                        <div class="action" style="color:#ef4444;" onclick="deletePost({{ post[0] }})">🗑️</div>
-                        {% endif %}
-                    </div>
+                <div class="avatar">{{current_user[0].upper()}}</div>
+                <div class="post-content">
+                    <textarea id="postInput" placeholder="Neler oluyor?" style="width:100%; font-size:18px; border:none; resize:none;"></textarea>
+                    <div style="text-align:right; margin-top:10px;"><button class="btn-black" style="padding:8px 20px; border-radius:20px; width:auto;" onclick="sendPost()">Paylaş</button></div>
                 </div>
             </div>
-            {% endfor %}
-        </div>
+
+            <div id="feed">
+                {% for post in posts %}
+                <div class="post">
+                    <div class="avatar">{{post.author[0].upper()}}</div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <b>{{post.author}}</b> {% if post.is_verified %}<svg viewBox="0 0 24 24" class="verified-svg"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"></path></svg>{% endif %} 
+                            <span style="color:var(--gray)">· {{post.created_at}}</span>
+                        </div>
+                        <div class="post-text raw-text">{{post.content}}</div>
+                        <div class="post-actions">
+                            <button onclick="action('like', {{post.id}})">❤️ {{post.likes_count}}</button>
+                            <button onclick="openChat('{{post.author}}')">💬 DM</button>
+                            <button onclick="copyUrl({{post.id}})">🔗</button>
+                            {% if is_admin or current_user == post.author %}<button onclick="action('delete', {{post.id}})">🗑️</button>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         {% endif %}
 
         {% if page == "profile" %}
-        <div class="header">
-            <a href="/" style="margin-right:20px;">←</a> 
-            <span style="font-weight:800; font-size:20px;">{{ profile_user['username'] }}</span>
-        </div>
-        
-        <div style="height: 150px; background: linear-gradient(135deg, var(--text-light) 0%, var(--primary) 100%); width: 100%;"></div>
-        
-        <div style="padding: 20px; border-bottom: 1px solid var(--border); position: relative;">
-            <div class="avatar" style="width:120px; height:120px; font-size:40px; position:absolute; top:-60px; border:4px solid var(--surface);">{{ profile_user['username'][0].upper() }}</div>
-            
-            <div style="display:flex; justify-content:flex-end; margin-bottom: 20px;">
-                {% if current_user != profile_user['username'] %}
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn-black" style="width:auto; padding:8px 20px; background:transparent; color:var(--text-main); border:1px solid var(--border);" onclick="openChatPanel('{{ profile_user['username'] }}')">✉️ Mesaj</button>
-                        <button class="btn-black" style="width:auto; padding:8px 20px;" onclick="toggleFollow('{{ profile_user['username'] }}')">
-                            {% if is_following %}Takibi Bırak{% else %}Takip Et{% endif %}
-                        </button>
-                    </div>
-                {% endif %}
-            </div>
-            
-            <div style="margin-top:15px;">
-                <h2 style="display:flex; align-items:center; gap:5px;">
-                    {{ profile_user['username'] }}
-                    {% if profile_user['is_verified'] == 1 %}
-                    <svg viewBox="0 0 24 24" class="svg-verified" style="width:22px; height:22px;"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>
-                    {% endif %}
-                    {% if "2024" in profile_user['created_at']|string or "2026" in profile_user['created_at']|string %}<span class="badge-pro">İlk 100</span>{% endif %}
-                </h2>
-                <div style="color:var(--text-light);">@{{ profile_user['username'] }}</div>
-                <p style="margin: 15px 0; font-size:15px;">{{ profile_user['bio'] }}</p>
-                
-                <div style="display:flex; gap:20px; color:var(--text-light); font-size:14px; flex-wrap:wrap;">
-                    <div><b style="color:var(--text-main);">{{ following }}</b> Takip Edilen</div>
-                    <div><b style="color:var(--text-main);">{{ followers }}</b> Takipçi</div>
-                    <div>🔥 <b style="color:var(--text-main);">{{ profile_user['streak'] }}</b> Günlük Seri</div>
-                    {% if current_user == profile_user['username'] %}
-                    <div>👀 <b style="color:var(--text-main);">{{ profile_user['profile_views'] }}</b> Ziyaret</div>
-                    {% endif %}
-                </div>
-                
-                {% if current_user == profile_user['username'] %}
-                <form action="/api/update_mood" method="POST" style="margin-top:15px; display:flex; gap:10px;">
-                    <select name="mood" style="border:1px solid var(--border); border-radius:10px; padding:5px; color:var(--text-main);">
-                        <option value="✨ Yeni">✨ Yeni</option>
-                        <option value="📚 Çalışıyor">📚 Çalışıyor</option>
-                        <option value="☕ Kahve Molası">☕ Kahve Molası</option>
-                        <option value="🎧 Müzik">🎧 Müzik</option>
-                        <option value="🚀 Kodluyor">🚀 Kodluyor</option>
-                    </select>
-                    <button class="btn-black" style="width:auto; padding:5px 15px; font-size:13px; border-radius:10px;">Durum Seç</button>
-                </form>
-                {% else %}
-                <div style="margin-top:15px;"><span class="mood-tag" style="margin-left:0; font-size:14px;">Durum: {{ profile_user['mood'] }}</span></div>
-                {% endif %}
-            </div>
-        </div>
-        
-        {% for post in posts %}
-        <div class="post">
-            <div class="avatar">{{ post[1][0].upper() }}</div>
-            <div style="flex: 1; min-width: 0;">
-                <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
-                    <b style="font-size: 15px;">{{ post[1] }}</b>
-                    <span class="timestamp" data-time="{{ post[3] }}" style="color:var(--text-light); font-size:14px; margin-left:auto;"></span>
-                </div>
-                <div class="raw-content" style="font-size: 15px; margin-bottom: 10px;">{{ post[2] }}</div>
-                <div class="post-actions">
-                    <div class="action" onclick="actionPost('like', {{ post[0] }})">❤️ {{ post[4] }}</div>
-                    {% if current_user == post[1] or is_admin %}<div class="action" style="color:#ef4444;" onclick="deletePost({{ post[0] }})">🗑️</div>{% endif %}
+            <div style="padding:20px; text-align:center;">
+                <div class="avatar" style="width:100px; height:100px; font-size:40px; margin:0 auto 15px;">{{profile_user.username[0].upper()}}</div>
+                <h2>{{profile_user.username}} {% if profile_user.is_verified %}<svg viewBox="0 0 24 24" class="verified-svg"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z"></path></svg>{% endif %}</h2>
+                <p style="color:var(--gray); margin:10px 0;">{{profile_user.bio}}</p>
+                <div style="display:flex; justify-content:center; gap:20px; font-size:14px;">
+                    <span><b>{{followers}}</b> Takipçi</span>
+                    <span>🔥 <b>{{profile_user.streak}}</b> Seri</span>
+                    <span>👀 <b>{{profile_user.profile_views}}</b> Ziyaret</span>
                 </div>
             </div>
-        </div>
-        {% endfor %}
         {% endif %}
-
-        {% if page == "messages" %}
-        <div class="header">Mesajlar</div>
-        {% if not chats %}<p style="text-align:center; padding:40px; color:var(--text-light);">Sohbetin yok.</p>{% endif %}
-        {% for chat in chats %}
-        <div class="post" style="align-items:center;" onclick="openChatPanel('{{ chat['partner'] }}')">
-            <div class="avatar">{{ chat['partner'][0].upper() }}</div>
-            <div style="font-weight:bold; font-size:18px; display:flex; align-items:center;">
-                {{ chat['partner'] }}
-                {% if chat['is_verified'] == 1 %}<svg viewBox="0 0 24 24" class="svg-verified" style="margin-left:5px;"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>{% endif %}
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-
-        {% if page == "notifications" %}
-        <div class="header">Bildirimler</div>
-        {% for n in notifs %}
-        <div class="post" style="align-items:center;">
-            <div style="font-size:24px;">{% if n['type']=='like' %}❤️{% elif n['type']=='follow' %}👤{% else %}✉️{% endif %}</div>
-            <div>
-                <b><a href="/profile/{{ n['sender'] }}">{{ n['sender'] }}</a></b> 
-                {% if n['type']=='like' %} gönderini beğendi.
-                {% elif n['type']=='follow' %} seni takip etmeye başladı.
-                {% else %} sana mesaj gönderdi.{% endif %}
-                <div class="timestamp" data-time="{{ n['created_at'] }}" style="font-size:12px; color:var(--text-light); margin-top:5px;"></div>
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-        
-        {% if page == "bookmarks" %}
-        <div class="header">Kaydedilenler</div>
-        {% for post in posts %}
-        <div class="post">
-            <div class="avatar">{{ post[1][0].upper() }}</div>
-            <div class="post-body" style="flex:1;">
-                <div><b>{{ post[1] }}</b></div>
-                <div class="raw-content">{{ post[2] }}</div>
-                <div style="cursor:pointer; color:var(--text-light); margin-top:10px;" onclick="actionPost('bookmark', {{ post[0] }}); window.location.reload();">🔖 Kaydetmeyi Bırak</div>
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-    </main>
-
-    <aside class="right-bar">
-        <input type="text" class="search-box" id="searchInput" placeholder="Kullanıcı Ara..." oninput="searchUser()">
-        <div class="search-results" id="searchResults"></div>
-
-        <div class="widget">
-            <div class="widget-header" onclick="toggleWidget('w-yeni')">🌟 Yeni Katılanlar <span style="font-size:12px;">▼</span></div>
-            <div class="widget-content open" id="w-yeni">
-                {% for u in new_users %}
-                <a href="/profile/{{ u['username'] }}" class="user-row">
-                    <div class="avatar" style="width:36px;height:36px;font-size:16px;">{{ u['username'][0].upper() }}</div>
-                    <div style="flex:1;">
-                        <div style="font-weight:bold; font-size:15px; display:flex; align-items:center;">
-                            {{ u['username'] }}
-                            {% if u['is_verified'] == 1 %}<svg viewBox="0 0 24 24" class="svg-verified" style="margin-left:4px;"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>{% endif %}
-                        </div>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="widget">
-            <div class="widget-header" onclick="toggleWidget('w-liderlik')">🏆 Liderlik Tablosu <span style="font-size:12px;">▼</span></div>
-            <div class="widget-content open" id="w-liderlik">
-                {% for u in top_users %}
-                <a href="/profile/{{ u['username'] }}" class="user-row">
-                    <div class="avatar" style="width:36px;height:36px;font-size:16px;">{{ u['username'][0].upper() }}</div>
-                    <div style="flex:1;">
-                        <div style="font-weight:bold; font-size:15px; display:flex; align-items:center;">
-                            {{ u['username'] }}
-                            {% if u['is_verified'] == 1 %}<svg viewBox="0 0 24 24" class="svg-verified" style="margin-left:4px;"><g><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.918-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.337 2.25c-.416-.165-.866-.25-1.336-.25-2.21 0-3.918 1.792-3.918 4 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.46.758 2.75 1.887 3.42-.08.35-.127.71-.127 1.08 0 2.21 1.71 4 3.918 4 .542 0 1.058-.12 1.526-.34.57 1.23 1.8 2.08 3.23 2.08s2.66-.85 3.23-2.08c.468.22 1.984.34 1.526.34 2.21 0 3.918-1.79 3.918-4 0-.37-.048-.73-.127-1.08 1.128-.67 1.887-1.96 1.887-3.42zm-10.15 4.39l-3.39-3.26 1.34-1.39 1.99 1.92 4.41-4.7 1.39 1.3-5.74 6.13z" fill="currentColor"></path></g></svg>{% endif %}
-                        </div>
-                        <div style="font-size:13px; color:var(--text-light);">{{ u['followers'] }} Takipçi</div>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="widget">
-            <div class="widget-header" onclick="toggleWidget('w-trendler')">🔥 Trendler <span style="font-size:12px;">▼</span></div>
-            <div class="widget-content open" id="w-trendler">
-                {% for t in trends %}
-                <div style="margin-bottom:12px;"><span class="hashtag">#{{ t['tag'] }}</span> <span style="color:var(--text-light); font-size:13px; float:right;">{{ t['count'] }} Post</span></div>
-                {% endfor %}
-            </div>
-        </div>
-    </aside>
-</div>
-
-<div class="story-modal" id="storyModal">
-    <div style="position:absolute; top:20px; right:20px; font-size:30px; cursor:pointer;" onclick="closeStory()">✖</div>
-    <textarea id="storyInput" placeholder="Hikayeni yaz..." style="width:80%; height:150px; font-size:30px; color:white; text-align:center; resize:none;"></textarea>
-    <button class="btn-black" style="width:auto; padding:15px 40px; margin-top:20px; background:white; color:black;" onclick="sendStory()">Hikaye Ekle</button>
-</div>
-
-<div class="story-modal" id="viewStoryModal" onclick="closeStory()">
-    <div style="font-weight:bold; position:absolute; top:40px; font-size:20px;" id="vsAuthor"></div>
-    <div class="story-content" id="vsContent"></div>
-</div>
-
-<div class="chat-panel" id="chatPanel">
-    <div class="chat-header">
-        <div style="cursor: pointer; padding: 5px; font-size: 20px;" onclick="closeChatPanel()">✖</div>
-        <div id="chatTitle"></div>
     </div>
-    <div class="chat-messages" id="chatBox"></div>
-    <div class="chat-input-area">
-        <div class="typing-indicator" id="typingIndicator"></div>
-        <div class="input-row">
-            <input type="text" id="msgInput" class="chat-input" placeholder="Bir mesaj yaz..." onkeypress="if(event.key==='Enter') sendMsg()" oninput="simulateTyping()">
-            <button class="btn-black" style="width:auto; padding:10px 20px;" onclick="sendMsg()">Gönder</button>
+
+    <div class="bottom-nav">
+        <a href="/" class="nav-icon">🏠</a>
+        <a href="/messages_page" class="nav-icon">💬</a>
+        <a href="/notifications" class="nav-icon">🔔{% if unread_notifs > 0 %}<span class="badge">{{unread_notifs}}</span>{% endif %}</a>
+        <a href="/profile/{{current_user}}" class="nav-icon">👤</a>
+    </div>
+
+    <div class="side-panel" id="chatPanel">
+        <div class="panel-header"><button onclick="togglePanel('chatPanel')">←</button> <span id="chatTitle">Sohbet</span></div>
+        <div class="chat-msgs" id="chatBox"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Mesaj yaz..." onkeypress="if(event.key==='Enter') sendChat()">
+            <button onclick="sendChat()" style="color:var(--blue); font-weight:bold;">Gönder</button>
         </div>
     </div>
-</div>
 
-<nav class="mobile-nav">
-    <a href="/" class="mobile-item {% if page == 'home' %}active{% endif %}">🏠</a>
-    <a href="/notifications" class="mobile-item {% if page == 'notifications' %}active{% endif %}">🔔<span style="position:absolute; top:-5px; right:-10px; background:#ef4444; color:white; border-radius:50%; width:16px; height:16px; font-size:10px; display:{% if unread_notifs > 0 %}flex{% else %}none{% endif %}; align-items:center; justify-content:center;" id="notifBadgeMobile">{{ unread_notifs }}</span></a>
-    <a href="/messages_page" class="mobile-item {% if page in ['messages', 'chat'] %}active{% endif %}">💬</a>
-    <a href="/profile/{{ current_user }}" class="mobile-item {% if page == 'profile' %}active{% endif %}">👤</a>
-</nav>
+    <div class="side-panel" id="newUsersPanel" style="right: auto; left: -100%; transition: left 0.3s;">
+        <div class="panel-header"><span>🌟 Yeni Katılanlar</span> <button onclick="togglePanel('newUsersPanel')" style="margin-left:auto">✕</button></div>
+        <div style="padding:15px;">
+            {% for u in new_users %}
+                <a href="/profile/{{u.username}}" class="post" style="align-items:center; border:none;">
+                    <div class="avatar">{{u.username[0].upper()}}</div>
+                    <b>{{u.username}}</b>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
 
-<script>
-    // --- YARDIMCI FONKSİYONLAR ---
-    function toggleWidget(id) { document.getElementById(id).classList.toggle('open'); }
-    
-    function copyLink(id) {
-        navigator.clipboard.writeText(window.location.origin + "/#post-" + id);
-        alert("Gönderi linki kopyalandı! 🔗");
-    }
+    <div class="modal" id="storyModal">
+        <div class="modal-content">
+            <h3>Yeni Hikaye</h3>
+            <textarea id="storyContent" style="width:100%; height:100px; margin-top:15px; background:var(--bg); color:var(--text); padding:10px; border:1px solid var(--border)"></textarea>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+                <button onclick="document.getElementById('storyModal').style.display='none'">İptal</button>
+                <button onclick="postStory()" class="btn-black" style="width:auto; padding:8px 20px;">Paylaş</button>
+            </div>
+        </div>
+    </div>
 
-    function formatTime(dateStr) {
-        if(!dateStr) return '';
-        const postDate = new Date(dateStr.replace(' ', 'T'));
-        const diff = Math.floor((new Date() - postDate) / 1000);
-        if(diff < 60) return "Az önce";
-        if(diff < 3600) return Math.floor(diff/60) + " dk önce";
-        if(diff < 86400) return Math.floor(diff/3600) + " saat önce";
-        return Math.floor(diff/86400) + " gün önce";
-    }
+    <script>
+        let chatPartner = "";
+        let chatInt = null;
 
-    function formatContent(text) {
-        text = text.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
-        text = text.replace(/@(\w+)/g, '<a href="/profile/$1" style="color:var(--accent); font-weight:bold;">@$1</a>');
-        text = text.replace(/(https?:\/\/[^\s]+?\.(?:jpg|jpeg|png|gif))/ig, '<br><img src="$1" class="post-img"><br>');
-        return text;
-    }
-    
-    document.querySelectorAll('.timestamp').forEach(el => el.textContent = formatTime(el.getAttribute('data-time')));
-    document.querySelectorAll('.raw-content').forEach(el => el.innerHTML = formatContent(el.textContent));
-
-    async function searchUser() {
-        const q = document.getElementById('searchInput').value.trim();
-        const box = document.getElementById('searchResults');
-        if(q.length < 2) { box.innerHTML = ''; return; }
-        const res = await fetch(`/api/search?q=${q}`);
-        const users = await res.json();
-        box.innerHTML = '';
-        users.forEach(u => box.innerHTML += `<a href="/profile/${u}" class="search-item">🔍 ${u}</a>`);
-    }
-
-    // --- STORY ---
-    function openStoryInput() { document.getElementById('storyModal').classList.add('active'); }
-    function closeStory() { document.getElementById('storyModal').classList.remove('active'); document.getElementById('viewStoryModal').classList.remove('active'); }
-    function viewStory(author, content) {
-        document.getElementById('vsAuthor').textContent = author;
-        document.getElementById('vsContent').textContent = content;
-        document.getElementById('viewStoryModal').classList.add('active');
-    }
-    async function sendStory() {
-        const val = document.getElementById('storyInput').value.trim();
-        if(!val) return;
-        const fd = new FormData(); fd.append("content", val);
-        const res = await fetch("/api/post_story", { method: "POST", body: fd });
-        if(res.ok) window.location.reload();
-    }
-
-    // --- API İŞLEMLERİ ---
-    async function sendPost() {
-        const val = document.getElementById('postInput').value.trim();
-        if(!val) return;
-        const fd = new FormData(); fd.append("content", val);
-        const res = await fetch("/api/post", { method: "POST", body: fd });
-        if(res.ok) window.location.reload();
-    }
-
-    async function actionPost(type, id) {
-        const res = await fetch(`/api/action/${type}/${id}`, {method:"POST"});
-        const data = await res.json();
-        if(data.success && type !== 'bookmark') {
-            const prefix = type === 'like' ? 'l' : 'r';
-            document.getElementById(`${prefix}-${id}`).textContent = data.count;
+        function togglePanel(id) {
+            const p = document.getElementById(id);
+            if(id === 'newUsersPanel') p.style.left = p.style.left === '0px' ? '-100%' : '0px';
+            else p.classList.toggle('active');
+            if(!p.classList.contains('active')) clearInterval(chatInt);
         }
-        if(type === 'bookmark') alert("Kaydedilenlere eklendi/çıkarıldı!");
-    }
 
-    async function deletePost(id) {
-        if(!confirm("Silinsin mi?")) return;
-        await fetch(`/api/delete/${id}`, {method:"POST"}); window.location.reload();
-    }
-    
-    async function toggleFollow(username) {
-        await fetch(`/api/follow/${username}`, {method:"POST"}); window.location.reload();
-    }
+        async function openChat(name) {
+            chatPartner = name;
+            document.getElementById('chatTitle').innerText = name;
+            document.getElementById('chatPanel').classList.add('active');
+            loadMsgs();
+            chatInt = setInterval(loadMsgs, 2000);
+        }
 
-    // --- KUSURSUZ DM (FLEXBOX) ---
-    const chatPanel = document.getElementById('chatPanel');
-    const chatBox = document.getElementById('chatBox');
-    let chatInterval = null;
-    let currentPartner = "";
-    let lastMsgCount = 0;
+        async function loadMsgs() {
+            const res = await fetch(`/api/chat/${chatPartner}`);
+            const data = await res.json();
+            const box = document.getElementById('chatBox');
+            box.innerHTML = data.map(m => `
+                <div class="bubble ${m.sender === '{{current_user}}' ? 'me' : 'them'}">
+                    ${m.content}
+                    <div style="font-size:9px; text-align:right; opacity:0.7">${m.created_at.split(' ')[1]} ${m.sender === '{{current_user}}' && m.is_read ? '✓✓' : ''}</div>
+                </div>
+            `).join('');
+            box.scrollTop = box.scrollHeight;
+        }
 
-    function openChatPanel(partner) {
-        currentPartner = partner;
-        document.getElementById('chatTitle').innerHTML = "<b>" + partner + "</b> ile sohbet";
-        chatPanel.classList.add('open');
-        lastMsgCount = 0;
-        chatBox.innerHTML = '<div style="text-align:center; margin-top:20px; color:var(--text-light);">Yükleniyor...</div>';
-        
-        loadMessages();
-        chatInterval = setInterval(loadMessages, 1500);
-    }
+        async function sendChat() {
+            const inp = document.getElementById('chatInput');
+            const fd = new FormData(); fd.append('content', inp.value);
+            await fetch(`/api/chat/${chatPartner}`, {method:'POST', body:fd});
+            inp.value = ''; loadMsgs();
+        }
 
-    function closeChatPanel() {
-        chatPanel.classList.remove('open');
-        clearInterval(chatInterval);
-    }
+        async function sendPost() {
+            const fd = new FormData(); fd.append('content', document.getElementById('postInput').value);
+            await fetch('/api/post', {method:'POST', body:fd}); location.reload();
+        }
 
-    let typingTimeout;
-    function simulateTyping() {
-        document.getElementById('typingIndicator').textContent = "Yazıyorsun...";
-        clearTimeout(typingTimeout);
-        typingTimeout = setTimeout(() => document.getElementById('typingIndicator').textContent = "", 1500);
-    }
+        async function postStory() {
+            const fd = new FormData(); fd.append('content', document.getElementById('storyContent').value);
+            await fetch('/api/post_story', {method:'POST', body:fd}); location.reload();
+        }
 
-    async function loadMessages() {
-        if(!currentPartner) return;
-        const res = await fetch(`/api/chat/${currentPartner}`);
-        const msgs = await res.json();
+        async function action(type, id) {
+            await fetch(`/api/action/${type}/${id}`, {method:'POST'});
+            if(type === 'delete') location.reload();
+            else location.reload();
+        }
 
-        if (msgs.length !== lastMsgCount) {
-            chatBox.innerHTML = '';
-            if(msgs.length === 0) chatBox.innerHTML = '<div style="text-align:center; margin-top:20px; color:var(--text-light);">İlk mesajı sen at!</div>';
-            
-            msgs.forEach(m => {
-                const isMe = m.sender === '{{ current_user }}';
-                const cls = isMe ? 'bubble-me' : 'bubble-them';
-                const timeOnly = m.created_at.split(' ')[1].substring(0, 5);
-                const ticks = isMe ? (m.is_read ? '<span style="color:#a7f3d0; margin-left:5px; font-weight:bold;">✓✓</span>' : '<span style="margin-left:5px;">✓</span>') : '';
-                
-                chatBox.innerHTML += `
-                    <div class="chat-bubble ${cls}">
-                        ${m.content}
-                        <div style="font-size:11px; margin-top:6px; opacity:0.8; text-align:right;">${timeOnly} ${ticks}</div>
-                    </div>
-                `;
+        function formatContent() {
+            document.querySelectorAll('.raw-text').forEach(el => {
+                let t = el.innerText;
+                t = t.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
+                t = t.replace(/@(\w+)/g, '<a href="/profile/$1" style="color:var(--blue); font-weight:bold;">@$1</a>');
+                t = t.replace(/(https?:\/\/[^\s]+?\.(?:jpg|jpeg|png|gif))/ig, '<img src="$1" class="raw-img">');
+                el.innerHTML = t;
             });
-            chatBox.scrollTop = chatBox.scrollHeight;
-            lastMsgCount = msgs.length;
         }
-    }
+        formatContent();
 
-    async function sendMsg() {
-        const val = document.getElementById('msgInput').value.trim();
-        if(!val) return;
-        const fd = new FormData(); fd.append("content", val);
-        await fetch(`/api/chat/${currentPartner}`, { method: "POST", body: fd });
-        document.getElementById('msgInput').value = '';
-        document.getElementById('typingIndicator').textContent = "";
-        loadMessages(); 
-    }
-
-    // --- CANLI BİLDİRİM KONTROLÜ ---
-    setInterval(async () => {
-        const res = await fetch('/api/check_notifications');
-        const data = await res.json();
-        ['notifBadge', 'notifBadgeMobile'].forEach(id => {
-            const badge = document.getElementById(id);
-            if(badge) {
-                if(data.count > 0) { badge.style.display = 'flex'; badge.textContent = data.count; } 
-                else { badge.style.display = 'none'; }
-            }
-        });
-    }, 3000); 
-
-    function toggleTheme() {
-        const html = document.documentElement;
-        const nextTheme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        html.setAttribute('data-theme', nextTheme);
-        localStorage.setItem('theme', nextTheme);
-    }
-    if(localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
-</script>
+        function toggleTheme() {
+            const b = document.body;
+            const theme = b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            b.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+        if(localStorage.getItem('theme')) document.body.setAttribute('data-theme', localStorage.getItem('theme'));
+        
+        function copyUrl(id) { navigator.clipboard.writeText(window.location.origin + "#post-" + id); alert("Kopyalandı!"); }
+    </script>
 {% endif %}
 </body>
 </html>
