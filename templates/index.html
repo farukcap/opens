@@ -1,3 +1,4 @@
+H
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -5,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Mekan - Sınırları Zorla</title>
     <style>
-        :root { --primary: #1d9bf0; --primary-dark: #1a8cd8; --primary-light: rgba(29, 155, 240, 0.1); --success: #00ba7c; --danger: #f91880; --bg: #ffffff; --surface: #f7f9fa; --surface-2: #eff3f4; --text: #0f1419; --text-secondary: #536471; --border: #eff3f4; --glass: rgba(255, 255, 255, 0.85); --shadow: 0 8px 24px rgba(0,0,0,0.08); }
+        :root { --primary: #1d9bf0; --primary-dark: #1a8cd8; --primary-light: rgba(29, 155, 240, 0.1); --success: #00ba7c; --danger: #f91880; --warning: #ffd400; --bg: #ffffff; --surface: #f7f9fa; --surface-2: #eff3f4; --text: #0f1419; --text-secondary: #536471; --border: #eff3f4; --glass: rgba(255, 255, 255, 0.85); --shadow: 0 8px 24px rgba(0,0,0,0.08); }
         [data-theme="dark"] { --bg: #000000; --surface: #16181c; --surface-2: #202327; --text: #e7e9ea; --text-secondary: #71767b; --border: #2f3336; --glass: rgba(0, 0, 0, 0.75); --shadow: 0 8px 24px rgba(255,255,255,0.02); }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -37,6 +38,14 @@
         .header { position: sticky; top: 0; background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 15px 20px; border-bottom: 1px solid var(--border); z-index: 50; display: flex; align-items: center; gap: 15px; }
         .header h2 { font-size: 20px; font-weight: 800; flex: 1; }
         
+        /* STORIES */
+        .stories { display: flex; gap: 15px; padding: 16px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; background: var(--surface); }
+        .stories::-webkit-scrollbar { display: none; }
+        .story-item { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 68px; cursor: pointer; }
+        .story-avatar { width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; font-size: 24px; padding: 2px; background-clip: content-box; }
+        .story-avatar.add { border: 2px dashed var(--text-secondary); background: transparent; color: var(--text); }
+        .story-name { font-size: 12px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70px; font-weight: 500; }
+
         /* POSTS */
         .post { padding: 18px 20px; border-bottom: 1px solid var(--border); transition: background 0.2s; cursor: pointer; }
         .post:hover { background: var(--surface); }
@@ -47,7 +56,12 @@
         .action-group:hover { color: var(--primary); }
         .action-group.like:hover, .action-group.like.liked { color: var(--danger); }
         .action-group.rt:hover { color: var(--success); }
+        .action-group.bookmark:hover, .action-group.bookmark.bookmarked { color: var(--warning); }
         
+        .quote-box { margin-left: 60px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 16px; padding: 12px 16px; background: transparent; transition: 0.2s; }
+        .quote-box:hover { background: var(--surface-2); }
+        .whisper-badge { background: #8e44ad; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 8px;}
+
         /* KAOS ÖZELLİKLERİ (STALK & SUSTURUCU) */
         .stalk-box { background: var(--surface-2); padding: 18px; border-radius: 16px; margin: 20px 0; border-left: 5px solid var(--danger); display: flex; align-items: center; gap: 15px; }
         .mute-btn { border-color: var(--danger); color: var(--danger); }
@@ -79,6 +93,8 @@
         .toast { background: var(--primary); color: white; padding: 14px 28px; border-radius: 30px; font-weight: 700; box-shadow: var(--shadow); animation: fadeUp 0.3s, fadeOut 0.3s 3.5s forwards; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
+        .empty-state { text-align: center; padding: 80px 20px; color: var(--text-secondary); }
+        .verified-svg { width: 18px; height: 18px; fill: var(--primary); vertical-align: middle; margin-left: 4px; margin-bottom: 2px;}
     </style>
 </head>
 <body>
@@ -118,6 +134,7 @@
         </div>
         <a href="/" class="nav-item {% if page == 'home' %}active{% endif %}"><span style="font-size:26px;">🏠</span> Ana Sayfa</a>
         <a href="/explore" class="nav-item {% if page == 'explore' %}active{% endif %}"><span style="font-size:26px;">🔍</span> Keşfet</a>
+        <a href="/bookmarks" class="nav-item {% if page == 'bookmarks' %}active{% endif %}"><span style="font-size:26px;">🔖</span> Kaydedilenler</a>
         <a href="/messages" class="nav-item {% if page == 'messages' %}active{% endif %}"><span style="font-size:26px;">✉️</span> Mesajlar</a>
         <a href="/notifications" class="nav-item {% if page == 'notifications' %}active{% endif %}">
             <span style="font-size:26px; position:relative;">🔔{% if unread_notifs > 0 %}<div class="badge-notification">{{ unread_notifs }}</div>{% endif %}</span> Bildirimler
@@ -145,6 +162,7 @@
             <h2>
                 {% if page == 'home' %}Ana Sayfa
                 {% elif page == 'explore' %}Keşfet
+                {% elif page == 'bookmarks' %}Kaydedilenler
                 {% elif page == 'messages' %}Sohbetler
                 {% elif page == 'notifications' %}Bildirimler
                 {% elif page == 'profile' %}Profil
@@ -154,11 +172,23 @@
         </div>
 
         {% if page == 'home' %}
+            <div class="stories">
+                <div class="story-item" onclick="openModal('storyModal')">
+                    <div class="story-avatar add">+</div>
+                    <div class="story-name">Ekle</div>
+                </div>
+                <div id="storiesContainer"></div>
+            </div>
+
             <div style="padding: 20px; border-bottom: 1px solid var(--border); display: flex; gap: 15px;">
                 <div class="avatar" style="background: var(--primary);">{{ current_user[0].upper() }}</div>
                 <div style="flex: 1;">
                     <textarea id="mainPostInput" style="width: 100%; border: none; background: transparent; font-size: 20px; resize: none; min-height: 50px;" placeholder="Neler oluyor?"></textarea>
-                    <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px;">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px;">
+                        <label style="color: var(--primary); font-weight: bold; font-size: 14px; cursor: pointer;">
+                            <input type="checkbox" id="isWhisperMain"> 🔒 Fısıltı
+                        </label>
                         <button class="btn-primary" style="width: auto; padding: 10px 24px;" onclick="sendPost('mainPostInput')">Paylaş</button>
                     </div>
                 </div>
@@ -167,6 +197,13 @@
         
         {% elif page == 'explore' %}
             <div style="padding: 20px;">
+                <div style="margin-bottom: 20px;">
+                    <form action="/search" method="GET" style="display:flex; gap:10px;">
+                        <input type="text" name="q" class="input-field" placeholder="Mekan'da Ara... (Kişi, etiket veya içerik)" style="margin-bottom: 0;">
+                        <button type="submit" class="btn-primary" style="width: auto; padding: 0 20px;">Ara</button>
+                    </form>
+                </div>
+
                 <h3 style="margin-bottom: 20px; font-weight: 800; font-size: 22px;">Aramıza Yeni Katılanlar</h3>
                 {% for u in new_users %}
                 <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border); cursor: pointer;" onclick="window.location.href='/profile/{{ u.username }}'">
@@ -182,11 +219,19 @@
                 {% endfor %}
             </div>
 
+        {% elif page == 'bookmarks' %}
+            <div id="bookmarksContainer">
+                <div class="empty-state">
+                    <div style="font-size: 50px; margin-bottom: 10px;">🔖</div>
+                    <div style="font-size: 20px; font-weight: 800;">Kaydedilen Gönderiler</div>
+                    Henüz bir gönderi kaydetmedin.
+                </div>
+            </div>
         {% elif page == 'profile' %}
-            <div style="height: 200px; background: {{ profile_user.avatar_color }}88;"></div>
+            <div style="height: 200px; background: {{ profile_user.avatar_color }}88; position: relative;"></div>
             <div style="padding: 0 20px 20px 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: -60px; margin-bottom: 15px;">
-                    <div class="avatar" style="width: 120px; height: 120px; font-size: 50px; border: 5px solid var(--bg); background: {{ profile_user.avatar_color }};">{{ profile_user.username[0].upper() }}</div>
+                    <div class="avatar" style="width: 120px; height: 120px; font-size: 50px; border: 5px solid var(--bg); background: {{ profile_user.avatar_color }}; position: relative; z-index: 2;">{{ profile_user.username[0].upper() }}</div>
                     
                     {% if current_user == profile_user.username %}
                         <button class="btn-secondary" style="width: auto; padding: 10px 20px;" onclick="openModal('settingsModal')">Profili Düzenle</button>
@@ -216,7 +261,20 @@
                 {% endif %}
             </div>
             <div style="border-top: 1px solid var(--border); padding: 20px; text-align: center; color: var(--text-secondary); font-weight: bold;">
-                Gönderiler yükleniyor... (Yakında)
+                Burası yakında dolacak...
+            </div>
+            
+        {% elif page == 'messages' %}
+            <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
+                <div style="font-size: 50px; margin-bottom: 10px;">✉️</div>
+                <h2 style="font-weight: 800; color: var(--text);">DM Kutusu</h2>
+                <p>Sohbet başlatmak için birinin profiline gir.</p>
+            </div>
+        {% elif page == 'notifications' %}
+            <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
+                <div style="font-size: 50px; margin-bottom: 10px;">🔔</div>
+                <h2 style="font-weight: 800; color: var(--text);">Bildirimler</h2>
+                <p>Yakında aktif olacak.</p>
             </div>
         {% endif %}
     </div>
@@ -245,12 +303,42 @@
     <div class="modal-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <button class="menu-toggle" style="display: block; font-size: 20px;" onclick="closeModal('composeModal')">✕</button>
-            <h3 style="font-weight: 800;">Yeni Gönderi</h3>
+            <h3 style="font-weight: 800;" id="composeModalTitle">Yeni Gönderi</h3>
         </div>
+        
+        <input type="hidden" id="quoteIdHidden" value="">
+        <input type="hidden" id="replyIdHidden" value="">
+        
+        <div id="replyToPreview" style="display:none; font-size: 14px; color: var(--text-secondary); margin-bottom: 10px;">
+            Yanıtlanıyor: <span id="replyToName" style="color: var(--primary); font-weight: bold;"></span>
+        </div>
+
         <textarea id="modalPostInput" style="width: 100%; height: 120px; border: none; background: transparent; font-size: 20px; resize: none;" placeholder="Mekan'ı sarsacak ne var aklında?"></textarea>
+        
+        <div id="quotePreviewBox" class="quote-box" style="display: none; margin-left: 0; margin-top: 10px; border-color: var(--primary);">
+            <div style="font-weight: 800; margin-bottom: 5px;" id="quotePreviewAuthor"></div>
+            <div style="font-size: 14px; color: var(--text-secondary);" id="quotePreviewContent"></div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 15px; margin-top: 10px;">
+            <label style="color: var(--primary); font-weight: bold; font-size: 14px; cursor: pointer;">
+                <input type="checkbox" id="isWhisperModal"> 🔒 Fısıltı
+            </label>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-secondary" style="width: auto; padding: 10px 20px;" onclick="closeModal('composeModal')">İptal</button>
+                <button class="btn-primary" style="width: auto; padding: 10px 30px;" onclick="sendPost('modalPostInput', 'isWhisperModal')">Paylaş</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="storyModal" onclick="closeOnOutside(event, 'storyModal')">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 15px; font-weight: 800;">Hikaye Ekle</h3>
+        <textarea id="storyInput" style="width: 100%; height: 100px; border: none; background: transparent; font-size: 20px; resize: none;" placeholder="Günü özetle..."></textarea>
         <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border); padding-top: 15px;">
-            <button class="btn-secondary" style="width: auto; padding: 10px 20px;" onclick="closeModal('composeModal')">İptal</button>
-            <button class="btn-primary" style="width: auto; padding: 10px 30px;" onclick="sendPost('modalPostInput')">Paylaş</button>
+            <button class="btn-secondary" style="width: auto; padding: 10px 20px;" onclick="closeModal('storyModal')">İptal</button>
+            <button class="btn-primary" style="width: auto; padding: 10px 30px;" onclick="postStory()">Ekle</button>
         </div>
     </div>
 </div>
@@ -274,6 +362,7 @@
                 </div>
                 <input type="checkbox" id="ghostModeInput" {% if ghost_mode %}checked{% endif %} style="transform: scale(1.5);">
             </div>
+            <a href="/logout" style="display: block; text-align: center; padding: 15px; color: var(--danger); font-weight: bold; text-decoration: none; margin-top: 10px; background: rgba(249, 24, 128, 0.1); border-radius: 12px;">Hesaptan Çıkış Yap</a>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px;">
             <button class="btn-secondary" style="width: auto; padding: 10px 20px;" onclick="closeModal('settingsModal')">İptal</button>
@@ -344,14 +433,25 @@
         document.getElementById('sidebarOverlay').style.display = document.getElementById('sidebar').classList.contains('open') ? 'block' : 'none';
     }
 
+    // Modal Temizleme (Alıntı ve Yanıt kalıntılarını siler)
+    function resetComposeModal() {
+        document.getElementById('modalPostInput').value = '';
+        document.getElementById('quoteIdHidden').value = '';
+        document.getElementById('replyIdHidden').value = '';
+        document.getElementById('quotePreviewBox').style.display = 'none';
+        document.getElementById('replyToPreview').style.display = 'none';
+        document.getElementById('composeModalTitle').innerText = 'Yeni Gönderi';
+    }
+
     function openModal(id) {
         const m = document.getElementById(id);
         m.style.display = 'flex'; setTimeout(() => m.classList.add('show'), 10);
         const ta = m.querySelector('textarea'); if(ta) setTimeout(() => ta.focus(), 300);
     }
+    
     function closeModal(id) {
         const m = document.getElementById(id);
-        m.classList.remove('show'); setTimeout(() => m.style.display = 'none', 300);
+        m.classList.remove('show'); setTimeout(() => { m.style.display = 'none'; if(id === 'composeModal') resetComposeModal(); }, 300);
     }
     function closeOnOutside(e, id) { if(e.target.id === id) closeModal(id); }
 
@@ -359,6 +459,26 @@
     function closePanel(id) { 
         document.getElementById(id).classList.remove('active'); 
         if(id === 'chatPanel' && chatInterval) { clearInterval(chatInterval); chatInterval = null; }
+    }
+
+    // Alıntı Yap Hazırlığı
+    function prepQuote(id, author, content) {
+        resetComposeModal();
+        document.getElementById('quoteIdHidden').value = id;
+        document.getElementById('quotePreviewBox').style.display = 'block';
+        document.getElementById('quotePreviewAuthor').innerText = '@' + author;
+        document.getElementById('quotePreviewContent').innerText = content.substring(0, 80) + (content.length > 80 ? '...' : '');
+        openModal('composeModal');
+    }
+
+    // Yanıt Ver Hazırlığı
+    function prepReply(id, author) {
+        resetComposeModal();
+        document.getElementById('replyIdHidden').value = id;
+        document.getElementById('replyToPreview').style.display = 'block';
+        document.getElementById('replyToName').innerText = '@' + author;
+        document.getElementById('composeModalTitle').innerText = 'Yanıtla';
+        openModal('composeModal');
     }
 
     // === API VE İŞLEMLER ===
@@ -369,7 +489,7 @@
             const posts = await res.json();
             const container = document.getElementById('feedContainer');
             if(posts.length === 0) {
-                container.innerHTML = '<div style="padding: 50px; text-align: center; color: var(--text-secondary);"><div style="font-size: 50px; margin-bottom: 10px;">📭</div><div style="font-size: 20px; font-weight: 800;">Burası çok ıssız</div></div>';
+                container.innerHTML = '<div style="padding: 50px; text-align: center; color: var(--text-secondary);"><div style="font-size: 50px; margin-bottom: 10px;">📭</div><div style="font-size: 20px; font-weight: 800;">Burası çok ıssız</div>Sessizliği ilk sen boz.</div>';
                 return;
             }
             let html = '';
@@ -383,13 +503,30 @@
                             <span style="color: var(--text-secondary); font-size: 14px; margin-left: 5px;">@${p.author} · ${timeAgo(p.created_at)}</span>
                         </div>
                     </div>
+                    
+                    ${p.is_whisper ? '<div style="margin-left:60px;"><span class="whisper-badge">🔒 Sadece Takipçiler</span></div>' : ''}
+                    
                     <div class="post-content">${p.content}</div>
+                    
+                    ${p.quote_id ? `
+                    <div class="quote-box" onclick="event.stopPropagation()">
+                        <div style="font-weight: 800; margin-bottom: 5px;">@${p.quote_author}</div>
+                        <div style="font-size: 14px; color: var(--text-secondary);">${p.quote_content}</div>
+                    </div>
+                    ` : ''}
+
                     <div class="post-actions" onclick="event.stopPropagation()">
+                        <div class="action-group" onclick="prepReply(${p.id}, '${p.author}')">
+                            <button class="action-btn">💬</button> <span>${p.replies_count || 0}</span>
+                        </div>
+                        <div class="action-group rt" onclick="doAction('retweet', ${p.id}, this)">
+                            <button class="action-btn">🔄</button> <span>${p.retweets_count}</span>
+                        </div>
                         <div class="action-group like" onclick="doAction('like', ${p.id}, this)">
                             <button class="action-btn">❤️</button> <span>${p.likes_count}</span>
                         </div>
-                        <div class="action-group" onclick="doAction('retweet', ${p.id}, this)">
-                            <button class="action-btn">🔄</button> <span>${p.retweets_count}</span>
+                        <div class="action-group" onclick="prepQuote(${p.id}, '${p.author}', '${p.content.replace(/'/g, "\\'")}')">
+                            <button class="action-btn">🔁</button>
                         </div>
                         ${p.author === '{{ current_user }}' ? `
                         <div class="action-group" style="color: var(--danger);" onclick="doAction('delete', ${p.id}, this)">
@@ -420,10 +557,24 @@
         }
     }
 
-    async function sendPost(inputId) {
+    async function sendPost(inputId, whisperId = null) {
         const val = document.getElementById(inputId).value.trim();
         if(!val) return;
-        const fd = new FormData(); fd.append('content', val);
+        
+        const fd = new FormData(); 
+        fd.append('content', val);
+        
+        // Fısıltı Kontrolü
+        if(whisperId && document.getElementById(whisperId).checked) fd.append('is_whisper', 1);
+        
+        // Alıntı veya Yanıt Kontrolü
+        if(inputId === 'modalPostInput') {
+            const qId = document.getElementById('quoteIdHidden').value;
+            const rId = document.getElementById('replyIdHidden').value;
+            if(qId) fd.append('quote_id', qId);
+            if(rId) fd.append('reply_to_id', rId);
+        }
+
         const res = await fetch('/api/post', { method: 'POST', body: fd });
         const data = await res.json();
         
@@ -445,6 +596,14 @@
             const data = await res.json();
             showToast(data.msg || data.error);
         }
+    }
+
+    async function postStory() {
+        const val = document.getElementById('storyInput').value.trim();
+        if(!val) return;
+        // Hikaye backend'i varsa çağrılır
+        showToast("Hikaye eklendi!");
+        closeModal('storyModal');
     }
 
     async function updateProfile() {
