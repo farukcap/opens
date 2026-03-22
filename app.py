@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = "mekan-v7-god-mode-fix"
+app.secret_key = "mekan-v7-ultimate-fix"
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
 
 ADMIN_USERNAME = "faruk"
@@ -80,7 +80,6 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# ÇÖKME HATASI BURADA GİDERİLDİ (Kullanıcı veritabanından silinmişse session'ı temizle)
 @app.context_processor
 def inject_global_data():
     if "username" in session:
@@ -88,6 +87,7 @@ def inject_global_data():
         user = session["username"]
         udata = db.execute("SELECT * FROM users WHERE username = ?", (user,)).fetchone()
         
+        # Eğer kullanıcı veritabanından silindiyse oturumu düşür (Çökme Engeli)
         if not udata:
             session.clear()
             return dict(current_user=None)
@@ -101,7 +101,8 @@ def inject_global_data():
         return dict(
             current_user=user, current_user_color=udata['avatar_color'], is_verified=udata['is_verified'], 
             ghost_mode=udata['ghost_mode'], is_private=udata['is_private'], mekan_coin=udata['mekan_coin'],
-            trust_score=udata['trust_score'], trends=trends, new_users=new_users, is_admin=(user==ADMIN_USERNAME)
+            trust_score=udata['trust_score'], trends=trends, new_users=new_users, is_admin=(user==ADMIN_USERNAME),
+            night_lock=udata['night_lock']
         )
     return dict(current_user=None)
 
@@ -124,10 +125,15 @@ def catch_all(page):
             last_msg = db.execute("SELECT * FROM messages WHERE (sender=? AND recipient=?) OR (sender=? AND recipient=?) ORDER BY id DESC LIMIT 1", (user, partner, partner, user)).fetchone()
             p_info = db.execute("SELECT avatar_color, is_verified FROM users WHERE username=?", (partner,)).fetchone()
             if p_info and last_msg:
+                try:
+                    time_str = last_msg["created_at"].split(' ')[1][:5]
+                except:
+                    time_str = ""
+                
                 chat_list.append({
                     "partner": partner, "avatar_color": p_info["avatar_color"], "is_verified": p_info["is_verified"],
                     "content": "💣 [Snap]" if last_msg["is_snap"] else last_msg["content"],
-                    "time": last_msg["created_at"][11:16],
+                    "time": time_str,
                     "unread": 1 if last_msg["recipient"] == user and last_msg["is_read"] == 0 else 0
                 })
         chat_list.sort(key=lambda x: x['time'], reverse=True)
@@ -153,7 +159,7 @@ def register():
             db.commit()
             session["username"] = u
         except sqlite3.IntegrityError:
-            pass # Kullanıcı zaten varsa çökmeyi engeller
+            pass
     return redirect(url_for("home"))
 
 @app.route("/login", methods=["POST"])
@@ -175,13 +181,17 @@ def get_feed():
     u = session.get("username")
     if not u: return jsonify([])
     db = get_db()
-    posts = db.execute("""
-        SELECT p.*, us.is_verified, us.avatar_color,
+    # Gelişmiş Gizlilik ve Fısıltı Sorgusu
+    query = """
+        SELECT p.*, us.is_verified, us.avatar_color, us.is_private,
                (SELECT COUNT(*) FROM likes WHERE post_id = p.id) as likes_count,
                (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user = ?) as is_liked_by_me
         FROM posts p JOIN users us ON p.author = us.username 
+        WHERE (us.is_private = 0 OR us.username = ? OR EXISTS (SELECT 1 FROM follows WHERE follower = ? AND followed = p.author))
+          AND (p.is_whisper = 0 OR (p.is_whisper = 1 AND (p.author = ? OR EXISTS (SELECT 1 FROM follows f1 JOIN follows f2 ON f1.follower = f2.followed AND f1.followed = f2.follower WHERE f1.follower = ? AND f1.followed = p.author))))
         ORDER BY p.id DESC LIMIT 50
-    """, (u,)).fetchall()
+    """
+    posts = db.execute(query, (u, u, u, u, u)).fetchall()
     return jsonify([dict(p) for p in posts])
 
 @app.route("/api/post", methods=["POST"])
@@ -189,24 +199,25 @@ def get_feed():
 def create_post():
     c = request.form.get("content", "").strip()
     is_w = int(request.form.get("is_whisper", 0))
+    is_v = int(request.form.get("is_offline_vault", 0))
     loc = request.form.get("location_tag", "").strip()
     u = session.get("username")
     db = get_db()
     
-    # Gece kilidi
     now = datetime.datetime.now()
     if 2 <= now.hour < 6:
         user_data = db.execute("SELECT night_lock FROM users WHERE username=?", (u,)).fetchone()
-        if user_data and user_data['night_lock']: return jsonify({"success": False, "error": "Gece kilidi aktif! 06:00'a kadar gönderi atılamaz."})
+        if user_data and user_data['night_lock']: 
+            return jsonify({"success": False, "error": "Gece kilidi aktif! 06:00'a kadar gönderi atamazsın."})
 
     if c:
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
         tags = re.findall(r"#(\w+)", c)
         for t in tags: db.execute("INSERT INTO hashtags (tag, count, last_used) VALUES (?, 1, ?) ON CONFLICT(tag) DO UPDATE SET count=count+1, last_used=?", (t, now_str, now_str))
-        db.execute("INSERT INTO posts (author, content, created_at, is_whisper, location_tag) VALUES (?, ?, ?, ?, ?)", (u, c, now_str, is_w, loc))
+        db.execute("INSERT INTO posts (author, content, created_at, is_whisper, is_offline_vault, location_tag) VALUES (?, ?, ?, ?, ?, ?)", (u, c, now_str, is_w, is_v, loc))
         db.commit()
         return jsonify({"success": True})
-    return jsonify({"success": False, "error": "Boş içerik!"})
+    return jsonify({"success": False, "error": "Boş içerik gönderemezsin!"})
 
 @app.route("/api/action/<action>/<int:post_id>", methods=["POST"])
 @login_required
@@ -233,7 +244,9 @@ def chat_api(partner):
     me = session.get("username")
     db = get_db()
     t = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    ghost_mode_active = db.execute("SELECT ghost_mode FROM users WHERE username = ?", (me,)).fetchone()['ghost_mode']
+    
+    user_data = db.execute("SELECT ghost_mode FROM users WHERE username = ?", (me,)).fetchone()
+    ghost_mode_active = user_data['ghost_mode'] if user_data else 0
 
     if request.method == "POST":
         c = request.form.get("content", "").strip()
@@ -266,7 +279,6 @@ def update_profile():
     db.commit()
     return jsonify({"success": True})
 
-# ⚡ KUSURSUZ GOD MODE
 @app.route("/api/admin/god_mode", methods=["POST"])
 @login_required
 @admin_required
