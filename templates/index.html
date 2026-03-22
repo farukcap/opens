@@ -33,7 +33,7 @@
         
         .main-content { flex: 1; max-width: 600px; width: 100%; margin-left: 280px; margin-right: 350px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); background: var(--surface); min-height: 100dvh; padding-bottom: 80px; }
         .right-sidebar { position: fixed; right: 0; top: 0; width: 350px; height: 100dvh; padding: 25px; background: transparent; overflow-y: auto; }
-        .header { position: sticky; top: 0; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 15px 25px; border-bottom: 1px solid var(--border); z-index: 100; display: flex; align-items: center; gap: 15px; }
+        .header { position: sticky; top: 0; background: var(--glass); backdrop-filter: blur(20px); padding: 15px 25px; border-bottom: 1px solid var(--border); z-index: 100; display: flex; align-items: center; gap: 15px; }
         .header h2 { font-size: 20px; font-weight: 800; flex: 1; background: -webkit-linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .post { padding: 20px 25px; border-bottom: 1px solid var(--border); transition: 0.2s; cursor: pointer; background: var(--surface); }
@@ -53,7 +53,7 @@
         .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 450px; height: 100dvh; background: var(--surface); z-index: 2000; transition: right 0.4s; display: flex; flex-direction: column; border-left: 1px solid var(--border); }
         .side-panel.active { right: 0; }
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: var(--bg); }
-        .bubble { max-width: 75%; padding: 14px 18px; border-radius: 20px; font-size: 15px; }
+        .bubble { max-width: 75%; padding: 14px 18px; border-radius: 20px; font-size: 15px; word-wrap: break-word; }
         .bubble.sent { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
         .bubble.received { background: var(--surface); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
         .bubble.snap { background: #ff5e6c; color: white; font-style: italic; }
@@ -138,7 +138,7 @@
     <div class="main-content">
         <div class="header">
             <h2>
-                {% if page == 'profile' %}Profilim
+                {% if page == 'profile' %}Profil
                 {% elif page == 'messages' %}Mesaj Kutusu
                 {% else %}Ana Akış{% endif %}
             </h2>
@@ -185,9 +185,13 @@
 
                 {% if current_user != profile_user.username %}
                 <div style="background: var(--surface-2); padding: 15px; border-radius: 20px; border-left: 5px solid var(--accent); margin: 20px 0; font-size: 14px;">🕵️ En son <strong style="color:var(--danger)">@{{ last_dm_to }}</strong> ile etkileşime girdi.</div>
+                
                 <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button class="btn-primary" style="flex: 1;" onclick="openChat('{{ profile_user.username }}')">✉️ Mesaj At</button>
-                    <button class="btn-secondary" style="flex: 1; border-color:var(--accent); color:var(--accent);" onclick="muteUser('{{ profile_user.username }}')">🤫 Sustur (50 🪙)</button>
+                    <button class="btn-primary" style="flex: 1; {% if is_following %}background: var(--surface); color: var(--text); border: 2px solid var(--border); box-shadow: none;{% endif %}" onclick="toggleFollow('{{ profile_user.username }}')">
+                        {% if is_following %}Takipten Çık{% else %}Takip Et ➕{% endif %}
+                    </button>
+                    <button class="btn-primary" style="flex: 1; background: var(--primary-dark);" onclick="openChat('{{ profile_user.username }}')">✉️ Mesaj</button>
+                    <button class="btn-secondary" style="flex: 0.5; border-color:var(--accent); color:var(--accent); padding: 12px;" onclick="muteUser('{{ profile_user.username }}')">🤫</button>
                 </div>
                 {% endif %}
             </div>
@@ -268,7 +272,7 @@
         <h3 style="color: var(--danger); margin-bottom: 20px; font-size: 24px;">⚡ KONTROL PANELİ</h3>
         <div style="background: var(--surface-2); padding: 15px; border-radius: 15px; margin-bottom: 15px;">
             <h4 style="margin-bottom: 10px;">Kullanıcı İşlemleri</h4>
-            <input type="text" id="adminTarget" class="custom-input" placeholder="Hedef Kullanıcı Adı (Örn: ahmet)">
+            <input type="text" id="adminTarget" class="custom-input" placeholder="Hedef Kullanıcı Adı">
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <button class="btn-primary" style="background: var(--warning); color: black; flex: 1;" onclick="fireGodMode('add_coin')">💰 10K Ver</button>
                 <button class="btn-primary" style="background: #1d9bf0; flex: 1;" onclick="fireGodMode('verify_user')">✔️ Doğrula</button>
@@ -312,7 +316,6 @@
     function toggleTheme() { const b = document.body; const t = b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; b.setAttribute('data-theme', t); localStorage.setItem('theme', t); }
     if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
 
-    // AKIŞ (FEED) HATASI GİDERİLDİ
     async function loadFeed() {
         const c = document.getElementById('feedContainer'); if(!c) return;
         try {
@@ -324,17 +327,14 @@
                 let badges = '';
                 if(p.is_whisper) badges += '<span class="post-badge" style="background: rgba(156, 39, 176, 0.1); color: #9c27b0;">🤫 Fısıltı</span>';
                 if(p.location_tag) badges += `<span class="post-badge">📍 ${p.location_tag}</span>`;
-                
                 const adminIdTag = '{{ is_admin }}' === 'True' ? `<b style="color:var(--danger)">ID:${p.id}</b> · ` : '';
-                
-                // Güvenli İçerik Render'ı
                 const safeContent = p.content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/#(\w+)/g, '<span style="color:var(--primary); font-weight:600;">#$1</span>');
 
                 html += `
                 <div class="post" onclick="location.href='/profile/${p.author}'">
                     <div style="display:flex; gap:15px;">
                         <div class="post-avatar" style="background:${p.avatar_color}">${p.author[0].toUpperCase()}</div>
-                        <div style="flex:1">
+                        <div style="flex:1; min-width: 0;">
                             <div style="display:flex; align-items:center; gap:5px;">
                                 <span style="font-weight:800; font-size:16px;">${p.author}</span>
                                 ${p.is_verified == 1 ? '<span style="color:var(--primary); font-size:14px;">✔️</span>' : ''}
@@ -342,7 +342,7 @@
                                 <span style="font-size:12px; color:var(--text-secondary); margin-left:auto;">${adminIdTag} ${p.created_at.split(' ')[1].slice(0,5)}</span>
                             </div>
                             <div style="margin-top:8px; margin-bottom:10px;">${badges}</div>
-                            <div style="font-size:16px; line-height:1.5; word-wrap: break-word;">${safeContent}</div>
+                            <div style="font-size:16px; line-height:1.5; word-wrap: break-word; overflow-wrap: anywhere;">${safeContent}</div>
                             
                             <div style="display:flex; justify-content:space-between; max-width: 400px; margin-top:15px;" onclick="event.stopPropagation()">
                                 <div class="action-group ${p.is_liked_by_me ? 'liked' : ''}" onclick="doA('like', ${p.id}, this)">
@@ -357,7 +357,7 @@
             c.innerHTML = html || '<div style="padding:60px 20px; text-align:center; color: var(--text-secondary);">Henüz tohum ekilmemiş. İlk eken sen ol! 🌱</div>';
         } catch(e) { console.error("Feed hatası:", e); }
     }
-    if(window.location.pathname === "/") { loadFeed(); setInterval(loadFeed, 20000); }
+    if(window.location.pathname === "/") { loadFeed(); setInterval(loadFeed, 15000); }
 
     async function sendPost() {
         const content = document.getElementById('postInp').value; 
@@ -386,23 +386,26 @@
         }
     }
 
-    // GÖRÜLDÜ ÖZELLİĞİ EKLENDİ
+    // YENİ EKLENEN TAKİP ET FONKSİYONU
+    async function toggleFollow(target) {
+        const res = await fetch(`/api/follow/${target}`, {method:'POST'});
+        const d = await res.json();
+        if(d.success) { location.reload(); }
+    }
+
     let cInt = null; let activeP = "";
     async function openChat(p) {
         activeP = p; document.getElementById('chatTitle').innerText = "@" + p;
         document.getElementById('chatPanel').classList.add('active');
-        await loadChat(); clearInterval(cInt); cInt = setInterval(loadChat, 3000);
+        await loadChat(); clearInterval(cInt); cInt = setInterval(loadChat, 2000);
     }
     async function loadChat() {
         if(!activeP) return; const res = await fetch(`/api/chat/${activeP}`); const msgs = await res.json();
         const b = document.getElementById('chatBox');
-        
-        // Sadece yeni mesaj gelirse kaydırmak için kontrol
         const isScrolledToBottom = b.scrollHeight - b.clientHeight <= b.scrollTop + 50;
 
         b.innerHTML = msgs.map(m => {
             const isMe = m.sender === '{{ current_user }}';
-            // Görüldü İşareti: Karşı taraf okuduysa ✓✓, okumadıysa ✓
             const readStatus = isMe ? (m.is_read ? '<span style="color:var(--text); font-weight:bold;">✓✓</span>' : '<span style="color:var(--text-secondary);">✓</span>') : '';
             const safeContent = m.content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             
@@ -434,15 +437,9 @@
         const res = await fetch(`/api/mute/${target}`, {method:'POST'}); const d = await res.json(); showT(d.msg || d.error, !d.success);
     }
 
-    // ⚡ GOD MODE
     async function fireGodMode(action) {
         const fd = new FormData(); fd.append('action', action);
         if(document.getElementById('adminTarget').value) fd.append('target_user', document.getElementById('adminTarget').value);
         if(document.getElementById('adminPostId').value) fd.append('post_id', document.getElementById('adminPostId').value);
         const res = await fetch('/api/admin/god_mode', {method: 'POST', body: fd});
         const d = await res.json(); showT(d.msg, !d.success);
-        if(d.success) { closeModal('godModeModal'); setTimeout(() => location.reload(), 1500); }
-    }
-</script>
-</body>
-</html>
