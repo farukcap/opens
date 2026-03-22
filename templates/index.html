@@ -3,80 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mekan V7 - Floral Edition</title>
+    <title>Mekan</title>
     <style>
         :root {
             --primary: #5da399; --primary-dark: #4a827a; --primary-light: #eaf4f2;
             --accent: #ff9a9e; --success: #00ba7c; --danger: #ff5e6c; --warning: #ffb703;
             --bg: #f8faf9; --surface: #ffffff; --surface-2: #f1f5f4;
             --text: #1a2e2b; --text-secondary: #607d7a; --border: #e2edea;
-            --glass: rgba(255, 255, 255, 0.85); --shadow: 0 10px 30px rgba(93, 163, 153, 0.08);
+            --glass: rgba(255, 255, 255, 0.9); --shadow: 0 8px 25px rgba(93, 163, 153, 0.1);
         }
         [data-theme="dark"] {
             --bg: #0d1a18; --surface: #142624; --surface-2: #1b3330;
             --text: #e0f2f1; --text-secondary: #8da3a1; --border: #223d3a;
-            --glass: rgba(20, 38, 36, 0.8); --primary-light: rgba(93, 163, 153, 0.15);
+            --glass: rgba(20, 38, 36, 0.9); --primary-light: rgba(93, 163, 153, 0.15);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; background-image: radial-gradient(var(--primary-light) 2px, transparent 2px); background-size: 40px 40px; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
         button, input, textarea { font-family: inherit; color: inherit; outline: none; }
 
         .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3); }
-        .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
         .btn-secondary { background: transparent; color: var(--text); border: 2px solid var(--border); padding: 12px 24px; border-radius: 25px; font-weight: 700; cursor: pointer; transition: 0.3s; }
 
         .app-wrapper { display: flex; min-height: 100dvh; justify-content: center; }
-        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100dvh; border-right: 1px solid var(--border); padding: 25px; background: var(--surface); display: flex; flex-direction: column; z-index: 1000; }
-        .nav-item { padding: 14px 20px; border-radius: 20px; text-decoration: none; color: var(--text); font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 15px; transition: 0.2s; border: none; background: transparent; cursor: pointer; margin-bottom: 5px; }
-        .nav-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(5px); }
-        .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 800; }
         
-        .main-content { flex: 1; max-width: 600px; width: 100%; margin-left: 280px; margin-right: 350px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); background: var(--surface); min-height: 100dvh; padding-bottom: 80px; }
-        .right-sidebar { position: fixed; right: 0; top: 0; width: 350px; height: 100dvh; padding: 25px; background: transparent; overflow-y: auto; }
-        .header { position: sticky; top: 0; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 15px 25px; border-bottom: 1px solid var(--border); z-index: 100; display: flex; align-items: center; gap: 15px; }
-        .header h2 { font-size: 20px; font-weight: 800; flex: 1; background: -webkit-linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .drawer-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100dvh; background: var(--surface); z-index: 4000; transition: 0.3s; padding: 25px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+        .drawer-menu.open { left: 0; }
+        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3999; display: none; backdrop-filter: blur(3px); }
+        .drawer-overlay.show { display: block; }
+        
+        .nav-item { padding: 14px 20px; border-radius: 20px; text-decoration: none; color: var(--text); font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 15px; transition: 0.2s; border: none; background: transparent; cursor: pointer; margin-bottom: 5px; width: 100%; text-align: left; }
+        .nav-item:hover { background: var(--primary-light); color: var(--primary); }
 
-        .post { padding: 20px 25px; border-bottom: 1px solid var(--border); transition: 0.2s; cursor: pointer; background: var(--surface); }
+        .main-content { flex: 1; max-width: 650px; width: 100%; background: var(--surface); min-height: 100dvh; border-left: 1px solid var(--border); border-right: 1px solid var(--border); padding-bottom: 90px; }
+        
+        .header { position: sticky; top: 0; background: var(--glass); backdrop-filter: blur(15px); padding: 15px 20px; border-bottom: 1px solid var(--border); z-index: 100; display: flex; align-items: center; gap: 15px; }
+        .hamburger-btn { background: none; border: none; font-size: 26px; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; }
+        .header h2 { font-size: 22px; font-weight: 800; flex: 1; background: -webkit-linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .new-users-strip { display: flex; overflow-x: auto; gap: 15px; padding: 20px; background: var(--bg); border-bottom: 1px solid var(--border); scrollbar-width: none; }
+        .new-users-strip::-webkit-scrollbar { display: none; }
+        .story-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; font-weight: bold; border: 3px solid var(--primary); padding: 2px; background-clip: content-box; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        .post { padding: 20px; border-bottom: 1px solid var(--border); transition: 0.2s; cursor: pointer; background: var(--surface); }
         .post:hover { background: var(--bg); }
         .post-avatar { width: 48px; height: 48px; border-radius: 18px; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; flex-shrink: 0; font-size: 20px; }
-        .post-badge { font-size: 12px; padding: 3px 8px; border-radius: 10px; background: var(--primary-light); color: var(--primary); margin-left: 8px; font-weight: bold; }
         
         .action-group { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); cursor: pointer; font-size: 14px; padding: 8px 12px; border-radius: 15px; transition: 0.2s; }
-        .action-group:hover { background: var(--primary-light); color: var(--primary); }
         .action-group.liked { color: var(--danger); background: rgba(255, 94, 108, 0.1); }
 
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 3000; padding: 20px; opacity: 0; transition: opacity 0.3s; }
-        .modal.show { display: flex; opacity: 1; }
-        .modal-content { background: var(--surface); padding: 30px; border-radius: 30px; width: 100%; max-width: 500px; box-shadow: var(--shadow); transform: translateY(20px); transition: 0.3s; }
-        .modal.show .modal-content { transform: translateY(0); }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 5000; padding: 20px; }
+        .modal-content { background: var(--surface); padding: 30px; border-radius: 30px; width: 100%; max-width: 500px; box-shadow: var(--shadow); }
         
-        .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 450px; height: 100dvh; background: var(--surface); z-index: 2000; transition: right 0.4s; display: flex; flex-direction: column; border-left: 1px solid var(--border); }
+        .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 450px; height: 100dvh; background: var(--surface); z-index: 4500; transition: right 0.3s; display: flex; flex-direction: column; border-left: 1px solid var(--border); }
         .side-panel.active { right: 0; }
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: var(--bg); }
         .bubble { max-width: 75%; padding: 14px 18px; border-radius: 20px; font-size: 15px; }
         .bubble.sent { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
         .bubble.received { background: var(--surface); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
-        .bubble.snap { background: #ff5e6c; color: white; font-style: italic; }
 
         .custom-input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 15px; border: 1px solid var(--border); background: var(--bg); font-size: 16px; transition: 0.3s; }
-        .custom-input:focus { border-color: var(--primary); }
-        .toggle-label { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 12px 25px; border-radius: 30px; font-weight: 700; z-index: 9999; animation: fUp 0.4s forwards; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        @keyframes fUp { from { opacity: 0; transform: translate(-50%, 30px); } to { opacity: 1; transform: translate(-50%, 0); } }
-
-        .bottom-nav { display: none; }
-        .floating-dm { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 10px 25px rgba(255, 154, 158, 0.4); z-index: 999; cursor: pointer; border: 4px solid var(--bg); transition: 0.3s; }
+        .toggle-label { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 14px; }
         
-        @media (max-width: 1200px) { .right-sidebar { display: none; } .main-content { margin-right: 0; } }
-        @media (max-width: 768px) { 
-            .sidebar { display: none; } .main-content { margin-left: 0; border: none; padding-bottom: 90px; } 
-            .floating-dm { bottom: 100px; right: 20px; }
-            .bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: var(--glass); backdrop-filter: blur(20px); border-top: 1px solid var(--border); justify-content: space-around; padding: 10px 0 25px 0; z-index: 1000; }
-            .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-secondary); text-decoration: none; font-size: 12px; font-weight: 600; }
-            .bottom-nav-item.active { color: var(--primary); }
-            .bottom-nav-item span { font-size: 24px; }
-        }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 12px 25px; border-radius: 30px; font-weight: 700; z-index: 9999; }
+
+        .bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: var(--glass); backdrop-filter: blur(20px); border-top: 1px solid var(--border); justify-content: space-around; padding: 10px 0 25px 0; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.03); }
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-secondary); text-decoration: none; font-size: 12px; font-weight: 600; }
+        .bottom-nav-item.active { color: var(--primary); }
+        .bottom-nav-item span { font-size: 24px; }
     </style>
 </head>
 <body>
@@ -85,123 +78,127 @@
 <div class="app-wrapper" style="align-items: center; background: radial-gradient(circle at top left, var(--primary-light), var(--bg));">
     <div style="background: var(--surface); padding: 40px; border-radius: 35px; width: 100%; max-width: 420px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border);">
         <div style="font-size: 50px; margin-bottom: 10px;">🌸</div>
-        <h1 style="background: -webkit-linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 38px;">Mekan V7</h1>
-        <p style="color: var(--text-secondary); margin-bottom: 30px; font-weight: 500;">Ferah bir güne merhaba de.</p>
-        
-        <div id="loginForm">
-            <form action="/login" method="POST">
-                <input type="text" name="username" class="custom-input" placeholder="Kullanıcı Adı" required>
-                <input type="password" name="password" class="custom-input" placeholder="Şifre" required>
-                <button type="submit" class="btn-primary" style="width: 100%;">Giriş Yap</button>
-            </form>
-            <p style="margin-top:25px; color: var(--text-secondary);">Mekan'a yabancı mısın? <br> <a href="#" style="color: var(--primary); font-weight: 700; text-decoration: none;" onclick="document.getElementById('loginForm').style.display='none';document.getElementById('regForm').style.display='block';">Kayıt Ol</a></p>
-        </div>
-        
-        <div id="regForm" style="display:none;">
-            <form action="/register" method="POST">
-                <input type="text" name="username" class="custom-input" placeholder="Kullanıcı Adı seç" required>
-                <input type="password" name="password" class="custom-input" placeholder="Güçlü bir şifre" required>
-                <button type="submit" class="btn-primary" style="width: 100%;">Aramıza Katıl (+1000 Coin)</button>
-            </form>
+        <h1 style="background: -webkit-linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 38px;">Mekan</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 30px;">Ferah bir güne merhaba de.</p>
+        <form action="/login" method="POST" id="loginForm">
+            <input type="text" name="username" class="custom-input" placeholder="Kullanıcı Adı" required>
+            <input type="password" name="password" class="custom-input" placeholder="Şifre" required>
+            <button type="submit" class="btn-primary" style="width: 100%;">Giriş Yap</button>
+            <p style="margin-top:25px; color: var(--text-secondary);">Mekan'a yabancı mısın? <a href="#" style="color: var(--primary); font-weight: 700; text-decoration: none;" onclick="document.getElementById('loginForm').style.display='none';document.getElementById('regForm').style.display='block';">Kayıt Ol</a></p>
+        </form>
+        <form action="/register" method="POST" id="regForm" style="display:none;">
+            <input type="text" name="username" class="custom-input" placeholder="Kullanıcı Adı seç" required>
+            <input type="password" name="password" class="custom-input" placeholder="Güçlü bir şifre" required>
+            <button type="submit" class="btn-primary" style="width: 100%;">Aramıza Katıl (+1000 Coin)</button>
             <p style="margin-top:25px;"><a href="#" style="color: var(--text-secondary); font-weight: 700; text-decoration: none;" onclick="location.reload()">← Giriş'e Dön</a></p>
-        </div>
+        </form>
     </div>
 </div>
 {% else %}
 
 <div class="app-wrapper">
-    <div class="sidebar" id="sidebar">
-        <h2 style="font-size: 28px; margin-bottom: 30px; display: flex; align-items: center; gap: 10px;">🌸 <span style="background: -webkit-linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Mekan.</span></h2>
-        <a href="/" class="nav-item {% if page == 'home' %}active{% endif %}">🏠 Ana Sayfa</a>
-        <a href="/explore" class="nav-item {% if page == 'explore' %}active{% endif %}">🔍 Keşfet</a>
-        <a href="/messages" class="nav-item {% if page == 'messages' %}active{% endif %}">✉️ Mesajlar</a>
-        <a href="/profile/{{ current_user }}" class="nav-item {% if page == 'profile' %}active{% endif %}">👤 Profil</a>
-        <button class="nav-item" onclick="openModal('settingsModal')">⚙️ Ayarlar</button>
+
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+    <div class="drawer-menu" id="drawerMenu">
+        <h2 style="font-size: 28px; margin-bottom: 30px;">🌸 <span style="background: -webkit-linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Mekan.</span></h2>
+        
+        <div style="background: var(--primary-light); padding: 15px; border-radius: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
+            <div class="post-avatar" style="background:{{ current_user_color }}">{{ current_user[0].upper() }}</div>
+            <div>
+                <div style="font-weight: 800; color: var(--primary-dark);">@{{ current_user }}</div>
+                <div style="font-size: 12px; font-weight: bold; color: var(--primary);">{{ mekan_coin }} 🪙 Cüzdan</div>
+            </div>
+        </div>
+
+        <button class="nav-item" onclick="toggleDrawer(); openModal('settingsModal')">⚙️ Ayarlar</button>
+        <button class="nav-item" onclick="toggleTheme()">🌗 Tema Değiştir</button>
+        
         {% if is_admin %}
-        <button class="nav-item" onclick="openModal('godModeModal')" style="color: var(--danger); font-weight: 900;">⚡ GOD MODE</button>
+        <button class="nav-item" onclick="toggleDrawer(); openModal('godModeModal')" style="color: var(--danger); font-weight: 900; margin-top: 10px; border: 1px solid var(--danger);">⚡ GOD MODE</button>
         {% endif %}
         
-        <button class="btn-primary" style="margin-top: 30px;" onclick="openModal('composeModal')">Tohum At 🌱</button>
-        
-        <div style="margin-top: auto; display: flex; align-items: center; gap: 12px; padding: 15px; background: var(--bg); border-radius: 20px;">
-            <div class="post-avatar" style="width:40px; height:40px; font-size:16px; background:{{ current_user_color }}">{{ current_user[0].upper() }}</div>
-            <div style="display: flex; flex-direction: column;">
-                <span style="font-weight:800; line-height: 1;">{{ current_user }}</span>
-                <span style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">{{ mekan_coin }} 🪙</span>
-            </div>
-            <a href="/logout" style="margin-left:auto; text-decoration:none; padding: 8px; background: var(--surface); border-radius: 50%;">👋</a>
-        </div>
+        <a href="/logout" class="nav-item" style="margin-top: auto; color: var(--danger);">👋 Çıkış Yap</a>
     </div>
-
-    <div class="floating-dm" onclick="location.href='/messages'">✉️</div>
 
     <div class="main-content">
         <div class="header">
-            <h2>{{ 'Profilim' if page=='profile' else 'Ana Akış' }}</h2>
-            {% if is_admin %}<span class="post-badge" style="background: var(--warning); color: black;">👑 Kurucu</span>{% endif %}
-            <button class="action-group" style="margin-left:auto; background: var(--bg); border-radius: 50%; width: 40px; height: 40px; justify-content: center;" onclick="toggleTheme()">🌗</button>
+            <button class="hamburger-btn" onclick="toggleDrawer()">☰</button>
+            <h2>{% if page == 'profile' %}Profil{% elif page == 'messages' %}Mesajlar{% else %}Mekan{% endif %}</h2>
         </div>
 
         {% if page == 'home' %}
-            <div id="feedContainer"></div>
-        {% elif page == 'profile' %}
-            <div style="height:180px; background:linear-gradient(135deg, var(--primary), var(--accent)); position: relative;">
-                {% if profile_user.is_private %}<div style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); color: white; padding: 5px 10px; border-radius: 10px; font-size: 12px;">🔒 Gizli Hesap</div>{% endif %}
+            <div class="new-users-strip">
+                {% for nu in new_users %}
+                <div onclick="location.href='/profile/{{ nu.username }}'" style="display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; flex-shrink: 0;">
+                    <div class="story-avatar" style="background-color: {{ nu.avatar_color }};">
+                        {{ nu.username[0].upper() }}
+                    </div>
+                    <span style="font-size: 12px; font-weight: 700;">{{ nu.username[:8] }}</span>
+                </div>
+                {% endfor %}
             </div>
-            <div style="padding: 0 25px 25px 25px;">
-                <div class="post-avatar" style="width:110px; height:110px; font-size:45px; border:6px solid var(--surface); margin-top:-55px; background:{{ profile_user.avatar_color }}; box-shadow: var(--shadow);">{{ profile_user.username[0].upper() }}</div>
-                <h2 style="margin-top:15px; font-size: 24px;">{{ profile_user.username }} {% if profile_user.is_verified == 1 %}✔️{% elif profile_user.is_verified == 2 %}👑{% endif %}</h2>
-                <p style="color:var(--text-secondary); font-size: 15px;">@{{ profile_user.username }} · <strong>{{ followers }}</strong> Takipçi · {{ profile_user.mekan_coin }} 🪙</p>
+            
+            <div id="feedContainer"></div>
+            
+        {% elif page == 'messages' %}
+            <div style="padding: 20px;">
+                {% if chat_list %}
+                    {% for c in chat_list %}
+                    <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--surface); border-radius: 20px; margin-bottom: 12px; cursor: pointer; border: 1px solid var(--border);" onclick="openChat('{{ c.partner }}')">
+                        <div class="post-avatar" style="background: {{ c.avatar_color }}">{{ c.partner[0].upper() }}</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 800; font-size: 16px;">{{ c.partner }} {% if c.is_verified %}✔️{% endif %}</div>
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-top: 5px;">{{ c.content }}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 12px; color: var(--text-secondary);">{{ c.time }}</div>
+                            {% if c.unread %} <div style="background: var(--primary); width: 12px; height: 12px; border-radius: 50%; margin-top: 8px; margin-left: auto;"></div> {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 50px; color: var(--text-secondary);">Kimseyle konuşmadın.</div>
+                {% endif %}
+            </div>
+
+        {% elif page == 'profile' %}
+            <div style="padding: 25px;">
+                <div class="post-avatar" style="width:100px; height:100px; font-size:40px; background:{{ profile_user.avatar_color }}; margin-bottom: 15px;">{{ profile_user.username[0].upper() }}</div>
+                <h2 style="font-size: 24px;">{{ profile_user.username }} {% if profile_user.is_verified == 1 %}✔️{% elif profile_user.is_verified == 2 %}👑{% endif %}</h2>
+                <p style="color:var(--text-secondary); margin-top: 5px;"><strong>{{ followers }}</strong> Takipçi · {{ profile_user.mekan_coin }} 🪙</p>
                 <p style="margin-top: 15px; font-size: 16px;">{{ profile_user.bio }}</p>
 
                 {% if current_user != profile_user.username %}
-                <div style="background: var(--surface-2); padding: 15px; border-radius: 20px; border-left: 5px solid var(--accent); margin: 20px 0; font-size: 14px;">🕵️ En son <strong style="color:var(--danger)">@{{ last_dm_to }}</strong> ile etkileşime girdi.</div>
                 <div style="display:flex; gap:10px; margin-top:20px;">
                     <button class="btn-primary" style="flex: 1;" onclick="openChat('{{ profile_user.username }}')">✉️ Mesaj At</button>
-                    <button class="btn-secondary" style="flex: 1; border-color:var(--accent); color:var(--accent);" onclick="muteUser('{{ profile_user.username }}')">🤫 Sustur (50 🪙)</button>
                 </div>
                 {% endif %}
             </div>
         {% endif %}
     </div>
-
-    <div class="right-sidebar">
-        <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; padding:30px; border-radius:30px; margin-bottom:25px; box-shadow: var(--shadow);">
-            <div style="font-size:14px; opacity:0.8; margin-bottom: 5px;">Cüzdanım</div>
-            <div style="font-size:36px; font-weight:900;">{{ mekan_coin }} <span style="font-size: 24px;">🪙</span></div>
-        </div>
-        <div style="background:var(--surface); padding:25px; border-radius:30px; border:1px solid var(--border); box-shadow: var(--shadow);">
-            <h3 style="margin-bottom:20px;">Gündem 🔥</h3>
-            {% for t in trends %}
-            <div style="margin-bottom: 15px;">
-                <div style="font-weight: 700;">#{{ t.tag }}</div>
-                <div style="font-size: 12px; color: var(--text-secondary);">{{ t.count }} Tohum</div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
 </div>
 
 <div class="bottom-nav">
     <a href="/" class="bottom-nav-item {% if page == 'home' %}active{% endif %}"><span>🏠</span> Akış</a>
-    <a href="/explore" class="bottom-nav-item {% if page == 'explore' %}active{% endif %}"><span>🔍</span> Keşfet</a>
+    <a href="/messages" class="bottom-nav-item {% if page == 'messages' %}active{% endif %}"><span>✉️</span> DM</a>
     <a href="#" class="bottom-nav-item" onclick="openModal('composeModal'); return false;" style="transform: translateY(-15px); color: var(--primary);">
-        <div style="background: var(--primary); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(93,163,153,0.4); border: 4px solid var(--bg);">🌱</div>
+        <div style="background: var(--primary); color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(93,163,153,0.4); border: 4px solid var(--bg); font-size: 28px;">🌱</div>
     </a>
-    <a href="/messages" class="bottom-nav-item {% if page == 'messages' %}active{% endif %}"><span>✉️</span> Mesajlar</a>
     <a href="/profile/{{ current_user }}" class="bottom-nav-item {% if page == 'profile' %}active{% endif %}"><span>👤</span> Profil</a>
 </div>
 
 <div class="modal" id="composeModal" onclick="if(event.target==this) closeModal('composeModal')">
     <div class="modal-content">
-        <h3 style="margin-bottom:20px; font-size: 22px;">Yeni Tohum Ekiyorsun 🌱</h3>
-        <textarea id="postInp" class="custom-input" style="height:120px; resize:none;" placeholder="Aklından neler geçiyor?"></textarea>
+        <h3 style="margin-bottom:20px;">Tohum Ek 🌱</h3>
+        <textarea id="postInp" class="custom-input" style="height:120px; resize:none;" placeholder="Örn: Bugün hava çok ferah..."></textarea>
+        
         <div style="background: var(--surface-2); padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-            <label class="toggle-label" style="border:none; padding:0 0 10px 0;"><span>🤫 Fısıltı (Sadece Karşılıklı Takip)</span><input type="checkbox" id="isWhisper" style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
-            <label class="toggle-label" style="border:none; padding:0;"><span>📦 Çevrimdışı Sır Kutusu</span><input type="checkbox" id="isVault" style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
+            <label class="toggle-label" style="border:none; padding:0 0 10px 0;"><span>🤫 Fısıltı (Sadece Takipçiler)</span><input type="checkbox" id="isWhisper" style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
+            <label class="toggle-label" style="border:none; padding:0;"><span>📦 Sır Kutusu</span><input type="checkbox" id="isVault" style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
         </div>
-        <input type="text" id="postLocation" class="custom-input" placeholder="Konum (Örn: Yalıkavak)">
-        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+
+        <input type="text" id="postLocation" class="custom-input" placeholder="📍 Konum (İsteğe Bağlı)">
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
             <button class="btn-secondary" onclick="closeModal('composeModal')">İptal</button>
             <button class="btn-primary" onclick="sendPost()">Paylaş</button>
         </div>
@@ -210,51 +207,46 @@
 
 <div class="modal" id="settingsModal" onclick="if(event.target==this) closeModal('settingsModal')">
     <div class="modal-content">
-        <h3 style="margin-bottom:25px; font-size: 22px;">⚙️ Ayarlar</h3>
-        <input type="text" id="setBio" class="custom-input" placeholder="Kendinden bahset...">
-        <label style="font-size: 14px; color: var(--text-secondary); font-weight: 700;">Avatar Rengi</label>
-        <input type="color" id="pColor" style="width:100%; height:50px; border:none; cursor:pointer; margin-bottom:20px; border-radius: 15px;">
+        <h3 style="margin-bottom:20px;">⚙️ Ayarlar</h3>
+        <input type="text" id="setBio" class="custom-input" placeholder="Biyografi">
+        <label style="font-size: 14px; font-weight: 700;">Avatar Rengi</label>
+        <input type="color" id="pColor" style="width:100%; height:50px; border:none; cursor:pointer; margin-bottom:15px; border-radius: 10px;">
+        
         <div style="background: var(--surface-2); padding: 0 15px; border-radius: 15px; margin-bottom: 25px;">
-            <label class="toggle-label"><span>👻 Hayalet Modu (Görüldü Kapat)</span><input type="checkbox" id="setGhost" {% if ghost_mode %}checked{% endif %} style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
+            <label class="toggle-label"><span>👻 Hayalet Modu</span><input type="checkbox" id="setGhost" {% if ghost_mode %}checked{% endif %} style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
             <label class="toggle-label"><span>🔒 Gizli Hesap</span><input type="checkbox" id="setPrivate" {% if is_private %}checked{% endif %} style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
-            <label class="toggle-label" style="border:none;"><span>🌙 Gece Kilidi (Sarhoş koruması)</span><input type="checkbox" id="setNight" {% if night_lock %}checked{% endif %} style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
+            <label class="toggle-label" style="border:none;"><span>🌙 Gece Kilidi</span><input type="checkbox" id="setNight" {% if night_lock %}checked{% endif %} style="width: 20px; height: 20px; accent-color: var(--primary);"></label>
         </div>
+
         <button class="btn-primary" style="width: 100%;" onclick="updateProfile()">Kaydet</button>
     </div>
 </div>
 
 {% if is_admin %}
 <div class="modal" id="godModeModal" onclick="if(event.target==this) closeModal('godModeModal')">
-    <div class="modal-content" style="border: 2px solid var(--danger); box-shadow: 0 0 40px rgba(255, 94, 108, 0.3);">
-        <h3 style="color: var(--danger); margin-bottom: 20px; font-size: 24px;">⚡ KONTROL PANELİ</h3>
-        <div style="background: var(--surface-2); padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-            <h4 style="margin-bottom: 10px;">Kullanıcı İşlemleri</h4>
-            <input type="text" id="adminTarget" class="custom-input" placeholder="Hedef Kullanıcı Adı (Örn: ahmet)">
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="btn-primary" style="background: var(--warning); color: black; flex: 1;" onclick="fireGodMode('add_coin')">💰 10K Ver</button>
-                <button class="btn-primary" style="background: #1d9bf0; flex: 1;" onclick="fireGodMode('verify_user')">✔️ Doğrula</button>
-                <button class="btn-primary" style="background: var(--danger); width: 100%;" onclick="fireGodMode('ban_user')">🔨 HESABI SİL</button>
-            </div>
+    <div class="modal-content" style="border: 2px solid var(--danger); box-shadow: 0 0 30px rgba(255,0,0,0.2);">
+        <h3 style="color: var(--danger); margin-bottom: 20px;">⚡ GOD MODE</h3>
+        <input type="text" id="adminTarget" class="custom-input" placeholder="Hedef Kullanıcı (Örn: ali)">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-primary" style="flex: 1; background: var(--warning); color: black;" onclick="fireGodMode('add_coin')">💰 10K Ver</button>
+            <button class="btn-primary" style="flex: 1; background: var(--danger);" onclick="fireGodMode('ban_user')">🔨 SİL</button>
         </div>
-        <div style="background: var(--surface-2); padding: 15px; border-radius: 15px;">
-            <h4 style="margin-bottom: 10px;">Gönderi Yok Et</h4>
-            <input type="number" id="adminPostId" class="custom-input" placeholder="Silinecek Gönderi ID'si">
-            <button class="btn-primary" style="background: var(--danger); width: 100%;" onclick="fireGodMode('delete_post')">🔥 Buharlaştır</button>
-        </div>
+        <input type="number" id="adminPostId" class="custom-input" placeholder="Silinecek Gönderi ID">
+        <button class="btn-primary" style="width: 100%; background: var(--danger);" onclick="fireGodMode('delete_post')">🔥 Gönderiyi Buharlaştır</button>
     </div>
 </div>
 {% endif %}
 
 <div class="side-panel" id="chatPanel">
-    <div class="header" style="border-bottom: 1px solid var(--border);">
-        <button style="background:var(--surface-2); border:none; width: 40px; height: 40px; border-radius: 50%; font-size:20px; cursor: pointer; display: flex; align-items: center; justify-content: center;" onclick="document.getElementById('chatPanel').classList.remove('active')">🡠</button>
+    <div class="header">
+        <button style="background:none; border:none; font-size:24px; cursor:pointer;" onclick="document.getElementById('chatPanel').classList.remove('active')">🡠</button>
         <h3 id="chatTitle" style="margin-left:15px; flex:1;">Sohbet</h3>
-        <label style="font-size: 12px; display: flex; align-items: center; gap: 5px; color: var(--danger); font-weight: bold; cursor: pointer;">Snap<input type="checkbox" id="isSnapChat" style="accent-color: var(--danger);"></label>
+        <label style="font-size: 12px; color: var(--danger); font-weight: bold; display:flex; align-items:center; gap:5px;">Snap<input type="checkbox" id="isSnapChat" style="accent-color: var(--danger);"></label>
     </div>
     <div class="chat-messages" id="chatBox"></div>
-    <div style="padding:20px; border-top:1px solid var(--border); display:flex; gap:10px; background: var(--surface);">
+    <div style="padding:20px; display:flex; gap:10px; background: var(--surface); border-top:1px solid var(--border);">
         <input type="text" id="chatInp" class="custom-input" style="margin:0; border-radius:25px;" placeholder="Mesaj yaz..." onkeypress="if(event.key==='Enter') sendChat()">
-        <button class="btn-primary" style="padding:0 20px; border-radius: 25px;" onclick="sendChat()">Gönder</button>
+        <button class="btn-primary" style="border-radius:25px;" onclick="sendChat()">Gönder</button>
     </div>
 </div>
 
@@ -266,64 +258,70 @@
         const c = document.getElementById('tCont');
         const t = document.createElement('div'); t.className = 'toast'; t.innerText = m;
         if(isErr) t.style.background = 'var(--danger)';
-        c.appendChild(t); setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 3500);
+        c.appendChild(t); setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 3000);
     }
-    function openModal(id) { const m = document.getElementById(id); m.style.display = 'flex'; setTimeout(() => m.classList.add('show'), 10); }
-    function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(() => m.style.display = 'none', 300); }
-    function toggleTheme() { const b = document.body; const t = b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; b.setAttribute('data-theme', t); localStorage.setItem('theme', t); }
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function toggleDrawer() { document.getElementById('drawerMenu').classList.toggle('open'); document.getElementById('drawerOverlay').classList.toggle('show'); }
+    function toggleTheme() { const b = document.body; const t = b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; b.setAttribute('data-theme', t); localStorage.setItem('theme', t); toggleDrawer(); }
     if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
 
     async function loadFeed() {
         const c = document.getElementById('feedContainer'); if(!c) return;
-        const res = await fetch('/api/feed'); const posts = await res.json();
-        
-        c.innerHTML = posts.map(p => {
-            let badges = '';
-            if(p.is_whisper) badges += '<span class="post-badge" style="background: rgba(156, 39, 176, 0.1); color: #9c27b0;">🤫 Fısıltı</span>';
-            if(p.location_tag) badges += `<span class="post-badge">📍 ${p.location_tag}</span>`;
-            
-            // ADMIN ISE ID GÖSTER
-            const adminIdTag = '{{ is_admin }}' === 'True' ? `<b style="color:var(--danger)">ID:${p.id}</b> · ` : '';
-
-            return `
-            <div class="post" onclick="location.href='/profile/${p.author}'">
-                <div style="display:flex; gap:15px;">
-                    <div class="post-avatar" style="background:${p.avatar_color}">${p.author[0].toUpperCase()}</div>
-                    <div style="flex:1">
-                        <div style="display:flex; align-items:center; gap:5px;">
-                            <span style="font-weight:800; font-size:16px;">${p.author}</span>
-                            ${p.is_verified == 1 ? '<span style="color:var(--primary); font-size:14px;">✔️</span>' : ''}
-                            ${p.is_verified == 2 ? '<span style="font-size:14px;">👑</span>' : ''}
-                            <span style="font-size:12px; color:var(--text-secondary); margin-left:auto;">${adminIdTag} ${p.created_at.split(' ')[1].slice(0,5)}</span>
-                        </div>
-                        <div style="margin-top:8px; margin-bottom:10px;">${badges}</div>
-                        <div style="font-size:16px; line-height:1.5;">${p.content.replace(/#(\w+)/g, '<span style="color:var(--primary); font-weight:600;">#$1</span>')}</div>
-                        
-                        <div style="display:flex; justify-content:space-between; max-width: 400px; margin-top:15px;" onclick="event.stopPropagation()">
-                            <div class="action-group ${p.is_liked_by_me ? 'liked' : ''}" onclick="doA('like', ${p.id}, this)">
-                                ${p.is_liked_by_me ? '❤️' : '🤍'} <span style="font-weight:600;">${p.likes_count}</span>
+        try {
+            const res = await fetch('/api/feed'); const posts = await res.json();
+            let html = '';
+            for(let p of posts) {
+                const adminIdTag = '{{ is_admin }}' === 'True' ? `<b style="color:var(--danger)">ID:${p.id}</b> · ` : '';
+                const locTag = p.location_tag ? `<span style="font-size:12px; color:var(--primary); font-weight:bold;">📍 ${p.location_tag}</span>` : '';
+                
+                html += `
+                <div class="post" onclick="location.href='/profile/${p.author}'">
+                    <div style="display:flex; gap:15px;">
+                        <div class="post-avatar" style="background:${p.avatar_color}">${p.author[0].toUpperCase()}</div>
+                        <div style="flex:1;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-weight:800;">${p.author} ${p.is_verified ? '✔️' : ''}</span>
+                                <span style="font-size:12px; color:var(--text-secondary);">${adminIdTag}${p.created_at.split(' ')[1].slice(0,5)}</span>
                             </div>
-                            <div class="action-group" style="color:var(--danger);" onclick="doA('burn', ${p.id}, this)">🔥 Yak</div>
+                            ${locTag}
+                            <div style="margin-top:8px; font-size:16px; line-height:1.5;">${p.content.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+                            
+                            <div style="display:flex; gap:20px; margin-top:15px;" onclick="event.stopPropagation()">
+                                <div class="action-group ${p.is_liked_by_me ? 'liked' : ''}" onclick="doA('like', ${p.id}, this)">
+                                    ${p.is_liked_by_me ? '❤️' : '🤍'} <span style="font-weight:bold;">${p.likes_count}</span>
+                                </div>
+                                <div class="action-group" style="color:var(--danger);" onclick="doA('burn', ${p.id}, this)">🔥 Yak</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>`
-        }).join('') || '<div style="padding:60px 20px; text-align:center; color: var(--text-secondary);">Henüz tohum ekilmemiş. 🌱</div>';
+                </div>`;
+            }
+            c.innerHTML = html || '<div style="padding:50px; text-align:center; color:var(--text-secondary);">Akış bomboş. İlk tohumu sen at!</div>';
+        } catch(e) {}
     }
-    if(window.location.pathname === "/") { loadFeed(); setInterval(loadFeed, 30000); }
+    if(window.location.pathname === "/") { loadFeed(); setInterval(loadFeed, 10000); }
 
+    // GÜVENLİK ÖNLEMİ (DEFENSIVE PROGRAMMING) EKLENDİ
     async function sendPost() {
-        const content = document.getElementById('postInp').value; 
-        if(!content) return showT("Boş tohum ekilemez!", true);
-        const fd = new FormData(); 
-        fd.append('content', content);
-        fd.append('is_whisper', document.getElementById('isWhisper').checked ? 1 : 0);
-        fd.append('is_offline_vault', document.getElementById('isVault').checked ? 1 : 0);
-        fd.append('location_tag', document.getElementById('postLocation').value);
+        const contentEl = document.getElementById('postInp');
+        if(!contentEl || !contentEl.value.trim()) return showT("Boş tohum ekilemez!", true);
 
-        const res = await fetch('/api/post', {method:'POST', body:fd});
-        const d = await res.json();
-        if(d.success) { location.reload(); } else { showT(d.error, true); }
+        const wEl = document.getElementById('isWhisper');
+        const vEl = document.getElementById('isVault');
+        const locEl = document.getElementById('postLocation');
+
+        const fd = new FormData(); 
+        fd.append('content', contentEl.value.trim());
+        fd.append('is_whisper', wEl && wEl.checked ? 1 : 0);
+        fd.append('is_offline_vault', vEl && vEl.checked ? 1 : 0);
+        fd.append('location_tag', locEl ? locEl.value : "");
+
+        try {
+            const res = await fetch('/api/post', {method:'POST', body:fd});
+            const d = await res.json();
+            if(d.success) { location.reload(); } else { showT(d.error, true); }
+        } catch(e) { showT("Sistemsel bir hata oluştu.", true); }
     }
 
     async function doA(action, id, el) {
@@ -334,8 +332,8 @@
                 el.classList.toggle('liked'); 
                 const span = el.querySelector('span');
                 span.innerText = parseInt(span.innerText) + (el.classList.contains('liked') ? 1 : -1);
-                el.innerHTML = (el.classList.contains('liked') ? '❤️ ' : '🤍 ') + `<span style="font-weight:600;">${span.innerText}</span>`;
-            } else { showT(d.msg); }
+                el.innerHTML = (el.classList.contains('liked') ? '❤️ ' : '🤍 ') + `<span style="font-weight:bold;">${span.innerText}</span>`;
+            } else { showT(d.msg); loadFeed(); }
         }
     }
 
@@ -343,45 +341,56 @@
     async function openChat(p) {
         activeP = p; document.getElementById('chatTitle').innerText = "@" + p;
         document.getElementById('chatPanel').classList.add('active');
-        await loadChat(); clearInterval(cInt); cInt = setInterval(loadChat, 3000);
+        await loadChat(); clearInterval(cInt); cInt = setInterval(loadChat, 2000);
     }
     async function loadChat() {
         if(!activeP) return; const res = await fetch(`/api/chat/${activeP}`); const msgs = await res.json();
         const b = document.getElementById('chatBox');
+        const isBtm = b.scrollHeight - b.clientHeight <= b.scrollTop + 50;
         b.innerHTML = msgs.map(m => {
             const isMe = m.sender === '{{ current_user }}';
-            return `<div class="bubble ${isMe ? 'sent' : 'received'} ${m.is_snap ? 'snap' : ''}">
-                ${m.is_snap && !isMe ? '💣 [Snap Mesaj]' : m.content}
-                <div style="font-size:10px; opacity:0.7; text-align:right; margin-top:5px;">${m.created_at.split(' ')[1].slice(0,5)}</div>
+            const readStat = isMe ? (m.is_read ? '<b style="color:var(--text)">✓✓</b>' : '✓') : '';
+            return `<div class="bubble ${isMe ? 'sent' : 'received'}">
+                ${m.is_snap && !isMe ? '💣 [Snap]' : m.content.replace(/</g,"&lt;")}
+                <div style="font-size:10px; opacity:0.8; text-align:right; margin-top:5px;">${m.created_at.split(' ')[1].slice(0,5)} ${readStat}</div>
             </div>`;
-        }).join('') || '<div style="text-align:center; color:var(--text-secondary); margin-top:50px;">İlk mesajı at!</div>';
-        b.scrollTop = b.scrollHeight;
+        }).join('');
+        if(isBtm) b.scrollTop = b.scrollHeight;
     }
     async function sendChat() {
         const i = document.getElementById('chatInp'); if(!i.value.trim()) return;
-        const fd = new FormData(); fd.append('content', i.value); fd.append('is_snap', document.getElementById('isSnapChat').checked ? 1 : 0);
-        i.value = ""; await fetch(`/api/chat/${activeP}`, {method:'POST', body:fd}); loadChat();
-        setTimeout(() => document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight, 100);
+        const sEl = document.getElementById('isSnapChat');
+        const fd = new FormData(); fd.append('content', i.value); fd.append('is_snap', sEl && sEl.checked ? 1 : 0);
+        i.value = ""; await fetch(`/api/chat/${activeP}`, {method:'POST', body:fd}); await loadChat();
+        setTimeout(() => document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight, 50);
     }
 
+    // GÜVENLİK ÖNLEMİ BURAYA DA EKLENDİ
     async function updateProfile() {
+        const bioEl = document.getElementById('setBio');
+        const colEl = document.getElementById('pColor');
+        const gEl = document.getElementById('setGhost');
+        const pEl = document.getElementById('setPrivate');
+        const nEl = document.getElementById('setNight');
+
         const fd = new FormData(); 
-        fd.append('bio', document.getElementById('setBio').value);
-        fd.append('avatar_color', document.getElementById('pColor').value);
-        fd.append('ghost_mode', document.getElementById('setGhost').checked ? 1 : 0);
-        fd.append('is_private', document.getElementById('setPrivate').checked ? 1 : 0);
-        fd.append('night_lock', document.getElementById('setNight').checked ? 1 : 0);
+        fd.append('bio', bioEl ? bioEl.value : ""); 
+        fd.append('avatar_color', colEl ? colEl.value : "#5da399");
+        fd.append('ghost_mode', gEl && gEl.checked ? 1 : 0);
+        fd.append('is_private', pEl && pEl.checked ? 1 : 0);
+        fd.append('night_lock', nEl && nEl.checked ? 1 : 0);
+
         await fetch('/api/update_profile', {method:'POST', body:fd}); location.reload();
     }
-    async function muteUser(target) {
-        const res = await fetch(`/api/mute/${target}`, {method:'POST'}); const d = await res.json(); showT(d.msg || d.error, !d.success);
-    }
 
-    // ⚡ GOD MODE
     async function fireGodMode(action) {
         const fd = new FormData(); fd.append('action', action);
-        if(document.getElementById('adminTarget').value) fd.append('target_user', document.getElementById('adminTarget').value);
-        if(document.getElementById('adminPostId').value) fd.append('post_id', document.getElementById('adminPostId').value);
+        const tEl = document.getElementById('adminTarget');
+        const pEl = document.getElementById('adminPostId');
+        
+        if(tEl && tEl.value) fd.append('target_user', tEl.value);
+        if(pEl && pEl.value) fd.append('post_id', pEl.value);
+        
         const res = await fetch('/api/admin/god_mode', {method: 'POST', body: fd});
         const d = await res.json(); showT(d.msg, !d.success);
         if(d.success) { closeModal('godModeModal'); setTimeout(() => location.reload(), 1500); }
