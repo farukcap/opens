@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = "mekan-v7-ultimate-fix"
+app.secret_key = "mekan-v8-ultimate-safe-mode"
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
 
 ADMIN_USERNAME = "faruk"
@@ -30,6 +30,7 @@ def init_db():
     c.execute("PRAGMA foreign_keys = ON;")
     c.execute("PRAGMA journal_mode = WAL;")
 
+    # Temel Tablolar (Eğer yoksa oluşturur, varsa dokunmaz)
     c.execute("""CREATE TABLE IF NOT EXISTS users (
         username TEXT PRIMARY KEY, password TEXT NOT NULL, bio TEXT DEFAULT 'Ferah bir gün!',
         avatar_color TEXT DEFAULT '#5da399', last_seen TEXT, is_verified INTEGER DEFAULT 0,
@@ -40,9 +41,9 @@ def init_db():
 
     c.execute("""CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY AUTOINCREMENT, author TEXT NOT NULL, content TEXT NOT NULL,
-        created_at TEXT NOT NULL, likes_count INTEGER DEFAULT 0, is_whisper INTEGER DEFAULT 0,
-        location_tag TEXT, burn_votes INTEGER DEFAULT 0, is_offline_vault INTEGER DEFAULT 0, 
-        FOREIGN KEY(author) REFERENCES users(username) ON DELETE CASCADE
+        created_at TEXT NOT NULL, likes_count INTEGER DEFAULT 0, replies_count INTEGER DEFAULT 0, 
+        is_whisper INTEGER DEFAULT 0, location_tag TEXT, burn_votes INTEGER DEFAULT 0, 
+        is_offline_vault INTEGER DEFAULT 0, FOREIGN KEY(author) REFERENCES users(username) ON DELETE CASCADE
     )""")
 
     c.execute("""CREATE TABLE IF NOT EXISTS messages (
@@ -64,7 +65,23 @@ def init_db():
     conn.commit()
     conn.close()
 
+def upgrade_db():
+    """ MEVCUT VERİLERİ SİLMEDEN YENİ ÖZELLİKLERİ EKLER """
+    conn = sqlite3.connect(DATABASE, timeout=20)
+    c = conn.cursor()
+    try: c.execute("ALTER TABLE posts ADD COLUMN reply_to_id INTEGER;")
+    except: pass
+    try: c.execute("ALTER TABLE messages ADD COLUMN reaction TEXT;")
+    except: pass
+    try: c.execute("ALTER TABLE users ADD COLUMN followers_count INTEGER DEFAULT 0;")
+    except: pass
+    try: c.execute("ALTER TABLE users ADD COLUMN following_count INTEGER DEFAULT 0;")
+    except: pass
+    conn.commit()
+    conn.close()
+
 init_db()
+upgrade_db() # Veritabanını güvenle günceller
 
 def login_required(f):
     @wraps(f)
@@ -87,13 +104,16 @@ def inject_global_data():
         user = session["username"]
         udata = db.execute("SELECT * FROM users WHERE username = ?", (user,)).fetchone()
         
-        # Eğer kullanıcı veritabanından silindiyse oturumu düşür (Çökme Engeli)
         if not udata:
             session.clear()
             return dict(current_user=None)
 
         t = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         db.execute("UPDATE users SET last_seen = ? WHERE username = ?", (t, user))
+        
+        # OKUNMAMIŞ DM BİLDİRİM SAYISI BURADA HESAPLANIYOR
+        unread_dms = db.execute("SELECT COUNT(*) as c FROM messages WHERE recipient = ? AND is_read = 0", (user,)).fetchone()['c']
+        
         trends = db.execute("SELECT tag, count FROM hashtags ORDER BY count DESC LIMIT 5").fetchall()
         new_users = db.execute("SELECT username, avatar_color FROM users ORDER BY created_at DESC LIMIT 10").fetchall()
         db.commit()
@@ -101,8 +121,7 @@ def inject_global_data():
         return dict(
             current_user=user, current_user_color=udata['avatar_color'], is_verified=udata['is_verified'], 
             ghost_mode=udata['ghost_mode'], is_private=udata['is_private'], mekan_coin=udata['mekan_coin'],
-            trust_score=udata['trust_score'], trends=trends, new_users=new_users, is_admin=(user==ADMIN_USERNAME),
-            night_lock=udata['night_lock']
+            trust_score=udata['trust_score'], trends=trends, new_users=new_users, unread_dms=unread_dms, is_admin=(user==ADMIN_USERNAME)
         )
     return dict(current_user=None)
 
@@ -125,15 +144,10 @@ def catch_all(page):
             last_msg = db.execute("SELECT * FROM messages WHERE (sender=? AND recipient=?) OR (sender=? AND recipient=?) ORDER BY id DESC LIMIT 1", (user, partner, partner, user)).fetchone()
             p_info = db.execute("SELECT avatar_color, is_verified FROM users WHERE username=?", (partner,)).fetchone()
             if p_info and last_msg:
-                try:
-                    time_str = last_msg["created_at"].split(' ')[1][:5]
-                except:
-                    time_str = ""
-                
                 chat_list.append({
                     "partner": partner, "avatar_color": p_info["avatar_color"], "is_verified": p_info["is_verified"],
                     "content": "💣 [Snap]" if last_msg["is_snap"] else last_msg["content"],
-                    "time": time_str,
+                    "time": last_msg["created_at"][11:16],
                     "unread": 1 if last_msg["recipient"] == user and last_msg["is_read"] == 0 else 0
                 })
         chat_list.sort(key=lambda x: x['time'], reverse=True)
@@ -143,8 +157,14 @@ def catch_all(page):
         target = page.split("/")[1]
         profile_user = db.execute("SELECT * FROM users WHERE username = ?", (target,)).fetchone()
         if not profile_user: return redirect(url_for("home"))
+        
         f_count = db.execute("SELECT COUNT(*) as c FROM follows WHERE followed = ?", (target,)).fetchone()['c']
-        return render_template("index.html", page="profile", profile_user=profile_user, followers=f_count)
+        is_following = db.execute("SELECT 1 FROM follows WHERE follower = ? AND followed = ?", (user, target)).fetchone() is not None
+        
+        last_dm = db.execute("SELECT recipient FROM messages WHERE sender = ? ORDER BY id DESC LIMIT 1", (target,)).fetchone()
+        last_dm_to = last_dm['recipient'] if last_dm else "Kimseyle"
+        
+        return render_template("index.html", page="profile", profile_user=profile_user, followers=f_count, is_following=is_following, last_dm_to=last_dm_to)
         
     return redirect(url_for("home"))
 
@@ -176,22 +196,28 @@ def logout():
     session.clear()
     return redirect(url_for("home"))
 
+@app.route("/api/search")
+@login_required
+def search_users():
+    q = request.args.get('q', '').strip().lower()
+    if not q: return jsonify([])
+    db = get_db()
+    users = db.execute("SELECT username, avatar_color, is_verified FROM users WHERE username LIKE ? LIMIT 10", (f"%{q}%",)).fetchall()
+    return jsonify([dict(u) for u in users])
+
 @app.route("/api/feed")
 def get_feed():
     u = session.get("username")
     if not u: return jsonify([])
     db = get_db()
-    # Gelişmiş Gizlilik ve Fısıltı Sorgusu
-    query = """
-        SELECT p.*, us.is_verified, us.avatar_color, us.is_private,
+    posts = db.execute("""
+        SELECT p.*, us.is_verified, us.avatar_color,
                (SELECT COUNT(*) FROM likes WHERE post_id = p.id) as likes_count,
-               (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user = ?) as is_liked_by_me
+               (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user = ?) as is_liked_by_me,
+               (SELECT author FROM posts WHERE id = p.reply_to_id) as reply_target
         FROM posts p JOIN users us ON p.author = us.username 
-        WHERE (us.is_private = 0 OR us.username = ? OR EXISTS (SELECT 1 FROM follows WHERE follower = ? AND followed = p.author))
-          AND (p.is_whisper = 0 OR (p.is_whisper = 1 AND (p.author = ? OR EXISTS (SELECT 1 FROM follows f1 JOIN follows f2 ON f1.follower = f2.followed AND f1.followed = f2.follower WHERE f1.follower = ? AND f1.followed = p.author))))
         ORDER BY p.id DESC LIMIT 50
-    """
-    posts = db.execute(query, (u, u, u, u, u)).fetchall()
+    """, (u,)).fetchall()
     return jsonify([dict(p) for p in posts])
 
 @app.route("/api/post", methods=["POST"])
@@ -199,25 +225,31 @@ def get_feed():
 def create_post():
     c = request.form.get("content", "").strip()
     is_w = int(request.form.get("is_whisper", 0))
-    is_v = int(request.form.get("is_offline_vault", 0))
     loc = request.form.get("location_tag", "").strip()
+    reply_id = request.form.get("reply_to_id")
+    if reply_id == "": reply_id = None
+    
     u = session.get("username")
     db = get_db()
     
     now = datetime.datetime.now()
     if 2 <= now.hour < 6:
         user_data = db.execute("SELECT night_lock FROM users WHERE username=?", (u,)).fetchone()
-        if user_data and user_data['night_lock']: 
-            return jsonify({"success": False, "error": "Gece kilidi aktif! 06:00'a kadar gönderi atamazsın."})
+        if user_data and user_data['night_lock']: return jsonify({"success": False, "error": "Gece kilidi aktif! 06:00'a kadar gönderi atılamaz."})
 
     if c:
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
         tags = re.findall(r"#(\w+)", c)
         for t in tags: db.execute("INSERT INTO hashtags (tag, count, last_used) VALUES (?, 1, ?) ON CONFLICT(tag) DO UPDATE SET count=count+1, last_used=?", (t, now_str, now_str))
-        db.execute("INSERT INTO posts (author, content, created_at, is_whisper, is_offline_vault, location_tag) VALUES (?, ?, ?, ?, ?, ?)", (u, c, now_str, is_w, is_v, loc))
+        
+        db.execute("INSERT INTO posts (author, content, created_at, is_whisper, location_tag, reply_to_id) VALUES (?, ?, ?, ?, ?, ?)", (u, c, now_str, is_w, loc, reply_id))
+        
+        if reply_id:
+            db.execute("UPDATE posts SET replies_count = replies_count + 1 WHERE id = ?", (reply_id,))
+            
         db.commit()
         return jsonify({"success": True})
-    return jsonify({"success": False, "error": "Boş içerik gönderemezsin!"})
+    return jsonify({"success": False, "error": "Boş içerik!"})
 
 @app.route("/api/action/<action>/<int:post_id>", methods=["POST"])
 @login_required
@@ -238,15 +270,30 @@ def post_action(action, post_id):
         return jsonify({"success": True, "msg": "Ateşe verildi! 🔥"})
     return jsonify({"success": True})
 
+@app.route("/api/follow/<target>", methods=["POST"])
+@login_required
+def follow_user(target):
+    me = session.get("username")
+    if me == target: return jsonify({"success": False, "msg": "Kendini takip edemezsin!"})
+    db = get_db()
+    is_following = db.execute("SELECT 1 FROM follows WHERE follower = ? AND followed = ?", (me, target)).fetchone()
+    
+    if is_following:
+        db.execute("DELETE FROM follows WHERE follower = ? AND followed = ?", (me, target))
+        msg = "Takipten çıkıldı."
+    else:
+        db.execute("INSERT INTO follows (follower, followed) VALUES (?, ?)", (me, target))
+        msg = "Takip ediliyor."
+    db.commit()
+    return jsonify({"success": True, "msg": msg})
+
 @app.route("/api/chat/<partner>", methods=["GET", "POST"])
 @login_required
 def chat_api(partner):
     me = session.get("username")
     db = get_db()
     t = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    user_data = db.execute("SELECT ghost_mode FROM users WHERE username = ?", (me,)).fetchone()
-    ghost_mode_active = user_data['ghost_mode'] if user_data else 0
+    ghost_mode_active = db.execute("SELECT ghost_mode FROM users WHERE username = ?", (me,)).fetchone()['ghost_mode']
 
     if request.method == "POST":
         c = request.form.get("content", "").strip()
@@ -265,6 +312,17 @@ def chat_api(partner):
     msgs = db.execute("SELECT * FROM messages WHERE (sender=? AND recipient=?) OR (sender=? AND recipient=?) ORDER BY id ASC", (me, partner, partner, me)).fetchall()
     return jsonify([dict(m) for m in msgs])
 
+@app.route("/api/react_msg/<int:msg_id>", methods=["POST"])
+@login_required
+def react_msg(msg_id):
+    db = get_db()
+    msg = db.execute("SELECT reaction FROM messages WHERE id = ?", (msg_id,)).fetchone()
+    if msg:
+        new_reaction = None if msg['reaction'] else '❤️'
+        db.execute("UPDATE messages SET reaction = ? WHERE id = ?", (new_reaction, msg_id))
+        db.commit()
+    return jsonify({"success": True})
+
 @app.route("/api/update_profile", methods=["POST"])
 @login_required
 def update_profile():
@@ -279,6 +337,7 @@ def update_profile():
     db.commit()
     return jsonify({"success": True})
 
+# ⚡ KUSURSUZ GOD MODE
 @app.route("/api/admin/god_mode", methods=["POST"])
 @login_required
 @admin_required
