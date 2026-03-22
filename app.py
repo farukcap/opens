@@ -3,9 +3,6 @@ from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, g
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# ==========================================
-# 1. UYGULAMA YAPILANDIRMASI
-# ==========================================
 app = Flask(__name__)
 app.secret_key = "mekan-ultimate-god-mode-2026-x"
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
@@ -14,9 +11,6 @@ ADMIN_USERNAME = "faruk"
 ADMIN_PASSWORD = "faruk4848"
 DATABASE = "mekan.db"
 
-# ==========================================
-# 2. VERİTABANI BAĞLANTISI VE MİMARİSİ
-# ==========================================
 def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect(DATABASE, timeout=20)
@@ -42,7 +36,7 @@ def init_db():
         avatar_color TEXT DEFAULT '#5da399', last_seen TEXT, is_verified INTEGER DEFAULT 0,
         is_private INTEGER DEFAULT 0, ghost_mode INTEGER DEFAULT 0, muted_until TEXT,
         muted_by TEXT, last_mute_used TEXT, last_login_date TEXT, mood TEXT DEFAULT '🌸 Ferah',
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP, followers_count INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP, followers_count INTEGER DEFAULT 0, following_count INTEGER DEFAULT 0,
         mekan_coin INTEGER DEFAULT 1000, trust_score INTEGER DEFAULT 100, night_lock INTEGER DEFAULT 0
     )""")
 
@@ -75,9 +69,6 @@ def init_db():
 
 init_db()
 
-# ==========================================
-# 3. YARDIMCI FONKSİYONLAR
-# ==========================================
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -100,9 +91,6 @@ def check_night_lock(username, db):
         if user and user['night_lock']: return True, "🌙 Gece kilidi aktif! Saat 06:00'a kadar gönderi atamazsın."
     return False, ""
 
-# ==========================================
-# 4. BAĞLAM VE SAYFALAR
-# ==========================================
 @app.context_processor
 def inject_global_data():
     if "username" in session:
@@ -139,12 +127,7 @@ def catch_all(page):
         return render_template("index.html", page=page)
         
     if page == 'messages':
-        # DM LİSTESİNİ ÇEKME - EKSİK OLAN KISIM BURASIYDI
-        chats = db.execute("""
-            SELECT DISTINCT CASE WHEN sender = ? THEN recipient ELSE sender END as partner 
-            FROM messages WHERE sender = ? OR recipient = ?
-        """, (user, user, user)).fetchall()
-        
+        chats = db.execute("SELECT DISTINCT CASE WHEN sender = ? THEN recipient ELSE sender END as partner FROM messages WHERE sender = ? OR recipient = ?", (user, user, user)).fetchall()
         chat_list = []
         for c in chats:
             partner = c['partner']
@@ -152,14 +135,10 @@ def catch_all(page):
             p_info = db.execute("SELECT avatar_color, is_verified FROM users WHERE username=?", (partner,)).fetchone()
             if p_info and last_msg:
                 chat_list.append({
-                    "partner": partner,
-                    "avatar_color": p_info["avatar_color"],
-                    "is_verified": p_info["is_verified"],
-                    "content": "💣 [Snap]" if last_msg["is_snap"] else last_msg["content"],
-                    "time": last_msg["created_at"][11:16],
+                    "partner": partner, "avatar_color": p_info["avatar_color"], "is_verified": p_info["is_verified"],
+                    "content": "💣 [Snap]" if last_msg["is_snap"] else last_msg["content"], "time": last_msg["created_at"][11:16],
                     "unread": 1 if last_msg["recipient"] == user and last_msg["is_read"] == 0 else 0
                 })
-        # Mesaj listesini en son mesaja göre sırala
         chat_list.sort(key=lambda x: x['time'], reverse=True)
         return render_template("index.html", page="messages", chat_list=chat_list)
         
@@ -168,15 +147,13 @@ def catch_all(page):
         profile_user = db.execute("SELECT * FROM users WHERE username = ?", (target,)).fetchone()
         if not profile_user: return redirect(url_for("home"))
         f_count = db.execute("SELECT COUNT(*) as c FROM follows WHERE followed = ?", (target,)).fetchone()['c']
+        is_following = db.execute("SELECT 1 FROM follows WHERE follower = ? AND followed = ?", (user, target)).fetchone() is not None
         last_dm = db.execute("SELECT recipient FROM messages WHERE sender = ? ORDER BY id DESC LIMIT 1", (target,)).fetchone()
         last_dm_to = last_dm['recipient'] if last_dm else "Kimseyle konuşmamış"
-        return render_template("index.html", page="profile", profile_user=profile_user, followers=f_count, last_dm_to=last_dm_to)
+        return render_template("index.html", page="profile", profile_user=profile_user, followers=f_count, is_following=is_following, last_dm_to=last_dm_to)
         
     return redirect(url_for("home"))
 
-# ==========================================
-# 5. KULLANICI GİRİŞ / ÇIKIŞ
-# ==========================================
 @app.route("/register", methods=["POST"])
 def register():
     u = request.form.get("username", "").lower().strip()
@@ -204,9 +181,6 @@ def logout():
     session.clear()
     return redirect(url_for("home"))
 
-# ==========================================
-# 6. API VE ALGORİTMALAR
-# ==========================================
 @app.route("/api/feed")
 def get_feed():
     u = session.get("username")
@@ -271,6 +245,25 @@ def post_action(action, post_id):
         return jsonify({"success": True, "msg": "Ateşe verildi! 🔥"})
     return jsonify({"success": True})
 
+@app.route("/api/follow/<target>", methods=["POST"])
+@login_required
+def follow_user(target):
+    me = session.get("username")
+    if me == target: return jsonify({"success": False})
+    db = get_db()
+    
+    is_following = db.execute("SELECT 1 FROM follows WHERE follower = ? AND followed = ?", (me, target)).fetchone()
+    if is_following:
+        db.execute("DELETE FROM follows WHERE follower = ? AND followed = ?", (me, target))
+        db.execute("UPDATE users SET followers_count = followers_count - 1 WHERE username = ?", (target,))
+        msg = "Takipten çıkıldı."
+    else:
+        db.execute("INSERT INTO follows (follower, followed) VALUES (?, ?)", (me, target))
+        db.execute("UPDATE users SET followers_count = followers_count + 1 WHERE username = ?", (target,))
+        msg = "Takip ediliyor! 🎉"
+    db.commit()
+    return jsonify({"success": True, "msg": msg})
+
 @app.route("/api/mute/<target>", methods=["POST"])
 @login_required
 def apply_mute(target):
@@ -278,7 +271,6 @@ def apply_mute(target):
     db = get_db()
     my_data = db.execute("SELECT mekan_coin FROM users WHERE username=?", (me,)).fetchone()
     if my_data['mekan_coin'] < 50: return jsonify({"success": False, "error": "Yetersiz bakiye (50 Coin lazım)."})
-    
     now = datetime.datetime.now()
     mute_until = (now + datetime.timedelta(minutes=10)).strftime("%Y-%m-%d %H:%M:%S")
     db.execute("UPDATE users SET muted_until=?, muted_by=?, mekan_coin=mekan_coin-50 WHERE username=?", (mute_until, me, target))
@@ -292,7 +284,6 @@ def chat_api(partner):
     db = get_db()
     t = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Hayalet Modu Kontrolü
     my_data = db.execute("SELECT ghost_mode FROM users WHERE username = ?", (me,)).fetchone()
     ghost_mode_active = my_data['ghost_mode']
 
@@ -304,11 +295,9 @@ def chat_api(partner):
             db.execute("INSERT INTO messages (sender, recipient, content, created_at, is_snap, expires_at) VALUES (?, ?, ?, ?, ?, ?)", (me, partner, c, t, snap, exp))
             db.commit()
 
-    # Eğer hayalet modu yoksa, bana gelen mesajları 'okundu' yap
     if not ghost_mode_active:
         db.execute("UPDATE messages SET is_read = 1, read_at = ? WHERE sender = ? AND recipient = ? AND is_read = 0", (t, partner, me))
     
-    # Süresi dolan snap'leri uçur
     db.execute("DELETE FROM messages WHERE expires_at IS NOT NULL AND expires_at < ? AND is_read = 1", (t,))
     db.commit()
 
@@ -330,7 +319,6 @@ def update_profile():
     db.commit()
     return jsonify({"success": True})
 
-# ⚡ GOD MODE API
 @app.route("/api/admin/god_mode", methods=["POST"])
 @login_required
 @admin_required
